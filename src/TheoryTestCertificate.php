@@ -24,9 +24,7 @@ class TheoryTestCertificate implements CreateCertificate{
     public function __construct(Database $db, $layout, $testID, $type = 'theory') {
         $this->db = $db;
         $this->pdf = new FPDF_Protection();
-        if($type == 'theory'){$this->theory = new theoryTest($this->db, $layout);}
-        elseif($type == 'bike'){$this->theory = new bikeTheoryTest($this->db, $layout);}
-        else{$this->theory = new freeTheoryTest($this->db, $layout);}
+        $this->theory = new TheoryTest($this->db, $layout);
         $this->theory->setTest($testID);
         $this->testType = $type;
     }

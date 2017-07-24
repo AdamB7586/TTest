@@ -47,11 +47,11 @@ class TheoryTest implements TTInterface{
     protected $current;
     
     protected $casestudy;
-    public $review = false;
+    protected $review = false;
     public $testresults;
     public $dsacat;
     
-    protected static $testType = 'car';  //Done
+    protected static $testType = 'car'; //Done
     
     /**
      * Connects to the database sets the current user and gets any user answers
@@ -81,15 +81,29 @@ class TheoryTest implements TTInterface{
         return $this->buildTest();
     }
     
+    /**
+     * Sets the Test Type for the current test the default is car
+     * @param string $type This should be the type of test the user is currently undertaking
+     * @return $this
+     */
     public function setTestType($type){
         self::$testType = strtoupper($type);
         return $this;
     }
     
+    /**
+     * Gets the current test type
+     * @return string Will return the current test type
+     */
     public function getTestType(){
         return strtoupper(self::$testType);
     }
     
+    /**
+     * Sets the passmark for the test the default is set to 43 which is what is set by the DVSA
+     * @param int $mark This should be the passmark for the test (no greater than 50 as only 50 questions are retrieved)
+     * @return $this
+     */
     public function setPassmark($mark){
         if(is_int($mark)){
             $this->passmark = intval($mark);
@@ -97,10 +111,19 @@ class TheoryTest implements TTInterface{
         return $this;
     }
     
+    /**
+     * Returns the current passmark for the test
+     * @return int Returns the set passmark for the current test
+     */
     public function getPassmark(){
-        return $this->passmark;
+        return intval($this->passmark);
     }
     
+    /**
+     * Sets the amount of seconds that should be allowed to undertake a test
+     * @param int $seconds If you wish to change the seconds allowed from the 57 minutes (3420 seconds) set the number in seconds 
+     * @return $this
+     */
     public function setSeconds($seconds){
         if(is_int($seconds)){
             $this->seconds = intval($seconds);
@@ -108,15 +131,28 @@ class TheoryTest implements TTInterface{
         return $this;
     }
     
+    /**
+     * Gets the amount of seconds that are allowed for the current test
+     * @return int This should be the number of sends allowed to partake the test
+     */
     public function getStartSeconds(){
         return $this->seconds;
     }
     
+    /**
+     * Sets the location where the audio files can be found
+     * @param string $location The should either be a URL or a relative position (minus mp4 & ogg folders)
+     * @return $this
+     */
     public function setAudioLocation($location){
         $this->audioLocation = $location;
         return $this;
     }
     
+    /**
+     * Returns the currents set location of the audio files
+     * @return string This should be the folder where all the audio files can be found
+     */
     public function getAudioLocation(){
         return $this->audioLocation;
     }

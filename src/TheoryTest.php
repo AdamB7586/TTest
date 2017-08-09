@@ -555,16 +555,26 @@ class TheoryTest implements TTInterface{
      * @return boolean If answer added returns true else returns false
      */
     public function addAnswer($answer, $prim){
-        $qNo = $this->questionNo($prim);
-        $questiondata = $this->getQuestionData($prim);
-        
-        $arraystring = str_replace($answer, '', trim($_SESSION['test'.$this->getTest()][$qNo]['answer'])).$answer;
+        $arraystring = str_replace($answer, '', trim($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'])).$answer;
         if(strlen($arraystring) > 1){
             $stringParts = str_split($arraystring);
             sort($stringParts);
             $arraystring = implode('', $stringParts);
         }
-        $_SESSION['test'.$this->getTest()][$qNo]['answer'] = strtoupper($arraystring);
+        return $this->replaceAnswer($arraystring, $prim);
+    }
+       
+    /**
+     * Replaces the answer for the given prim number
+     * @param string $answer This should be the answer the user has selected
+     * @param int $prim This should be the question prim number
+     * @return boolean Returns true if the answer has been updated else returns false
+     */
+    public function replaceAnswer($answer, $prim){
+        $qNo = $this->questionNo($prim);
+        $questiondata = $this->getQuestionData($prim);
+        
+        $_SESSION['test'.$this->getTest()][$qNo]['answer'] = strtoupper($answer);
         if(strlen($_SESSION['test'.$this->getTest()][$qNo]['answer']) == $questiondata['mark']){
             if($_SESSION['test'.$this->getTest()][$qNo]['answer'] == $questiondata['answerletters']){$_SESSION['test'.$this->getTest()][$qNo]['status'] = 4;}
             else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 3;}
@@ -577,7 +587,7 @@ class TheoryTest implements TTInterface{
     /**
      * Removes a given answer from the current question
      * @param string $answer This should be the answer you wish to remove
-     * @param int $prim This should be the question prim you wish to remove the naswer from
+     * @param int $prim This should be the question prim you wish to remove the answer from
      * @return boolean Returns true if database has been updated else return false
      */
     public function removeAnswer($answer, $prim){
@@ -588,23 +598,7 @@ class TheoryTest implements TTInterface{
 
         return $this->updateAnswers();
     }
-    
-    /**
-     * Replaces the answer for the given prim number
-     * @param string $answer This should be the answer the user has selected
-     * @param int $prim This should be the question prim number
-     * @return boolean Returns true if the answer has been updated else returns false
-     */
-    public function replaceAnswer($answer, $prim){
-        $qNo = $this->questionNo($prim);
-        $questiondata = $this->getQuestionData($prim);
-        
-        $_SESSION['test'.$this->getTest()][$qNo]['answer'] = strtoupper($answer);
-        if($_SESSION['test'.$this->getTest()][$qNo]['answer'] == $questiondata['answerletters']){$_SESSION['test'.$this->getTest()][$qNo]['status'] = 4;}
-        else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 3;}
-        
-        return $this->updateAnswers();
-    }
+
     
     /**
      * Flags/Un-flags the particular question

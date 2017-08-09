@@ -154,7 +154,6 @@ class TheoryTestCertificate implements CertificateInterface{
     
     public function createPDF(){
         $this->generateCertificate();
-        //$this->pdf->AutoPrint(true);
         $this->pdf->Output();
     }
 }

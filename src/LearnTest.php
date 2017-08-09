@@ -268,21 +268,13 @@ class LearnTest extends TheoryTest{
      * @return boolean Returns true
      */
     public function addAnswer($answer, $prim){
-        $questiondata = $this->getQuestionData($prim);
-        
         $arraystring = str_replace($answer, '', trim($_SESSION['answers'][$prim]['answer'])).$answer;
         if(strlen($arraystring) > 1){
             $stringParts = str_split($arraystring);
             sort($stringParts);
             $arraystring = implode('', $stringParts);
         }
-        $_SESSION['answers'][$prim]['answer'] = strtoupper($arraystring);
-        if(strlen($_SESSION['answers'][$prim]['answer']) == $questiondata['mark']){
-            if($_SESSION['answers'][$prim]['answer'] == $questiondata['answerletters']){$_SESSION['answers'][$prim]['status'] = 2;}
-            else{$_SESSION['answers'][$prim]['status'] = 1;}
-        }
-        else{$_SESSION['answers'][$prim]['status'] = 0;}
-        return true;
+        return $this->replaceAnswer($arraystring, $prim);
     }
     
     /**
@@ -292,10 +284,13 @@ class LearnTest extends TheoryTest{
      * @return boolean Returns true
      */
     public function replaceAnswer($answer, $prim){
-        $_SESSION['answers'][$prim]['answer'] = strtoupper($answer);
         $questiondata = $this->getQuestionData($prim);
-        if($_SESSION['answers'][$prim]['answer'] == $questiondata['answerletters']){$_SESSION['answers'][$prim]['status'] = 2;}
-        else{$_SESSION['answers'][$prim]['status'] = 1;}
+        $_SESSION['answers'][$prim]['answer'] = strtoupper($answer);
+        if(strlen($_SESSION['answers'][$prim]['answer']) == $questiondata['mark']){
+            if($_SESSION['answers'][$prim]['answer'] == $questiondata['answerletters']){$_SESSION['answers'][$prim]['status'] = 2;}
+            else{$_SESSION['answers'][$prim]['status'] = 1;}
+        }
+        else{$_SESSION['answers'][$prim]['status'] = 0;}
         return true;
     }
     

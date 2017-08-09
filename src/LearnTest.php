@@ -269,12 +269,7 @@ class LearnTest extends TheoryTest{
      */
     public function addAnswer($answer, $prim){
         $arraystring = str_replace($answer, '', trim($_SESSION['answers'][$prim]['answer'])).$answer;
-        if(strlen($arraystring) > 1){
-            $stringParts = str_split($arraystring);
-            sort($stringParts);
-            $arraystring = implode('', $stringParts);
-        }
-        return $this->replaceAnswer($arraystring, $prim);
+        return $this->replaceAnswer($this->sortAnswers($arraystring), $prim);
     }
     
     /**

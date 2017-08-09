@@ -555,12 +555,7 @@ class TheoryTest implements TTInterface{
      */
     public function addAnswer($answer, $prim){
         $arraystring = str_replace($answer, '', trim($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'])).$answer;
-        if(strlen($arraystring) > 1){
-            $stringParts = str_split($arraystring);
-            sort($stringParts);
-            $arraystring = implode('', $stringParts);
-        }
-        return $this->replaceAnswer($arraystring, $prim);
+        return $this->replaceAnswer($this->sortAnswers($arraystring), $prim);
     }
        
     /**
@@ -597,8 +592,23 @@ class TheoryTest implements TTInterface{
 
         return $this->updateAnswers();
     }
-
     
+    /**
+     * Sorts the answer letters into alphabetical order to compare to the database
+     * @param string $string If the string length is greater than 1 in length will break apart and sort else will simply return original value
+     * @return string The ordered string or original string will be returned
+     */
+    protected function sortAnswers($string){
+        if(strlen($string) > 1){
+            $stringParts = str_split($string);
+            sort($stringParts);
+            $string = implode('', $stringParts);
+        }
+        return $string;
+    }
+
+
+
     /**
      * Flags/Un-flags the particular question
      * @param int $prim This should be the question prim

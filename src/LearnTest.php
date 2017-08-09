@@ -26,9 +26,11 @@ class LearnTest extends TheoryTest{
     /**
      * Connects to the database sets the current user and gets any user answers
      * @param Database $db
+     * @param Smarty $layout
+     * @param User $user
      */
-    public function __construct(Database $db, $layout) {
-        parent::__construct($db, $layout);
+    public function __construct(Database $db, Smarty $layout, User $user) {
+        parent::__construct($db, $layout, $user);
         $this->getTestInfo();
     }
     
@@ -130,7 +132,7 @@ class LearnTest extends TheoryTest{
     public function getUserAnswers() {
         if(!isset($this->useranswers)){
             $answers = $this->db->select($this->progressTable, array('user_id' => $this->user->getUserID()), array('progress'));
-            if($answers){
+            if(!empty($answers)){
                 if($_SESSION['answers']){$this->useranswers = $_SESSION['answers'] + unserialize(stripslashes($answers['progress']));}
                 else{$this->useranswers = unserialize(stripslashes($answers['progress']));}
             }
@@ -162,7 +164,6 @@ class LearnTest extends TheoryTest{
 
     /**
      * Returns the current question number
-     * @param int $prim This should be the current questions unique prim number
      * @return int Returns the current question number
      */
     protected function currentQuestion(){
@@ -239,29 +240,18 @@ class LearnTest extends TheoryTest{
         else{$dir = '<'; $sort = 'DESC'; $start = '100000';}
         
         if($this->testInfo['sort']){
-            $questions = $this->db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort));
-            foreach($questions as $question){
+            foreach($this->db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort)) as $question){
                 if($this->useranswers[$question['prim']]['status'] <= 1){
-                    $prim = $question['prim'];
-                    break;
+                    return $question['prim'];
+                }
+            }
+            foreach($this->db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $start), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort)) as $question){
+                if($this->useranswers[$question['prim']]['status'] <= 1){
+                    return $question['prim'];
                 }
             }
         }
-        
-        if($prim){return $prim;}
-        else{
-            if($this->testInfo['sort']){
-                $questions = $this->db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $start), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort));
-                foreach($questions as $question){
-                    if($this->useranswers[$question['prim']]['status'] <= 1){
-                        $prim = $question['prim'];
-                        break;
-                    }
-                }
-            }
-            if($prim){return $prim;}
-            else{return 'none';}
-        }
+        return 'none';
     }
     
     /**

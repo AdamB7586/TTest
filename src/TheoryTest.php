@@ -434,8 +434,7 @@ class TheoryTest implements TTInterface{
      */
     public function hintEnable(){
         $settings = $this->checkSettings();
-        if($settings['hint'] == 'on'){$settings['hint'] = 'off';}
-        else{$settings['hint'] = 'on';}
+        $settings['hint'] = ($settings['hint'] === 'on' ? 'off' : 'on');
         self::$user->setUserSettings($settings);
     }
     
@@ -486,7 +485,7 @@ class TheoryTest implements TTInterface{
      * @return string|boolean Returns the alert HTML if in the correct section else return false
      */
     protected function alert(){
-        if($this->review == 'flagged' || $this->review == 'incomplete'){
+        if($this->review === 'flagged' || $this->review === 'incomplete'){
             return '<div class="alert alert-danger">Reviewing '.$this->review.' questions only</div>';
         }
         elseif(!$this->review && $this->numComplete() == $this->numQuestions()){
@@ -501,7 +500,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the button HTML code
      */
     protected function flagHintButton($prim){
-        if($this->review != 'answers'){
+        if($this->review !== 'answers'){
             return '<div class="flag'.($this->questionFlagged($prim) ? ' flagged' : '').' btn btn-theory"><span class="fa fa-flag fa-fw"></span><span class="hidden-xs"> Flag Question</span></div>';
         }
         $settings = $this->checkSettings();
@@ -513,7 +512,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the button HTML code
      */
     protected function reviewButton(){
-        if($this->review != 'answers'){
+        if($this->review !== 'answers'){
             return '<div class="review btn btn-theory"><span class="fa fa-binoculars fa-fw"></span><span class="hidden-xs"> Review</span></div>';
         }
         return '<div class="endreview btn btn-theory"><span class="fa fa-reply fa-fw"></span><span class="hidden-xs"> End Review</span></div>';
@@ -526,7 +525,7 @@ class TheoryTest implements TTInterface{
      */
     protected function checkSettings($new = false){
         $settings = self::$user->getUserSettings();
-        if($new != true){
+        if($new !== true){
             if($settings['review'] == 'all'){$this->review = 'all';}
             elseif($settings['review'] == 'flagged'){$this->review = 'flagged';}
             elseif($settings['review'] == 'incomplete'){$this->review = 'incomplete';}

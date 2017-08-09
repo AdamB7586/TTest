@@ -77,7 +77,7 @@ class TheoryTest implements TTInterface{
         $this->setTest($theorytest);
         self::$user->checkUserAccess($theorytest);
         $this->setTestName();
-        if(!$this->anyExisting()){
+        if($this->anyExisting() === false){
             $this->chooseQuestions($theorytest);
         }
         return $this->buildTest();
@@ -218,7 +218,7 @@ class TheoryTest implements TTInterface{
      * @return void Nothing is returned
      */
     protected function existingLayout(){        
-        if($this->anyExisting() == 'passed'){
+        if($this->anyExisting() === 'passed'){
             $text = '<p>You have already passed this test! Are you sure you want to start a new test?</p><div class="timeremaining" id=""></div>';
             $continue = '';
         }
@@ -252,7 +252,7 @@ class TheoryTest implements TTInterface{
     
     /**
      * Returns the current users answers for the current test
-     * @return array Returns the current users answers for the current test
+     * @return array|false Returns the current users answers for the current test if any exist else returns false
      */
     public function getUserAnswers(){
         if(!isset(self::$useranswers)){
@@ -331,7 +331,7 @@ class TheoryTest implements TTInterface{
     /**
      * Returns the next flagged question number
      * @param int $current This should be the current question 
-     * @return int|boolean Returns the next question ID if one exists else will return false
+     * @return int|false Returns the next question ID if one exists else will return false
      */
     public function getNextFlagged($current = ''){
         if(!is_numeric($current)){$current = $this->currentQuestion();}
@@ -390,9 +390,10 @@ class TheoryTest implements TTInterface{
     public function getPrevIncomplete($current = ''){
         if(!is_numeric($current)){$current = $this->currentQuestion();}
         foreach($_SESSION['test'.$this->getTest()] as $question => $value){
-            if($question < $current && $value['status'] < 3){$test = $question;}
+            if($question < $current && $value['status'] < 3){
+                return $question;
+            }
         }
-        if($test){return $test;}
         if($this->numIncomplete() > 1){return $this->getPrevIncomplete($this->numQuestions() + 1);}
         return false;
     }
@@ -505,12 +506,10 @@ class TheoryTest implements TTInterface{
      */
     protected function flagHintButton($prim){
         if($this->review != 'answers'){
-            if($this->questionFlagged($prim)){$flagged = ' flagged';}
-            return '<div class="flag'.$flagged.' btn btn-theory"><span class="fa fa-flag fa-fw"></span><span class="hidden-xs"> Flag Question</span></div>';
+            return '<div class="flag'.($this->questionFlagged($prim) ? ' flagged' : '').' btn btn-theory"><span class="fa fa-flag fa-fw"></span><span class="hidden-xs"> Flag Question</span></div>';
         }
         $settings = $this->checkSettings();
-        if($settings['hint'] == 'on'){$class = ' flagged';}
-        return '<div class="viewfeedback'.$class.' btn btn-theory"><span class="fa fa-book fa-fw"></span><span class="hidden-xs"> Explain</span></div>';
+        return '<div class="viewfeedback'.($settings['hint'] === 'on' ? ' flagged' : '').' btn btn-theory"><span class="fa fa-book fa-fw"></span><span class="hidden-xs"> Explain</span></div>';
     }
     
     /**
@@ -718,9 +717,9 @@ class TheoryTest implements TTInterface{
     protected function answerSelectedCorrect($prim, $letter){
         $isCorrect = self::$db->select($this->questionsTable, array('prim' => $prim, 'answerletters' => array('LIKE', '%'.strtoupper($letter).'%')), array('answerletters'));
         
-        if($this->answerSelected($prim, $letter) && $isCorrect){return 'CORRECT';}
-        elseif($this->answerSelected($prim, $letter) && !$isCorrect){return 'INCORRECT';}
-        elseif($isCorrect){return 'NSCORRECT';}
+        if($this->answerSelected($prim, $letter) && !empty($isCorrect)){return 'CORRECT';}
+        elseif($this->answerSelected($prim, $letter) && $isCorrect === false){return 'INCORRECT';}
+        elseif(!empty($isCorrect)){return 'NSCORRECT';}
         return false;
     }
     
@@ -849,18 +848,15 @@ class TheoryTest implements TTInterface{
         $question = $this->getQuestionData($prim);
         if($question){
             if(is_numeric($question['casestudyno'])){$this->setCaseStudy($question['casestudyno']);}
-            
             if($question['format'] == '0' || $question['format'] == '2'){
-                if($question['dsaimageid']){$image = $this->createImage($question['prim'].'.jpg', true);}
-                if($question['option1']){$option1 = $this->getOptions($question['prim'], $question['option1'], 'A', $new);}
-                if($question['option2']){$option2 = $this->getOptions($question['prim'], $question['option2'], 'B', $new);}
-                if($question['option3']){$option3 = $this->getOptions($question['prim'], $question['option3'], 'C', $new);}
-                if($question['option4']){$option4 = $this->getOptions($question['prim'], $question['option4'], 'D', $new);}
+                $option1 = $this->getOptions($question['prim'], $question['option1'], 'A', $new);
+                $option2 = $this->getOptions($question['prim'], $question['option2'], 'B', $new);
+                $option3 = $this->getOptions($question['prim'], $question['option3'], 'C', $new);
+                $option4 = $this->getOptions($question['prim'], $question['option4'], 'D', $new);
                 if($question['option5']){$option5 = $this->getOptions($question['prim'], $question['option5'], 'E', $new);}
                 if($question['option6']){$option6 = $this->getOptions($question['prim'], $question['option6'], 'F', $new);}
             }
             else{
-                if($question['dsaimageid']){$image = $this->createImage($question['prim'].'.png', true);}
                 $option1 = $this->imageOption($question['prim'], $question['option1'], 'A', $new);
                 $option2 = $this->imageOption($question['prim'], $question['option2'], 'B', $new);
                 $option3 = $this->imageOption($question['prim'], $question['option3'], 'C', $new);
@@ -875,7 +871,7 @@ class TheoryTest implements TTInterface{
             self::$layout->assign('answer_4', $option4);
             self::$layout->assign('answer_5', $option5);
             self::$layout->assign('answer_6', $option6);
-            self::$layout->assign('image', $image);
+            self::$layout->assign('image', ($question['dsaimageid'] ? $this->createImage($question['prim'].'.jpg', true) : ''));
             self::$layout->assign('case_study', $this->casestudy);
             self::$layout->assign('dsa_explanation', $this->dsaExplanation($question['dsaexplanation'], $prim));
             self::$layout->assign('previous_question', $this->prevQuestion());
@@ -930,13 +926,11 @@ class TheoryTest implements TTInterface{
         $q = 1;
         foreach($_SESSION['test'.$this->getTest()] as $value){
             if($value['flagged'] == 1){
-                $qNo = $q;
-                break;
+                return $this->questionPrim($q);
             }
             $q++;
         }
-        if($qNo){return $this->questionPrim($qNo);}
-        else{return 'none';}
+        return 'none';
     }
     
     /**
@@ -947,13 +941,11 @@ class TheoryTest implements TTInterface{
         $q = 1;
         foreach($_SESSION['test'.$this->getTest()] as $value){
             if($value['status'] <= 1){
-                $qNo = $q;
-                break;
+                return $this->questionPrim($q);
             }
             $q++;
         }
-        if($qNo){return $this->questionPrim($qNo);}
-        else{return 'none';}
+        return 'none';
     }
     
     /**

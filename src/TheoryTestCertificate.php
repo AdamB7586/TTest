@@ -1,19 +1,11 @@
 <?php
 namespace TheoryTest;
 
-interface CreateCertificate{
-    public function PDFInfo();
-    public function generateCertificate();
-}
-
-/**
- * Description of certificate
- * @author Adam Binnersley
- */
+use TheoryTest\Essential\CertificateInterface;
 use DBAL\Database;
 use FPDF_Protection;
 
-class TheoryTestCertificate implements CreateCertificate{
+class TheoryTestCertificate implements CertificateInterface{
     protected $db;
     protected $pdf;
     private $theory;

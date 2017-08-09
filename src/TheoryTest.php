@@ -710,7 +710,7 @@ class TheoryTest implements TTInterface{
     }
     
     /**
-     * Chceks to see if the answer is selected and if it is correct or not
+     * Checks to see if the answer is selected and if it is correct or not
      * @param int $prim Should be the question prim number
      * @param string $letter Should be the letter of the answer you are checking if it is correct
      * @return string|boolean Returns string if correct and not selected, selected and correct, or selected and incorrect else returns false
@@ -738,10 +738,10 @@ class TheoryTest implements TTInterface{
     
     /**
      * This is to add extra content if required (Used on extention classes)
-     * @return boolean
+     * @return string
      */
     protected function extraContent(){
-        return false;
+        return '';
     }
     
     /**

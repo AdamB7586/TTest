@@ -114,7 +114,7 @@ class TheoryTestCertificate implements CreateCertificate{
         $this->infoLine('Status:', strip_tags($this->theory->testStatus()));
         $this->infoLine('Questions:', $this->theory->testresults['numquestions']);
         $this->pdf->Ln(6);
-        if($this->testType != 'free'){$this->infoLine('Candidate:', $userInfo['first_name'].' '.$userInfo['last_name']);}
+        $this->infoLine('Candidate:', $userInfo['first_name'].' '.$userInfo['last_name']);
         $this->infoLine('Time Taken:', $this->theory->getTime());
         $this->pdf->Ln(16);
         $this->pdf->SetFont('Arial','B', 8);

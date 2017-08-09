@@ -220,25 +220,39 @@ class LearnTest extends TheoryTest{
     /**
      * Returns the prim number for the next or previous incomplete question
      * @param string $nextOrPrev Should be set to either 'next' or 'prev' depending on which way you wish to get the next question for
-     * @return int|string Returns the prim number for the next/prev incomplete question
+     * @return int|string Returns the prim number for the next/previous incomplete question
      */
     protected function getIncomplete($nextOrPrev = 'next'){
-        if(strtolower($nextOrPrev) == 'next'){$dir = '>'; $sort = 'ASC'; $start = '0';}
-        else{$dir = '<'; $sort = 'DESC'; $start = '100000';}
+        if(strtolower($nextOrPrev) == 'next'){$dir = '>'; $sort = 'ASC'; $start = 0;}
+        else{$dir = '<'; $sort = 'DESC'; $start = 100000;}
         
         if($this->testInfo['sort']){
-            foreach($this->db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort)) as $question){
-                if($this->useranswers[$question['prim']]['status'] <= 1){
-                    return $question['prim'];
-                }
+            $searchCurrentQuestion = $this->findNextQuestion($dir, $this->currentQuestion(), $sort);
+            if($searchCurrentQuestion !== false){
+                return $searchCurrentQuestion;
             }
-            foreach($this->db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $start), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort)) as $question){
-                if($this->useranswers[$question['prim']]['status'] <= 1){
-                    return $question['prim'];
-                }
+            $searchStart = $this->findNextQuestion($dir, $start, $sort);
+            if($searchStart !== false){
+                return $searchStart;
             }
         }
         return 'none';
+    }
+    
+    /**
+     * Finds the next question from the given parameters
+     * @param string $dir
+     * @param int $start
+     * @param string $sort
+     * @return int|false
+     */
+    protected function findNextQuestion($dir, $start, $sort){
+        foreach($this->db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $start), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort)) as $question){
+            if($this->useranswers[$question['prim']]['status'] <= 1){
+                return $question['prim'];
+            }
+        }
+        return false;
     }
     
     /**

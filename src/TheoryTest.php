@@ -181,11 +181,9 @@ class TheoryTest implements TTInterface{
     protected function chooseQuestions($testNo){
         $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
         self::$db->delete($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()/*, 'status' => 0*/));
-        $q = 1;
-        foreach($questions as $question){
-            $this->questions[$q] = $question['prim'];
-            $_SESSION['test'.$this->getTest()][$q]['answer'] = ''; $_SESSION['test'.$this->getTest()][$q]['flagged'] = 0; $_SESSION['test'.$this->getTest()][$q]['status'] = 0;
-            $q++;
+        unset($_SESSION['test'.$this->getTest()]);
+        foreach($questions as $i => $question){
+            $this->questions[($i + 1)] = $question['prim'];
         }
         return self::$db->insert($this->progressTable, array('user_id' => self::$user->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => $this->getTestType()));
     }
@@ -821,7 +819,7 @@ class TheoryTest implements TTInterface{
     /**
      * Creates the HTML for the given question number
      * @param int $prim This should be the prim number for the selected question
-     * @param booelean $new If if is a new test should be set to true else should be false
+     * @param boolean $new If if is a new test should be set to true else should be false
      * @return string|boolean Returns the question HTML and Question number as a JSON encoded string if question exists else returns false
      */
     public function createQuestionHTML($prim, $new = false){
@@ -880,7 +878,7 @@ class TheoryTest implements TTInterface{
      * @param int $prim This should be the current question prim number
      * @param boolean $new If it is a new test should be set to true
      */
-    protected function updateTestProgress($prim, $new = false){
+    protected function updateTestProgress($prim){
         $this->current = $this->questionNo($prim);
         if($this->current < 1){$this->current = 1;} 
         $_SESSION['question_no']['test'.$this->getTest()] = $this->current;
@@ -1097,7 +1095,7 @@ class TheoryTest implements TTInterface{
      * @return string The end test HTML code will be returned
      */
     public function endTest($time, $mark = true){
-        if($mark == true){
+        if($mark === true){
             $this->setTime($time);
             $this->markTest();
         }

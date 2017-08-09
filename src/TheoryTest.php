@@ -429,7 +429,6 @@ class TheoryTest implements TTInterface{
     protected function audioButton(){
         if($this->audioEnabled == true){return '<div class="audioswitch audiooff"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span><span class="fa fa-ban fa-stack-2x text-danger"></span></span><span class="sr-only">Turn Sound OFF</span></div>';}
         else{return '<div class="audioswitch audioon"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span></span><span class="sr-only">Turn Sound ON</span></div>';}
-        return false;
     }
     
     /**
@@ -1080,14 +1079,14 @@ class TheoryTest implements TTInterface{
      * @return string Returns the previous question button HTML code
      */
     protected function prevQuestion(){
-        if(($this->review == 'flagged' && $this->numFlagged() > 1) || ($this->review == 'incomplete' && $this->numIncomplete() > 1) || ((int)$this->currentQuestion() != 1 && ($this->review == 'all' || $this->review == false || $this->review == 'answers'))){
+        if(($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ((int)$this->currentQuestion() != 1 && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))){
             if($this->review == 'flagged' && $this->numFlagged() > 1){$prev = $this->questionPrim($this->getPrevFlagged());}
             elseif($this->review == 'incomplete' && $this->numIncomplete() > 1){$prev = $this->questionPrim($this->getPrevIncomplete());}
             else{$prev = $this->questionPrim(($this->currentQuestion() - 1));}
             return '<div class="prevquestion btn btn-theory" id="'.$prev.'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
         }
         else{
-            if($this->review == 'all' || $this->review == 'answers' || $this->review == false){
+            if($this->review === 'all' || $this->review === 'answers' || $this->review === false){
                 return '<div class="prevquestion btn btn-theory" id="'.$this->getLastQuestion().'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
             }
             return '<div class="noprev"></div>';
@@ -1099,14 +1098,14 @@ class TheoryTest implements TTInterface{
      * @return string Returns the next question button HTML code
      */
     protected function nextQuestion(){
-        if(($this->review == 'flagged' && $this->numFlagged() > 1) || ($this->review == 'incomplete' && $this->numIncomplete() > 1) || ($this->currentQuestion() != $this->numQuestions() && ($this->review == 'all' || $this->review == false || $this->review == 'answers'))){
+        if(($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ($this->currentQuestion() != $this->numQuestions() && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))){
             if($this->review == 'flagged' && $this->numFlagged() > 1){$next = $this->questionPrim($this->getNextFlagged());}
             elseif($this->review == 'incomplete' && $this->numIncomplete() > 1){$next = $this->questionPrim($this->getNextIncomplete());}
             else{$next = $this->questionPrim(($this->currentQuestion() + 1));}
             return '<div class="nextquestion btn btn-theory" id="'.$next.'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
         }
         else{
-            if($this->review == 'all' || $this->review == 'answers' || $this->review == false){
+            if($this->review === 'all' || $this->review === 'answers' || $this->review == false){
                 return '<div class="nextquestion btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
             }
             return '';

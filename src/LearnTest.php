@@ -436,25 +436,28 @@ class LearnTest extends TheoryTest{
             if(is_numeric($ruleno)){
                 $ruleinfo = $this->db->select('highway_code', array('hcno' => $ruleno), array('hcrule', 'hctitle', 'imagetitle1', 'imagetitle2'));
                 if(!$ruleinfo['hcrule']){
-                    list($width, $height) = getimagesize(ROOT.DS.'images/highway-code/'.$ruleinfo['imagetitle1']);
-                    $rule = '<p class="center"><img src="/images/highway-code/'.$ruleinfo['imagetitle1'].'" alt="'.$ruleinfo['hctitle'].'" width="'.$width.'" height="'.$height.'" /> ';
-                    if($ruleinfo['imagetitle2']){
-                        list($width, $height) = getimagesize(ROOT.DS.'images/highway-code/'.$ruleinfo['imagetitle2']);
-                        $rule.= '<img src="/images/highway-code/'.$ruleinfo['imagetitle2'].'" alt="'.$ruleinfo['hctitle'].'" width="'.$width.'" height="'.$height.'" />';
-                    }
-                    $rule.= '</p><p class="center">'.$ruleinfo['hctitle'].'</p>';
+                    $rule = '<p class="center">'.$this->ruleImageHC($ruleinfo['imagetitle1'], $ruleinfo['hctitle']).$this->ruleImageHC($ruleinfo['imagetitle2'], $ruleinfo['hctitle']).'</p><p class="center">'.$ruleinfo['hctitle'].'</p>';
                 }
                 else{
-                    $rule = $ruleinfo['hcrule'];
-                    if($ruleinfo['imagetitle1']){
-                        list($width, $height) = getimagesize(ROOT.DS.'images/highway-code/'.$ruleinfo['imagetitle1']);
-                        $rule.= '<p class="center"><img src="/images/highway-code/'.$ruleinfo['imagetitle1'].'" alt="'.$ruleinfo['hctitle'].'" width="'.$width.'" height="'.$height.'" /></p>';
-                    }
+                    $rule = $ruleinfo['hcrule'].$this->ruleImageHC($ruleinfo['imagetitle1'], $ruleinfo['hctitle']);
                 }
                 $highwaycode.= $this->addAudio($ruleno, 'HC', '/highway-code').$rule;
             }
         }
         return $highwaycode;
+    }
+    
+    /**
+     * Create a image tag for the Highway Code Plus section
+     * @param string|boolean $image If the image exists will create the image tag
+     * @param string $alt This should be the image alt tag text
+     * @return string If the image exists will return the image HTML tag else will not return anything
+     */
+    protected function ruleImageHC($image, $alt){
+        if(strlen($image) >= 4){
+            list($width, $height) = getimagesize(ROOT.DS.'images/highway-code/'.$image);
+            return '<img src="/images/highway-code/'.$image.'" alt="'.$alt.'" width="'.$width.'" height="'.$height.'" class="img-responsive center-block" /> ';
+        }
     }
     
     /**

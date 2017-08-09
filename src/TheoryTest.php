@@ -758,14 +758,16 @@ class TheoryTest implements TTInterface{
      * @return string Should return the option HTML for the given option
      */
     protected function getOptions($question, $option, $letter, $image = false, $new = false){
-        if(!$new && $this->review != 'answers'){
+        if($new === false && $this->review != 'answers'){
             if($this->answerSelected($question, $letter)){$selected = ($image === false ? ' selected' : ' imgselected');}
-        }elseif(!$new){
+        }
+        elseif($new === false){
             $iscorrect = $this->answerSelectedCorrect($question, $letter);
             if($iscorrect == 'CORRECT'){$selected = ($image === false ? ' selectedcorrect' : ' imgcorrect');}
             elseif($iscorrect == 'INCORRECT'){$selected = ($image === false ? ' selectedincorrect' : ' imgincorrect');}
             elseif($iscorrect == 'NSCORRECT'){$selected = ($image === false ? ' nscorrect' : ' imgnscorrect');}
         }
+        else{$selected = '';}
         return '<div class="answer'.$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($question, $letter).$option : $option.$this->createImage($question.strtolower($letter).'.png')).'</div>';
     }
     

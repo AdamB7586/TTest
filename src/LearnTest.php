@@ -433,16 +433,14 @@ class LearnTest extends TheoryTest{
         $hcRules = $this->db->select($this->questionsTable, array('prim' => $prim), array('hcrule1', 'hcrule2', 'hcrule3'));
         $highwaycode = '';
         foreach($hcRules as $ruleno){
-            if(is_numeric($ruleno)){
-                $ruleinfo = $this->db->select('highway_code', array('hcno' => $ruleno), array('hcrule', 'hctitle', 'imagetitle1', 'imagetitle2'));
-                if(!$ruleinfo['hcrule']){
-                    $rule = '<p class="center">'.$this->ruleImageHC($ruleinfo['imagetitle1'], $ruleinfo['hctitle']).$this->ruleImageHC($ruleinfo['imagetitle2'], $ruleinfo['hctitle']).'</p><p class="center">'.$ruleinfo['hctitle'].'</p>';
-                }
-                else{
-                    $rule = $ruleinfo['hcrule'].$this->ruleImageHC($ruleinfo['imagetitle1'], $ruleinfo['hctitle']);
-                }
-                $highwaycode.= $this->addAudio($ruleno, 'HC', '/highway-code').$rule;
+            $ruleinfo = $this->db->select('highway_code', array('hcno' => $ruleno), array('hcrule', 'hctitle', 'imagetitle1', 'imagetitle2'));
+            if(!$ruleinfo['hcrule']){
+                $rule = '<p class="center">'.$this->ruleImageHC($ruleinfo['imagetitle1'], $ruleinfo['hctitle']).$this->ruleImageHC($ruleinfo['imagetitle2'], $ruleinfo['hctitle']).'</p><p class="center">'.$ruleinfo['hctitle'].'</p>';
             }
+            else{
+                $rule = $ruleinfo['hcrule'].$this->ruleImageHC($ruleinfo['imagetitle1'], $ruleinfo['hctitle']);
+            }
+            $highwaycode.= $this->addAudio($ruleno, 'HC', '/highway-code').$rule;
         }
         return $highwaycode;
     }

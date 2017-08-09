@@ -195,7 +195,7 @@ class TheoryTest implements TTInterface{
     protected function anyExisting(){
         $testID = $this->getTest();
         $existing = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testID, 'type' => $this->getTestType(), 'status' => array('<=', 1)));
-        if($existing){
+        if(!empty($existing)){
             $this->exists = true;
             if($existing['status'] == 1){return 'passed';}
             else{return 'exists';}
@@ -216,7 +216,10 @@ class TheoryTest implements TTInterface{
      * @return void Nothing is returned
      */
     protected function existingLayout(){        
-        if($this->anyExisting() == 'passed'){$text = '<p>You have already passed this test! Are you sure you want to start a new test?</p><div class="timeremaining" id=""></div>';}
+        if($this->anyExisting() == 'passed'){
+            $text = '<p>You have already passed this test! Are you sure you want to start a new test?</p><div class="timeremaining" id=""></div>';
+            $continue = '';
+        }
         else{
             $text = '<p>You have already started this test! Would you like to continue this test or start a new one?</p><div class="timeremaining" id="'.$this->getSeconds().'"></div>';
             $continue = '<div class="continue btn btn-theory" id="'.$this->questionPrim($this->currentQuestion()).'"><span class="fa fa-long-arrow-right fa-fw"></span><span class="hidden-xs"> Continue Test</span></div>';
@@ -231,13 +234,13 @@ class TheoryTest implements TTInterface{
         
     /**
      * Gets the questions array from the database if $this->questions is not set
-     * @return array Returns the questions array
+     * @return array|false Returns the questions array if it exists else returns false
      */
     public function getQuestions(){
         if(!isset($this->questions)){
             $testID = $this->getTest();
             $questions = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testID, 'type' => $this->getTestType()), array('questions'), array('started' => 'DESC'));
-            if($questions){
+            if(!empty($questions)){
                 $this->questions = unserialize($questions['questions']);
                 return $this->questions;
             }
@@ -253,7 +256,7 @@ class TheoryTest implements TTInterface{
         if(!isset(self::$useranswers)){
             $testID = $this->getTest();
             $answers = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testID, 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
-            if($answers){
+            if(!empty($answers)){
                 self::$useranswers = unserialize($answers['answers']);
                 if(!is_array($_SESSION['test'.$this->getTest()])){$_SESSION['test'.$this->getTest()] = self::$useranswers;}
                 if(!is_numeric($_SESSION['question_no']['test'.$this->getTest()])){$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
@@ -350,10 +353,9 @@ class TheoryTest implements TTInterface{
         if(!is_numeric($current)){$current = $this->currentQuestion();}
         foreach($_SESSION['test'.$this->getTest()] as $question => $value){
             if($question < $current && $value['flagged'] == 1){
-                $test = $question;
+                return $question;
             }
         }
-        if($test){return $test;}
         if($this->numFlagged() > 1){
             return $this->getPrevFlagged($this->numQuestions() + 1);
         }

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Description of TTInterface
- *
- * @author Adams
- */
 namespace TheoryTest\Essential;
 
 interface TTInterface{

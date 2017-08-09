@@ -41,7 +41,7 @@ class LearnTest extends TheoryTest{
      */
     public function createNewTest($sectionNo = '1', $type = 'dsa'){
         $this->clearSettings();
-        if($type == 'casestudy'){$caseNo = $sectionNo; $sectionNo = $this->getRealCaseID($sectionNo);}
+        if($type == 'casestudy'){$sectionNo = $this->getRealCaseID($sectionNo);}
         $this->chooseQuestions($sectionNo, $type);
         $this->setTest($type.$sectionNo);
         if($type != 'casestudy'){
@@ -49,7 +49,7 @@ class LearnTest extends TheoryTest{
             $name = $sectionNo.'. '.$learnName['name'];
             if($learnName['free'] == 0){$this->user->checkUserAccess();}
         }
-        else{$name = 'Case Study '.$caseNo;}
+        else{$name = 'Case Study '.$sectionNo;}
         $this->setTestName($name);
         return $this->buildTest();
     }
@@ -260,9 +260,8 @@ class LearnTest extends TheoryTest{
      */
     protected function getFirstQuestion(){
         if($this->testInfo['category']){
-            $question = $this->db->select($this->questionsTable, array($this->testInfo['sort'] => '1', $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'));
+            return $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => '1', $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'));
         }
-        return $question['prim'];
     }
     
      /**
@@ -271,9 +270,8 @@ class LearnTest extends TheoryTest{
      */
     protected function getLastQuestion(){
         if($this->testInfo['category']){
-            $question = $this->db->select($this->questionsTable, array($this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => 'DESC'));
+            return $question = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
         }
-        return $question['prim'];
     }
 
     /**
@@ -391,7 +389,7 @@ class LearnTest extends TheoryTest{
      */
     protected function flagHintButton(){
         $settings = $this->checkSettings();
-        if($settings['hint'] == 'on'){$class = ' studyon';}
+        $class = ($settings['hint'] === 'on' ? ' studyon' : '');
         return '<div class="hint btn btn-theory'.$class.'"><span class="fa fa-book fa-fw"></span><span class="hidden-xs"> Study</span></div>';
     }
     
@@ -409,7 +407,7 @@ class LearnTest extends TheoryTest{
      */
     protected function extraContent(){
         if(is_array($this->testInfo['casestudy'])){
-            if($_COOKIE['skipCorrect'] == 1){$skipcorrect = ' flagged';}
+            $skipcorrect = ($_COOKIE['skipCorrect'] === 1 ? ' flagged' : '');
             $extra.= '</div></div><div class="row"><div><div class="col-xs-12 skipcorrectclear"><div class="skipcorrect btn btn-theory'.$skipcorrect.'">Skip Correct</div></div>';
         }
         $extra.='<div class="signal signal'.$this->questionStatus().'"></div>';
@@ -424,7 +422,7 @@ class LearnTest extends TheoryTest{
      */
     public function dsaExplanation($explanation, $prim){
         $settings = $this->checkSettings();
-        if($settings['hint'] == 'on'){$class = ' visible';}
+        $class = ($settings['hint'] === 'on' ? ' visible' : '');
         return '<div class="col-xs-12 showhint'.$class.'">
 <ul class="nav nav-tabs">
 <li class="active"><a href="#tab-1" aria-controls="profile" role="tab" data-toggle="tab">Highway Code +</a></li>
@@ -485,7 +483,7 @@ class LearnTest extends TheoryTest{
     /**
      * The case ID's give may not match so make sure to get the correct one
      * @param int $sectionNo This should be the section number for the test
-     * @return int|boolean Returns the real case study ID number if it exists or returns false
+     * @return int|false Returns the real case study ID number if it exists or returns false
      */
     private function getRealCaseID($sectionNo){
         if($this->getTestType() == 'CAR'){$type = 'car';}else{$type = 'M/C';}

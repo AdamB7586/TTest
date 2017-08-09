@@ -270,7 +270,7 @@ class LearnTest extends TheoryTest{
      */
     protected function getLastQuestion(){
         if($this->testInfo['category']){
-            return $question = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
+            return $this->db->fetchColumn($this->questionsTable, array($this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
         }
     }
 

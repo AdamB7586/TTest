@@ -179,29 +179,15 @@ class LearnTest extends TheoryTest{
      * @param int $prim The prim number for the question
      * @param string $option The option text
      * @param string $letter The letter of the current option
+     * @param boolean $image If is a image question should be set to true else if it is multiple choice set to false (default)
      * @return string Returns the HTML code for a given question option
      */
-    protected function getOptions($prim, $option, $letter) {
+    protected function getOptions($prim, $option, $letter, $image = false) {
         if($this->answerSelected($prim, $letter)){
-            $selected = ' selected';
+            $selected = ($image === false ? ' selected' : ' imgselected');
             if($this->questionStatus() != 'unattempted'){$selected.= ' selected'.$this->questionStatus();}
         }
-        return '<div class="answer'.$selected.'" id="'.$letter.'"><div class="selectbtn"></div>'.$this->addAudio($prim, $letter).$option.'</div>';
-    }
-    
-    /**
-     * Returns the HTML code for the options if its an image type of question
-     * @param int $prim The prim number for the question
-     * @param string $option The option text
-     * @param string $letter The letter of the current option
-     * @return string Returns the HTML code for a given question option
-     */
-    protected function imageOption($prim, $option, $letter) {
-        if($this->answerSelected($prim, $letter)){
-            $selected = ' imgselected';
-            if($this->questionStatus() != 'unattempted'){$selected.= ' selected'.$this->questionStatus();}
-        }
-        return '<div class="answerimage'.$selected.'" id="'.strtoupper($letter).'">'.$option.$this->createImage($prim.strtolower($letter).'.png').'</div>';
+        return '<div class="answer'($image === true ? 'image' : '').$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($prim, $letter).$option : $option.$this->createImage($prim.strtolower($letter).'.png')).'</div>';
     }
     
     /**

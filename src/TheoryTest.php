@@ -753,39 +753,20 @@ class TheoryTest implements TTInterface{
      * @param int $question This should be the unique question prim number
      * @param string $option This should be the option text
      * @param string $letter This should be the option letter
+     * @param boolean $image If is a image question should be set to true else if it is multiple choice set to false (default)
      * @param boolean $new If the test is new this should be set to true else set to false
      * @return string Should return the option HTML for the given option
      */
-    protected function getOptions($question, $option, $letter, $new = false){
+    protected function getOptions($question, $option, $letter, $image = false, $new = false){
         if(!$new && $this->review != 'answers'){
-            if($this->answerSelected($question, $letter)){$selected = ' selected';}
+            if($this->answerSelected($question, $letter)){$selected = ($image === false ? ' selected' : ' imgselected');}
         }elseif(!$new){
             $iscorrect = $this->answerSelectedCorrect($question, $letter);
-            if($iscorrect == 'CORRECT'){$selected = ' selectedcorrect';}
-            elseif($iscorrect == 'INCORRECT'){$selected = ' selectedincorrect';}
-            elseif($iscorrect == 'NSCORRECT'){$selected = ' nscorrect';}
+            if($iscorrect == 'CORRECT'){$selected = ($image === false ? ' selectedcorrect' : ' imgcorrect');}
+            elseif($iscorrect == 'INCORRECT'){$selected = ($image === false ? ' selectedincorrect' : ' imgincorrect');}
+            elseif($iscorrect == 'NSCORRECT'){$selected = ($image === false ? ' nscorrect' : ' imgnscorrect');}
         }
-        return '<div class="answer'.$selected.'" id="'.$letter.'"><div class="selectbtn"></div>'.$this->addAudio($question, $letter).$option.'</div>';
-    }
-    
-    /**
-     * Returns the option HTML for a selected image option of a question
-     * @param int $question This should be the unique question prim number
-     * @param string $option This should be the option text
-     * @param string $letter This should be the option letter
-     * @param boolean $new If the test is new this should be set to true else set to false
-     * @return string Should return the option HTML for the given image option
-     */
-    protected function imageOption($question, $option, $letter, $new = false){
-        if(!$new && $this->review != 'answers'){
-            if($this->answerSelected($question, strtoupper($letter))){$selected = ' imgselected';}
-        }elseif(!$new){
-            $iscorrect = $this->answerSelectedCorrect($question, $letter);
-            if($iscorrect == 'CORRECT'){$selected = ' imgcorrect';}
-            elseif($iscorrect == 'INCORRECT'){$selected = ' imgincorrect';}
-            elseif($iscorrect == 'NSCORRECT'){$selected = ' imgnscorrect';}
-        }
-        return '<div class="answerimage'.$selected.'" id="'.strtoupper($letter).'">'.$option.$this->createImage($question.strtolower($letter).'.png').'</div>';
+        return '<div class="answer'.$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($question, $letter).$option : $option.$this->createImage($question.strtolower($letter).'.png')).'</div>';
     }
     
     /**
@@ -844,29 +825,15 @@ class TheoryTest implements TTInterface{
         $question = $this->getQuestionData($prim);
         if($question){
             if(is_numeric($question['casestudyno'])){$this->setCaseStudy($question['casestudyno']);}
-            if($question['format'] == '0' || $question['format'] == '2'){
-                $option1 = $this->getOptions($question['prim'], $question['option1'], 'A', $new);
-                $option2 = $this->getOptions($question['prim'], $question['option2'], 'B', $new);
-                $option3 = $this->getOptions($question['prim'], $question['option3'], 'C', $new);
-                $option4 = $this->getOptions($question['prim'], $question['option4'], 'D', $new);
-                if($question['option5']){$option5 = $this->getOptions($question['prim'], $question['option5'], 'E', $new);}
-                if($question['option6']){$option6 = $this->getOptions($question['prim'], $question['option6'], 'F', $new);}
-            }
-            else{
-                $option1 = $this->imageOption($question['prim'], $question['option1'], 'A', $new);
-                $option2 = $this->imageOption($question['prim'], $question['option2'], 'B', $new);
-                $option3 = $this->imageOption($question['prim'], $question['option3'], 'C', $new);
-                $option4 = $this->imageOption($question['prim'], $question['option4'], 'D', $new);
-            }
-            
+            $image = (($question['format'] == '0' || $question['format'] == '2') ? false : true);
             self::$layout->assign('mark', $this->getMarkText($question['mark']));
             self::$layout->assign('question', '<div class="questiontext" id="'.$prim.'">'.$this->addAudio($prim, 'Q').$question['question'].'</div>');
-            self::$layout->assign('answer_1', $option1);
-            self::$layout->assign('answer_2', $option2);
-            self::$layout->assign('answer_3', $option3);
-            self::$layout->assign('answer_4', $option4);
-            self::$layout->assign('answer_5', $option5);
-            self::$layout->assign('answer_6', $option6);
+            self::$layout->assign('answer_1', $this->getOptions($question['prim'], $question['option1'], 'A', $image, $new));
+            self::$layout->assign('answer_2', $this->getOptions($question['prim'], $question['option2'], 'B', $image, $new));
+            self::$layout->assign('answer_3', $this->getOptions($question['prim'], $question['option3'], 'C', $image, $new));
+            self::$layout->assign('answer_4', $this->getOptions($question['prim'], $question['option4'], 'D', $image, $new));
+            self::$layout->assign('answer_5', ($question['option5'] ? $this->getOptions($question['prim'], $question['option5'], 'E', $image, $new) : false));
+            self::$layout->assign('answer_6', ($question['option6'] ? $this->getOptions($question['prim'], $question['option6'], 'F', $image, $new) : false));
             self::$layout->assign('image', ($question['dsaimageid'] ? $this->createImage($question['prim'].'.jpg', true) : ''));
             self::$layout->assign('case_study', $this->casestudy);
             self::$layout->assign('dsa_explanation', $this->dsaExplanation($question['dsaexplanation'], $prim));

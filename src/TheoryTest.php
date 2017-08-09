@@ -190,7 +190,7 @@ class TheoryTest implements TTInterface{
     
     /**
      * Checks to see if their is currently a test which is not complete or a test which has already been passed
-     * @return string|boolean
+     * @return string|false
      */
     protected function anyExisting(){
         $testID = $this->getTest();

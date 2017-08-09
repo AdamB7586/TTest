@@ -195,8 +195,7 @@ class TheoryTest implements TTInterface{
      * @return string|false
      */
     protected function anyExisting(){
-        $testID = $this->getTest();
-        $existing = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testID, 'type' => $this->getTestType(), 'status' => array('<=', 1)));
+        $existing = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'status' => array('<=', 1)));
         if(!empty($existing)){
             $this->exists = true;
             if($existing['status'] == 1){return 'passed';}
@@ -240,8 +239,7 @@ class TheoryTest implements TTInterface{
      */
     public function getQuestions(){
         if(!isset($this->questions)){
-            $testID = $this->getTest();
-            $questions = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testID, 'type' => $this->getTestType()), array('questions'), array('started' => 'DESC'));
+            $questions = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('questions'), array('started' => 'DESC'));
             if(!empty($questions)){
                 $this->questions = unserialize($questions['questions']);
                 return $this->questions;
@@ -256,8 +254,7 @@ class TheoryTest implements TTInterface{
      */
     public function getUserAnswers(){
         if(!isset(self::$useranswers)){
-            $testID = $this->getTest();
-            $answers = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testID, 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
+            $answers = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
             if(!empty($answers)){
                 self::$useranswers = unserialize($answers['answers']);
                 if(!is_array($_SESSION['test'.$this->getTest()])){$_SESSION['test'.$this->getTest()] = self::$useranswers;}
@@ -896,10 +893,10 @@ class TheoryTest implements TTInterface{
      * @param int $prim this is the question unique number
      * @return array Returns that particular prim info
      */
-    public function questionInfo($prim){        
+    public function questionInfo($prim){    
+        $info = array();
         $questioninfo = self::$db->select($this->questionsTable, array('prim' => $prim), array('prim', 'dsacat', 'dsaqposition'));
         $catinfo = self::$db->select($this->dsaCategoriesTable, array('section' => $questioninfo['dsacat']));
-        
         $info['prim'] = $questioninfo['prim'];
         $info['cat'] = $questioninfo['dsacat'].'. '.$catinfo['name'];
         if($questioninfo['dsaqposition']){$info['topic'] = $questioninfo['dsaqposition'];}else{$info['topic'] = 'Case Study';}
@@ -956,8 +953,7 @@ class TheoryTest implements TTInterface{
     public function dsaExplanation($explanation, $prim){
         if($this->review == 'answers'){
             $settings = $this->checkSettings();
-            if($settings['hint'] == 'on'){$class = ' visable';}
-            return '<div class="col-md-12"><div class="explanation'.$class.'">'.$this->addAudio($prim, 'DSA').'<strong>Official DVSA answer explanation:</strong> '.$explanation.'</div></div>';
+            return '<div class="col-md-12"><div class="explanation'.($settings['hint'] === 'on' ? ' visable' : '').'">'.$this->addAudio($prim, 'DSA').'<strong>Official DVSA answer explanation:</strong> '.$explanation.'</div></div>';
         }
         return false;
     }
@@ -1059,9 +1055,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the time from the database
      */
     public function getTime($type = 'taken'){
-        $testID = $this->getTest();
-        $time = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testID, 'type' => $this->getTestType()), array('time_'.$type), array('started' => 'DESC'));
-        return $time['time_'.$type];
+        return self::$db->fetchColumn($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('time_'.$type), array('started' => 'DESC'));
     }
     
     /**
@@ -1085,12 +1079,10 @@ class TheoryTest implements TTInterface{
             else{$prev = $this->questionPrim(($this->currentQuestion() - 1));}
             return '<div class="prevquestion btn btn-theory" id="'.$prev.'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
         }
-        else{
-            if($this->review === 'all' || $this->review === 'answers' || $this->review === false){
-                return '<div class="prevquestion btn btn-theory" id="'.$this->getLastQuestion().'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
-            }
-            return '<div class="noprev"></div>';
+        if($this->review === 'all' || $this->review === 'answers' || $this->review === false){
+            return '<div class="prevquestion btn btn-theory" id="'.$this->getLastQuestion().'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
         }
+        return '<div class="noprev"></div>';
     }
     
     /**
@@ -1104,12 +1096,10 @@ class TheoryTest implements TTInterface{
             else{$next = $this->questionPrim(($this->currentQuestion() + 1));}
             return '<div class="nextquestion btn btn-theory" id="'.$next.'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
         }
-        else{
-            if($this->review === 'all' || $this->review === 'answers' || $this->review == false){
-                return '<div class="nextquestion btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
-            }
-            return '';
+        if($this->review === 'all' || $this->review === 'answers' || $this->review == false){
+            return '<div class="nextquestion btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
         }
+        return '';
     }
     
     /**
@@ -1118,8 +1108,7 @@ class TheoryTest implements TTInterface{
      * @return int Returns the DSA Category number of the current question
      */
     protected function getDSACat($prim){
-        $dsacat = self::$db->select($this->questionsTable, array('prim' => $prim), array('dsacat'));
-        return $dsacat['dsacat'];
+        return self::$db->fetchColumn($this->questionsTable, array('prim' => $prim), array('dsacat'));
     }
     
     /**
@@ -1212,7 +1201,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the print certificate/report button depending on how the user has done on the test
      */
     protected function printCertif(){
-        if($this->testresults['status'] == 'pass'){
+        if($this->testresults['status'] === 'pass'){
             return '<a href="/certificate.pdf?type=theory&amp;testID='.$this->getTest().'" title="Print Certificate" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Certificate</span></a>';
         }
         return '<a href="/certificate.pdf?type=theory&amp;testID='.$this->getTest().'" title="Print Results" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Results</span></a>';
@@ -1223,9 +1212,8 @@ class TheoryTest implements TTInterface{
      * @return boolean|array If the test has been completed the test results will be returned as an array else will return false
      */
     public function getTestResults(){
-        $testID = $this->getTest();
-        $results = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testID, 'type' => $this->getTestType(), 'status' => array('>', 0)), array('id', 'test_id', 'results', 'started', 'complete', 'time_taken', 'status'), array('started' => 'DESC'));
-        if($results){
+        $results = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'status' => array('>', 0)), array('id', 'test_id', 'results', 'started', 'complete', 'time_taken', 'status'), array('started' => 'DESC'));
+        if(!empty($results)){
             $this->testresults = unserialize($results['results']);
             $this->testresults['id'] = $results['id'];
             $this->testresults['test_id'] = $results['test_id'];
@@ -1240,7 +1228,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the test status HTML code either pass or failed
      */
     public function testStatus(){
-        if($this->testresults['status'] == 'pass'){return '<strong class="pass">Passed</strong>';}
+        if($this->testresults['status'] === 'pass'){return '<strong class="pass">Passed</strong>';}
         else{return '<strong class="fail">Failed</strong>';}
     }
     
@@ -1249,6 +1237,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the test report table
      */
     protected function testReport(){
+        $report = array();
         $this->getTestResults();
         $report['testname'] = ucwords($this->getTestName());
         $report['user'] = self::$user->getFirstname().' '.self::$user->getLastname();
@@ -1296,13 +1285,9 @@ class TheoryTest implements TTInterface{
                 elseif($_SESSION['test'.$this->getTest()][$r]['status'] == '3'){$class = ' incorrect';}
                 else{$class = ' incomplete';}
                 
-                if($this->currentQuestion() == $r){$current = ' currentreview';}
-                else{$current = '';}
-                
-                $questions.= '<div class="questionreview'.$class.$current.'" id="'.$this->questionPrim($r).'">'.$r.'</div>';
+                $questions.= '<div class="questionreview'.$class.($this->currentQuestion() == $r ? ' currentreview' : '').'" id="'.$this->questionPrim($r).'">'.$r.'</div>';
             }
-            $questions.= '</div>';
-            return $questions;
+            return $questions.'</div>';
         }
         return false;
     }

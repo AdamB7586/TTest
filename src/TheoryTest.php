@@ -56,6 +56,8 @@ class TheoryTest implements TTInterface{
     /**
      * Connects to the database sets the current user and gets any user answers
      * @param Database $db
+     * @param Smarty $layout
+     * @param User $user
      */
     public function __construct(Database $db, Smarty $layout, User $user){
         self::$db = $db;

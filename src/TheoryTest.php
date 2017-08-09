@@ -826,7 +826,7 @@ class TheoryTest implements TTInterface{
         $this->updateTestProgress($prim);
         $this->checkSettings($new);
         $question = $this->getQuestionData($prim);
-        if($question){
+        if(!empty($question)){
             if(is_numeric($question['casestudyno'])){$this->setCaseStudy($question['casestudyno']);}
             $image = (($question['format'] == '0' || $question['format'] == '2') ? false : true);
             self::$layout->assign('mark', $this->getMarkText($question['mark']));

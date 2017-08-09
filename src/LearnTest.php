@@ -393,6 +393,7 @@ class LearnTest extends TheoryTest{
      * @return string Returns any extra HTML code that needs adding to the page
      */
     protected function extraContent(){
+        $extra = '';
         if(is_array($this->testInfo['casestudy'])){
             $skipcorrect = ($_COOKIE['skipCorrect'] === 1 ? ' flagged' : '');
             $extra.= '</div></div><div class="row"><div><div class="col-xs-12 skipcorrectclear"><div class="skipcorrect btn btn-theory'.$skipcorrect.'">Skip Correct</div></div>';
@@ -476,7 +477,7 @@ class LearnTest extends TheoryTest{
     private function getRealCaseID($sectionNo){
         if($this->getTestType() == 'CAR'){$type = 'car';}else{$type = 'M/C';}
         $caseInfo = $this->db->select('theory_case_studies', array('type' => $type, 'lp' => 1, 'dsacat' => $sectionNo), array('casestudyno'));
-        if($caseInfo){
+        if(!empty($caseInfo)){
             return $caseInfo['casestudyno'];
         }
         return false;

@@ -4,9 +4,9 @@
     "require": {
         "php":">=5.5",
         "adamb/database": "^1.0",
-        "adamb/user": "^1.0",
         "smarty/smarty": "^3.1",
-        "setasign/fpdf": "^1.8"
+        "setasign/fpdf": "^1.8",
+        "adamb/user": "^0.0.1"
     },
     "suggests": {
         "fortawesome/font-awesome": "^4.7"
@@ -19,10 +19,16 @@
         }
     ],
     "require-dev": {
-        "phpunit/phpunit": "^6.1",
-        "phpunit/php-timer": "^1.0"
+        "phpunit/phpunit": "^6.1"
     },
     "autoload": {
-        "classmap": ["src/"]
+        "psr-4": {
+            "TheoryTest\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TheoryTest\\Tests\\": "tests/"
+        }
     }
 }

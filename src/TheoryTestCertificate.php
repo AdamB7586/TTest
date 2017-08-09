@@ -61,19 +61,16 @@ class TheoryTestCertificate implements CreateCertificate{
         $this->PDFInfo();
         if($this->theory->testresults['status'] == 'pass'){
             $this->pdf->AddPage();
-            if($this->testType == 'free'){$this->pdf->Image('images/theorycertificate.jpg', 0, 0, 210, 297);}
-            else{$this->pdf->Image('images/cert.jpg', 0, 0, 210, 297);}
+            $this->pdf->Image('images/cert.jpg', 0, 0, 210, 297);
             $this->pdf->SetFont('Arial','B', 24);
             $this->pdf->Ln(30);
             $this->pdf->Cell(190, 15, strip_tags($this->theory->getTestName()), 0, 0, 'C');
             $this->pdf->Ln(30);
-            if($this->testType != 'free'){
-                $this->pdf->SetFont('Arial','B', 18);
-                $this->pdf->Cell(10, 14, '', 0); $this->pdf->Cell(28, 14, 'Candidate', 0);
-                $this->pdf->Ln(12);
-                $this->certLine('Name:', $userInfo['first_name'].' '.$userInfo['last_name']);
-                $this->pdf->Ln(10);
-            }
+            $this->pdf->SetFont('Arial','B', 18);
+            $this->pdf->Cell(10, 14, '', 0); $this->pdf->Cell(28, 14, 'Candidate', 0);
+            $this->pdf->Ln(12);
+            $this->certLine('Name:', $userInfo['first_name'].' '.$userInfo['last_name']);
+            $this->pdf->Ln(10);
             $this->pdf->SetFont('Arial','B', 18);
             $this->pdf->Cell(10, 10, '', 0); $this->pdf->Cell(14, 10, 'Test', 0);
             $this->pdf->Ln(12);
@@ -87,28 +84,15 @@ class TheoryTestCertificate implements CreateCertificate{
             $this->pdf->SetTextColor(0,151,0);
             $this->pdf->Cell(92, 10, 'Passed', 0);
             $this->pdf->SetTextColor(0,0,0);
-            if($this->testType == 'free'){
-                $this->pdf->Ln(125);
-                $this->pdf->SetFont('Arial','B', 14);
-                $this->pdf->Cell(4, 10, '', 0); $this->pdf->Cell(72, 10, 'Voucher Code: SAVE10-LDCFTT'.$this->theory->testresults['id'], 0); $this->pdf->Ln(8);
-                $this->pdf->Cell(4, 10, '', 0); $date = new DateTime(); $date->modify('+1 month'); $this->pdf->Cell(72, 10, 'Expiry Date: '.$date->format('d/m/Y'), 0); $this->pdf->Ln(8);
-                $this->pdf->Cell(4, 10, '', 0); $this->pdf->Write(10, 'Visit www.learnerdriving.com for more info', 'http://www.learnerdriving.com/offers/google');
-            }
         }
         
         $this->pdf->AddPage('P', 'A4');
         $this->pdf->SetFont('Arial','B', 8);
-        if($this->testType != 'free'){
-            $detailsheader = array('Name', 'Test Name', 'Unique Test ID', 'Taken on Date/Time');
-            $details = array(array($userInfo['first_name'].' '.$userInfo['last_name'], strip_tags($this->theory->getTestName()), $this->theory->testresults['id'], date('d/m/Y g:i A', strtotime($this->theory->testresults['complete']))));
-            $tablewidths = array(52,52,39,47);
-        }
-        else{
-            $detailsheader = array('Test Name', 'Unique Test ID', 'Taken on Date/Time');
-            $details = array(array(strip_tags($this->theory->getTestName()),  $this->theory->testresults['id'], date('d/m/Y g:i A', strtotime($this->theory->testresults['complete']))));
-            $tablewidths = array(104,39,47);
-        }
-        $this->pdf->BasicTable($detailsheader, $details, $tablewidths);
+        $this->pdf->BasicTable(
+            array('Name', 'Test Name', 'Unique Test ID', 'Taken on Date/Time'),
+            array(array($userInfo['first_name'].' '.$userInfo['last_name'], strip_tags($this->theory->getTestName()), $this->theory->testresults['id'], date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])))),
+            array(52,52,39,47)
+        );
         $this->pdf->Ln();
         $this->pdf->SetFont('Arial','B', 16);
         $this->pdf->Cell(92, 10, 'Theory Test Report', 0);
@@ -141,30 +125,10 @@ class TheoryTestCertificate implements CreateCertificate{
     private function overallResults(){
         $header = array('Group', 'Topics in group', 'Correct', 'Incorrect', 'Total', 'Percentage', 'Status');
         foreach($this->db->selectAll($this->theory->dsaCategoriesTable) as $group => $data){
-            if($this->testType == 'adi'){
-                $correct = (int)$this->theory->testresults['band'][$data['section']]['correct'];
-                $dsacorrect = (int)$this->theory->testresults['dsa'][$data['group']]['correct'];
-                $incorrect = (int)$this->theory->testresults['band'][$data['section']]['incorrect'];
-                $total = $correct + $incorrect;
-
-                $lastInGroup = $this->db->select($this->theory->dsaCategoriesTable, array('group' => $data['group']), array('section'), array('section' => 'DESC'));
-                if($dsacorrect >= $this->theory->passmarkPerCat && $lastInGroup['section'] == $data['section']){$groupstatus = 'Passed';}
-                elseif($lastInGroup['section'] == $data['section']){$groupstatus = 'Failed';}
-                else{$groupstatus = '';}
-                
-                $groupdata[] = array($data['group'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format((($correct / $total) * 100), 0).'%', $groupstatus);
-            }
-            else{
-                $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
-                $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
-                $total = $correct + $incorrect;
-
-                if($this->testType == 'fleet'){
-                    if($correct >= self::passmarkPerCat){$groupstatus = 'Passed';}
-                    else{$groupstatus = 'Failed';}
-                }
-                $groupdata[] = array($data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format((($correct / $total) * 100), 0).'%', $groupstatus);
-            }
+            $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
+            $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
+            $total = $correct + $incorrect;
+            $groupdata[] = array($data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format((($correct / $total) * 100), 0).'%', $groupstatus);
             
             $totalcorrect = $totalcorrect + $correct;
             $totalincorrect = $totalincorrect + $incorrect;

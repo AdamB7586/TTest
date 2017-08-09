@@ -424,7 +424,7 @@ class TheoryTest implements TTInterface{
      * @return string|boolean If the user can play audio the button will be returned else returns false
      */
     protected function audioButton(){
-        if($this->audioEnabled == true){return '<div class="audioswitch audiooff"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span><span class="fa fa-ban fa-stack-2x text-danger"></span></span><span class="sr-only">Turn Sound OFF</span></div>';}
+        if($this->audioEnabled === true){return '<div class="audioswitch audiooff"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span><span class="fa fa-ban fa-stack-2x text-danger"></span></span><span class="sr-only">Turn Sound OFF</span></div>';}
         else{return '<div class="audioswitch audioon"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span></span><span class="sr-only">Turn Sound ON</span></div>';}
     }
     
@@ -447,7 +447,7 @@ class TheoryTest implements TTInterface{
      */
     public function createImage($file, $main = false){
         if($file != NULL && $file != '' && file_exists(ROOT.DS.'images'.DS.'prim'.DS.$file)){
-            if($main == true){$class = ' class="imageright questionimage img-responsive"'; $width = '273'; $height = '178';}
+            if($main === true){$class = ' class="imageright questionimage img-responsive"'; $width = '273'; $height = '178';}
             else{
                 list($width, $height) = getimagesize(ROOT.DS.'images'.DS.'prim'.DS.$file);
                 $class = ' class="img-responsive"';
@@ -463,7 +463,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the script needed for the page the user is currently on
      */
     protected function getScript($review = false){
-        if($this->review != 'answers' && $review == false){
+        if($this->review !== 'answers' && $review === false){
             return '<script type="text/javascript" src="/js/theory/theory-test-questions.js"></script>';
         }
         return '<script type="text/javascript" src="/js/theory/review-questions.js"></script>';
@@ -899,7 +899,7 @@ class TheoryTest implements TTInterface{
         $catinfo = self::$db->select($this->dsaCategoriesTable, array('section' => $questioninfo['dsacat']));
         $info['prim'] = $questioninfo['prim'];
         $info['cat'] = $questioninfo['dsacat'].'. '.$catinfo['name'];
-        if($questioninfo['dsaqposition']){$info['topic'] = $questioninfo['dsaqposition'];}else{$info['topic'] = 'Case Study';}
+        $info['topic'] = ($questioninfo['dsaqposition'] ? $questioninfo['dsaqposition'] : 'Case Study');
         return $info;
     }
     
@@ -963,8 +963,8 @@ class TheoryTest implements TTInterface{
      * @param int $casestudy This should be the case study number for the set of questions
      */
     protected function setCaseStudy($casestudy){
-        $case = self::$db->select($this->caseTable, array('casestudyno' => $casestudy), array('cssituation'));
-        $this->casestudy = $this->addAudio($casestudy, 'CS').$case['cssituation'];
+        $case = self::$db->fetchColumn($this->caseTable, array('casestudyno' => $casestudy), array('cssituation'));
+        $this->casestudy = $this->addAudio($casestudy, 'CS').$case;
     }
     
     /**
@@ -1040,8 +1040,8 @@ class TheoryTest implements TTInterface{
         if($time){
             if($type == 'taken'){
                 list($mins, $secs) = explode(':', $time);
-                $time = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
-                self::$db->update($this->progressTable, array('time_'.$type => $time), array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
+                $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
+                self::$db->update($this->progressTable, array('time_'.$type => $newtime), array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
             }
             else{
                 $_SESSION['time_'.$type]['test'.$this->getTest()] = $time;
@@ -1055,7 +1055,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the time from the database
      */
     public function getTime($type = 'taken'){
-        return self::$db->fetchColumn($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('time_'.$type), array('started' => 'DESC'));
+        return self::$db->fetchColumn($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('time_'.$type), 0, array('started' => 'DESC'));
     }
     
     /**
@@ -1063,8 +1063,7 @@ class TheoryTest implements TTInterface{
      * @return int Returns the current number of seconds remaining for the test
      */
     protected function getSeconds(){
-        $time = $this->getTime('remaining');
-        list($minutes, $seconds) = explode(':', $time);
+        list($minutes, $seconds) = explode(':', $this->getTime('remaining'));
         return intval((intval($minutes) * 60) + intval($seconds));
     }
 

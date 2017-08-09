@@ -823,7 +823,7 @@ class TheoryTest implements TTInterface{
      * @return string|boolean Returns the question HTML and Question number as a JSON encoded string if question exists else returns false
      */
     public function createQuestionHTML($prim, $new = false){
-        $this->updateTestProgress($prim, $new);
+        $this->updateTestProgress($prim);
         $this->checkSettings($new);
         $question = $this->getQuestionData($prim);
         if($question){
@@ -876,7 +876,6 @@ class TheoryTest implements TTInterface{
     /**
      * Updates the test progress in the database
      * @param int $prim This should be the current question prim number
-     * @param boolean $new If it is a new test should be set to true
      */
     protected function updateTestProgress($prim){
         $this->current = $this->questionNo($prim);

@@ -291,7 +291,7 @@ class TheoryTest implements TTInterface{
      */
     public function questionPrim($questionNo){
         $this->getQuestions();
-        return $this->questions[$questionNo];
+        return $this->questions[intval($questionNo)];
     }
     
     /**
@@ -326,37 +326,35 @@ class TheoryTest implements TTInterface{
     /**
      * Returns the next flagged question number
      * @param string $dir This should be set to 'next' for the next question or 'prev' for the previous question
-     * @return int|false Returns the next question ID if one exists else will return false
+     * @return int Returns the next question ID if one exists else will return false
      */
     public function getNextFlagged($dir = 'next'){
         $current = $this->currentQuestion();
         foreach($_SESSION['test'.$this->getTest()] as $question => $value){
             if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['flagged'] == 1){
-                return $question;
+                return (int)$question;
             }
         }
         if($this->numFlagged() > 1){
-            return $this->getNextFlagged($dir === 'next' ? 0 : $this->numQuestions() + 1);
+            return (int)$this->getNextFlagged($dir === 'next' ? 0 : $this->numQuestions() + 1);
         }
-        return false;
     }
     
     /**
      * Returns the next incomplete question
      * @param string $dir This should be set to 'next' for the next question or 'prev' for the previous question
-     * @return int|boolean Returns the next incomplete question ID if one exists else will return false
+     * @return int Returns the next incomplete question ID if one exists else will return false
      */
     public function getNextIncomplete($dir = 'next'){
         $current = $this->currentQuestion();
         foreach($_SESSION['test'.$this->getTest()] as $question => $value){
             if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['status'] < 3){
-                return $question;
+                return (int)$question;
             }
         }
         if($this->numIncomplete() > 1){
-            return $this->getNextIncomplete($dir === 'next' ? 0 : $this->numQuestions() + 1);
+            return (int)$this->getNextIncomplete($dir === 'next' ? 0 : $this->numQuestions() + 1);
         }
-        return false;
     }
     
     /**
@@ -368,7 +366,7 @@ class TheoryTest implements TTInterface{
         if($status == 'on'){$this->audioEnabled = true;}else{$this->audioEnabled = false;}
         $settings = $this->checkSettings();
         $settings['audio'] = $status;
-        self::$user->setUserSettings($settings);
+        return self::$user->setUserSettings($settings);
     }
     
     /**
@@ -399,14 +397,14 @@ class TheoryTest implements TTInterface{
     public function hintEnable(){
         $settings = $this->checkSettings();
         $settings['hint'] = ($settings['hint'] === 'on' ? 'off' : 'on');
-        self::$user->setUserSettings($settings);
+        return self::$user->setUserSettings($settings);
     }
     
     /**
      * Returns the image HTML if the image exists else returns false
      * @param string $file Should be the image name and extension
      * @param boolean $main If the image is from the question should be set to true
-     * @return string|boolean Returns HTML image string if exists else returns false
+     * @return string|false Returns HTML image string if exists else returns false
      */
     public function createImage($file, $main = false){
         if($file != NULL && $file != '' && file_exists(ROOT.DS.'images'.DS.'prim'.DS.$file)){
@@ -446,7 +444,7 @@ class TheoryTest implements TTInterface{
     
     /**
      * If reviewing a particular set of questions will provide the alert HTML of false
-     * @return string|boolean Returns the alert HTML if in the correct section else return false
+     * @return string|false Returns the alert HTML if in the correct section else return false
      */
     protected function alert(){
         if($this->review === 'flagged' || $this->review === 'incomplete'){
@@ -673,7 +671,7 @@ class TheoryTest implements TTInterface{
      * Checks to see if the answer is selected and if it is correct or not
      * @param int $prim Should be the question prim number
      * @param string $letter Should be the letter of the answer you are checking if it is correct
-     * @return string|boolean Returns string if correct and not selected, selected and correct, or selected and incorrect else returns false
+     * @return string|false Returns string if correct and not selected, selected and correct, or selected and incorrect else returns false
      */
     protected function answerSelectedCorrect($prim, $letter){
         $isCorrect = self::$db->select($this->questionsTable, array('prim' => $prim, 'answerletters' => array('LIKE', '%'.strtoupper($letter).'%')), array('answerletters'));
@@ -1207,7 +1205,7 @@ class TheoryTest implements TTInterface{
     
     /**
      * Returns the status of each questions and the styles for the review answers section
-     * @return string|boolean Returns the HTML code if they are in the reviewing answers section else return false
+     * @return string|false Returns the HTML code if they are in the reviewing answers section else return false
      */
     protected function reviewAnswers(){
         if($this->review == 'answers'){

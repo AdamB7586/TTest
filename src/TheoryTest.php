@@ -432,10 +432,8 @@ class TheoryTest implements TTInterface{
      * @return string Returns the HTML with the number of questions to mark
      */
     protected function getMarkText($num){
-        if($num == 1){return '<span class="mark" title="1">Mark one answer</span>';}
-        if($num == 2){return '<span class="mark" title="2">Mark two answers</span>';}
-        if($num == 3){return '<span class="mark" title="3">Mark three answers</span>';}
-        if($num == 4){return '<span class="mark" title="4">Mark four answers</span>';}
+        $number = array(1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five', 6 => 'six');
+        return '<span class="mark" title="'.$num.'">Mark '.$number[intval($num)].' answer'.($num > 1 ? 's' : '').'</span>';
     }
     
     /**

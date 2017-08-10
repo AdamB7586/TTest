@@ -325,71 +325,37 @@ class TheoryTest implements TTInterface{
     
     /**
      * Returns the next flagged question number
-     * @param int $current This should be the current question 
+     * @param string $dir This should be set to 'next' for the next question or 'prev' for the previous question
      * @return int|false Returns the next question ID if one exists else will return false
      */
-    public function getNextFlagged($current = ''){
-        if(!is_numeric($current)){$current = $this->currentQuestion();}
+    public function getNextFlagged($dir = 'next'){
+        $current = $this->currentQuestion();
         foreach($_SESSION['test'.$this->getTest()] as $question => $value){
-            if($question > $current && $value['flagged'] == 1){
+            if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['flagged'] == 1){
                 return $question;
             }
         }
         if($this->numFlagged() > 1){
-            return $this->getNextFlagged(0);
-        }
-        return false;
-    }
-    
-    /**
-     * Returns the previous flagged question number
-     * @param int $current This should be the current question
-     * @return int|boolean Returns the previous question ID if one exists else will return false
-     */
-    public function getPrevFlagged($current = ''){
-        if(!is_numeric($current)){$current = $this->currentQuestion();}
-        foreach($_SESSION['test'.$this->getTest()] as $question => $value){
-            if($question < $current && $value['flagged'] == 1){
-                return $question;
-            }
-        }
-        if($this->numFlagged() > 1){
-            return $this->getPrevFlagged($this->numQuestions() + 1);
+            return $this->getNextFlagged($dir === 'next' ? 0 : $this->numQuestions() + 1);
         }
         return false;
     }
     
     /**
      * Returns the next incomplete question
-     * @param int $current This should be the current question
+     * @param string $dir This should be set to 'next' for the next question or 'prev' for the previous question
      * @return int|boolean Returns the next incomplete question ID if one exists else will return false
      */
-    public function getNextIncomplete($current = ''){
-        if(!is_numeric($current)){$current = $this->currentQuestion();}
+    public function getNextIncomplete($dir = 'next'){
+        $current = $this->currentQuestion();
         foreach($_SESSION['test'.$this->getTest()] as $question => $value){
-            if($question > $current && $value['status'] < 3){
+            if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['status'] < 3){
                 return $question;
             }
         }
         if($this->numIncomplete() > 1){
-            return $this->getNextIncomplete(0);
+            return $this->getNextIncomplete($dir === 'next' ? 0 : $this->numQuestions() + 1);
         }
-        return false;
-    }
-    
-    /**
-     * Returns the previous incomplete question
-     * @param int $current This should be the current question
-     * @return int|boolean Returns the previous incomplete question ID if one exists else will return false
-     */
-    public function getPrevIncomplete($current = ''){
-        if(!is_numeric($current)){$current = $this->currentQuestion();}
-        foreach($_SESSION['test'.$this->getTest()] as $question => $value){
-            if($question < $current && $value['status'] < 3){
-                return $question;
-            }
-        }
-        if($this->numIncomplete() > 1){return $this->getPrevIncomplete($this->numQuestions() + 1);}
         return false;
     }
     
@@ -604,8 +570,6 @@ class TheoryTest implements TTInterface{
         }
         return $string;
     }
-
-
 
     /**
      * Flags/Un-flags the particular question
@@ -1042,8 +1006,8 @@ class TheoryTest implements TTInterface{
      */
     protected function prevQuestion(){
         if(($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ((int)$this->currentQuestion() != 1 && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))){
-            if($this->review == 'flagged' && $this->numFlagged() > 1){$prev = $this->questionPrim($this->getPrevFlagged());}
-            elseif($this->review == 'incomplete' && $this->numIncomplete() > 1){$prev = $this->questionPrim($this->getPrevIncomplete());}
+            if($this->review == 'flagged' && $this->numFlagged() > 1){$prev = $this->questionPrim($this->getNextFlagged('prev'));}
+            elseif($this->review == 'incomplete' && $this->numIncomplete() > 1){$prev = $this->questionPrim($this->getNextIncomplete('prev'));}
             else{$prev = $this->questionPrim(($this->currentQuestion() - 1));}
             return '<div class="prevquestion btn btn-theory" id="'.$prev.'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
         }

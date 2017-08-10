@@ -1,7 +1,7 @@
 <?php
 namespace TheoryTest\Essential;
 
-class CertificateInterface{
+interface CertificateInterface{
     public function PDFInfo();
     public function generateCertificate();
 }

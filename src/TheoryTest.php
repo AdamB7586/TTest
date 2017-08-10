@@ -408,12 +408,13 @@ class TheoryTest implements TTInterface{
      */
     public function createImage($file, $main = false){
         if($file != NULL && $file != '' && file_exists(ROOT.DS.'images'.DS.'prim'.DS.$file)){
-            if($main === true){$class = ' class="imageright questionimage img-responsive"'; $width = '273'; $height = '178';}
+            list($width, $height) = getimagesize(ROOT.DS.'images'.DS.'prim'.DS.$file);
+            if{$class = ; $width = '273'; $height = '178';}
             else{
-                list($width, $height) = getimagesize(ROOT.DS.'images'.DS.'prim'.DS.$file);
-                $class = ' class="img-responsive"';
+                
+                $class = '';
             }
-            return '<img src="/images/prim/'.$file.'" alt="" width="'.$width.'" height="'.$height.'"'.$class.' />';
+            return '<img src="/images/prim/'.$file.'" alt="" width="'.$width.'" height="'.$height.'" class="'.($main === true ? 'imageright questionimage ' : '').'img-responsive" />';
         }
         return false;
     }
@@ -879,7 +880,7 @@ class TheoryTest implements TTInterface{
      * Returns the correct HTML for the DSA explanation in the review section
      * @param string $explanation Should be the DSA explanation for the particular question
      * @param int $prim Should be the prim number of the current question
-     * @return string|boolean Returns the HTML string if in the review section else returns false
+     * @return string|false Returns the HTML string if in the review section else returns false
      */
     public function dsaExplanation($explanation, $prim){
         if($this->review == 'answers'){

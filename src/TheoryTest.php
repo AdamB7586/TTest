@@ -180,7 +180,7 @@ class TheoryTest implements TTInterface{
      */
     protected function chooseQuestions($testNo){
         $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
-        self::$db->delete($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()/*, 'status' => 0*/));
+        self::$db->delete($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()));
         unset($_SESSION['test'.$this->getTest()]);
         foreach($questions as $i => $question){
             $this->questions[($i + 1)] = $question['prim'];

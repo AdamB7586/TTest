@@ -255,7 +255,7 @@ class TheoryTest implements TTInterface{
             $answers = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
             if(!empty($answers)){
                 self::$useranswers = unserialize($answers['answers']);
-                if(!is_array($_SESSION['test'.$this->getTest()])){$_SESSION['test'.$this->getTest()] = self::$useranswers;}
+                if(!is_array(filter_input(INPUT_SESSION, 'test'.$this->getTest(), FILTER_DEFAULT, FILTER_REQUIRE_ARRAY))){$_SESSION['test'.$this->getTest()] = self::$useranswers;}
                 if(!is_numeric($_SESSION['question_no']['test'.$this->getTest()])){$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
                 $this->testID = $answers['id'];
                 return self::$useranswers;
@@ -330,7 +330,7 @@ class TheoryTest implements TTInterface{
      */
     public function getNextFlagged($dir = 'next'){
         $current = $this->currentQuestion();
-        foreach($_SESSION['test'.$this->getTest()] as $question => $value){
+        foreach(filter_input(INPUT_SESSION, 'test'.$this->getTest(), FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) as $question => $value){
             if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['flagged'] == 1){
                 return (int)$question;
             }
@@ -347,7 +347,7 @@ class TheoryTest implements TTInterface{
      */
     public function getNextIncomplete($dir = 'next'){
         $current = $this->currentQuestion();
-        foreach($_SESSION['test'.$this->getTest()] as $question => $value){
+        foreach(filter_input(INPUT_SESSION, 'test'.$this->getTest(), FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) as $question => $value){
             if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['status'] < 3){
                 return (int)$question;
             }
@@ -409,11 +409,6 @@ class TheoryTest implements TTInterface{
     public function createImage($file, $main = false){
         if($file != NULL && $file != '' && file_exists(ROOT.DS.'images'.DS.'prim'.DS.$file)){
             list($width, $height) = getimagesize(ROOT.DS.'images'.DS.'prim'.DS.$file);
-            if{$class = ; $width = '273'; $height = '178';}
-            else{
-                
-                $class = '';
-            }
             return '<img src="/images/prim/'.$file.'" alt="" width="'.$width.'" height="'.$height.'" class="'.($main === true ? 'imageright questionimage ' : '').'img-responsive" />';
         }
         return false;
@@ -852,7 +847,7 @@ class TheoryTest implements TTInterface{
      */
     protected function getFlaggedQuestion(){
         $q = 1;
-        foreach($_SESSION['test'.$this->getTest()] as $value){
+        foreach(filter_input(INPUT_SESSION, 'test'.$this->getTest(), FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) as $value){
             if($value['flagged'] == 1){
                 return $this->questionPrim($q);
             }
@@ -867,7 +862,7 @@ class TheoryTest implements TTInterface{
      */
     protected function getIncompleteQuestion(){
         $q = 1;
-        foreach($_SESSION['test'.$this->getTest()] as $value){
+        foreach(filter_input(INPUT_SESSION, 'test'.$this->getTest(), FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) as $value){
             if($value['status'] <= 1){
                 return $this->questionPrim($q);
             }

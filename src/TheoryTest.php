@@ -572,8 +572,7 @@ class TheoryTest implements TTInterface{
      * @return boolean Should return true if flag status has been updated else returns false
      */
     public function flagQuestion($prim){
-        $flagged = filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'], FILTER_SANITIZE_NUMBER_INT);
-        if($flagged === 0 || !$flagged){
+        if(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'], FILTER_SANITIZE_NUMBER_INT) === 0 || !filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'], FILTER_VALIDATE_INT)){
             $_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] = 1;
         }
         else{
@@ -628,7 +627,7 @@ class TheoryTest implements TTInterface{
      */
     public function numFlagged(){
         $num = 0;
-        foreach($_SESSION['test'.$this->getTest()] as $value){
+        foreach(filter_var_array($_SESSION['test'.$this->getTest()]) as $value){
             $value = trim($value['flagged']);
             if($value == 1){
                 $num++;
@@ -643,7 +642,7 @@ class TheoryTest implements TTInterface{
      */
     protected function numCorrect(){
         $num = 0;
-        foreach($_SESSION['test'.$this->getTest()] as $value){
+        foreach(filter_var_array($_SESSION['test'.$this->getTest()]) as $value){
             $value = trim($value['status']);
             if($value == 4){
                 $num++;
@@ -659,7 +658,7 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if answer selected else return false
      */
     protected function answerSelected($prim, $letter){
-        if(strpos($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'], strtoupper($letter)) !== false){
+        if(strpos(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'], FILTER_SANITIZE_STRING), strtoupper($letter)) !== false){
             return true;
         }
         return false;

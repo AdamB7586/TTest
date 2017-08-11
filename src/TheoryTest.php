@@ -32,6 +32,7 @@ class TheoryTest implements TTInterface{
     public $dsaCategoriesTable = 'theory_dsa_sections';
 	
     protected $audioLocation = '/audio';
+    protected $javascriptLocation = '/js/theory/';
     
     protected $seconds = 3420;
     protected $section = 'theory';
@@ -51,7 +52,7 @@ class TheoryTest implements TTInterface{
     public $testresults;
     public $dsacat;
     
-    protected static $testType = 'car'; //Done
+    protected static $testType = 'car';
     
     /**
      * Connects to the database sets the current user and gets any user answers
@@ -59,7 +60,7 @@ class TheoryTest implements TTInterface{
      * @param Smarty $layout
      * @param User $user
      */
-    public function __construct(Database $db, Smarty $layout, User $user){
+    public function __construct(Database $db, Smarty $layout, User $user) {
         self::$db = $db;
         self::$user = $user;
         self::$layout = $layout;
@@ -72,12 +73,12 @@ class TheoryTest implements TTInterface{
      * @param int $theorytest Should be the test number
      * @return string Returns the HTML for a test
      */
-    public function createNewTest($theorytest = 1){
+    public function createNewTest($theorytest = 1) {
         $this->clearSettings();
         $this->setTest($theorytest);
         self::$user->checkUserAccess($theorytest);
         $this->setTestName();
-        if($this->anyExisting() === false){
+        if($this->anyExisting() === false) {
             $this->chooseQuestions($theorytest);
         }
         return $this->buildTest();
@@ -88,7 +89,7 @@ class TheoryTest implements TTInterface{
      * @param string $type This should be the type of test the user is currently undertaking
      * @return $this
      */
-    public function setTestType($type){
+    public function setTestType($type) {
         self::$testType = strtoupper($type);
         return $this;
     }
@@ -97,7 +98,7 @@ class TheoryTest implements TTInterface{
      * Gets the current test type
      * @return string Will return the current test type
      */
-    public function getTestType(){
+    public function getTestType() {
         return strtoupper(self::$testType);
     }
     
@@ -106,8 +107,8 @@ class TheoryTest implements TTInterface{
      * @param int $mark This should be the passmark for the test (no greater than 50 as only 50 questions are retrieved)
      * @return $this
      */
-    public function setPassmark($mark){
-        if(is_int($mark)){
+    public function setPassmark($mark) {
+        if(is_int($mark)) {
             $this->passmark = intval($mark);
         }
         return $this;
@@ -117,7 +118,7 @@ class TheoryTest implements TTInterface{
      * Returns the current passmark for the test
      * @return int Returns the set passmark for the current test
      */
-    public function getPassmark(){
+    public function getPassmark() {
         return intval($this->passmark);
     }
     
@@ -126,8 +127,8 @@ class TheoryTest implements TTInterface{
      * @param int $seconds If you wish to change the seconds allowed from the 57 minutes (3420 seconds) set the number in seconds 
      * @return $this
      */
-    public function setSeconds($seconds){
-        if(is_int($seconds)){
+    public function setSeconds($seconds) {
+        if(is_int($seconds)) {
             $this->seconds = intval($seconds);
         }
         return $this;
@@ -137,7 +138,7 @@ class TheoryTest implements TTInterface{
      * Gets the amount of seconds that are allowed for the current test
      * @return int This should be the number of sends allowed to partake the test
      */
-    public function getStartSeconds(){
+    public function getStartSeconds() {
         return $this->seconds;
     }
     
@@ -146,7 +147,7 @@ class TheoryTest implements TTInterface{
      * @param string $location The should either be a URL or a relative position (minus mp4 & ogg folders)
      * @return $this
      */
-    public function setAudioLocation($location){
+    public function setAudioLocation($location) {
         $this->audioLocation = $location;
         return $this;
     }
@@ -155,8 +156,26 @@ class TheoryTest implements TTInterface{
      * Returns the currents set location of the audio files
      * @return string This should be the folder where all the audio files can be found
      */
-    public function getAudioLocation(){
+    public function getAudioLocation() {
         return $this->audioLocation;
+    }
+    
+    /**
+     * Sets the location where the JavaScript files can be found
+     * @param string $location The should either be a URL or a relative position
+     * @return $this
+     */
+    public function setJavascriptLocation($location) {
+        $this->javascriptLocation = $location;
+        return $this;
+    }
+    
+    /**
+     * Returns the currents set location of the JavaScript files
+     * @return string This should be the folder where all the JavaScript files can be found
+     */
+    public function getJavascriptLocation() {
+        return $this->javascriptLocation;
     }
     
     /**
@@ -164,9 +183,9 @@ class TheoryTest implements TTInterface{
      * @param int $theorytest The test number you wish to view the report for
      * @return string Returns the HTML for the test report for the given test ID
      */
-    public function createTestReport($theorytest = 1){
+    public function createTestReport($theorytest = 1) {
         $this->setTest($theorytest);
-        if($this->getTestResults()){
+        if($this->getTestResults()) {
             $this->setTestName();
             return $this->buildReport(false);
         }
@@ -178,11 +197,11 @@ class TheoryTest implements TTInterface{
      * @param int $testNo This should be the test number you which to get the questions for
      * @return boolean If the test questions are inserted into the database will return true else returns false
      */
-    protected function chooseQuestions($testNo){
+    protected function chooseQuestions($testNo) {
         $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
         self::$db->delete($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()));
         unset($_SESSION['test'.$this->getTest()]);
-        foreach($questions as $i => $question){
+        foreach($questions as $i => $question) {
             $this->questions[($i + 1)] = $question['prim'];
         }
         return self::$db->insert($this->progressTable, array('user_id' => self::$user->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => $this->getTestType()));
@@ -192,11 +211,11 @@ class TheoryTest implements TTInterface{
      * Checks to see if their is currently a test which is not complete or a test which has already been passed
      * @return string|false
      */
-    protected function anyExisting(){
+    protected function anyExisting() {
         $existing = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'status' => array('<=', 1)));
-        if(!empty($existing)){
+        if(!empty($existing)) {
             $this->exists = true;
-            if($existing['status'] == 1){return 'passed';}
+            if($existing['status'] == 1) {return 'passed';}
             else{return 'exists';}
         }
         return false;
@@ -206,16 +225,16 @@ class TheoryTest implements TTInterface{
      * Returns the JavaScript script to be displayed on the page
      * @return string Returns the JavaScript script to be displayed on the page
      */
-    protected function existingScript(){
-        return '<script type="text/javascript" src="/js/theory/existing-questions.js"></script>';
+    protected function existingScript() {
+        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'existing-questions.js"></script>';
     }
 
     /**
      * If a test already exist for the test ID this will add variables for the template to displayed a confirmation of new test
      * @return void Nothing is returned
      */
-    protected function existingLayout(){        
-        if($this->anyExisting() === 'passed'){
+    protected function existingLayout() {        
+        if($this->anyExisting() === 'passed') {
             $text = '<p>You have already passed this test! Are you sure you want to start a new test?</p><div class="timeremaining" id=""></div>';
             $continue = '';
         }
@@ -235,10 +254,10 @@ class TheoryTest implements TTInterface{
      * Gets the questions array from the database if $this->questions is not set
      * @return array|false Returns the questions array if it exists else returns false
      */
-    public function getQuestions(){
-        if(!isset($this->questions)){
+    public function getQuestions() {
+        if(!isset($this->questions)) {
             $questions = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('questions'), array('started' => 'DESC'));
-            if(!empty($questions)){
+            if(!empty($questions)) {
                 $this->questions = unserialize($questions['questions']);
                 return $this->questions;
             }
@@ -250,13 +269,13 @@ class TheoryTest implements TTInterface{
      * Returns the current users answers for the current test
      * @return array|false Returns the current users answers for the current test if any exist else returns false
      */
-    public function getUserAnswers(){
-        if(!isset(self::$useranswers)){
+    public function getUserAnswers() {
+        if(!isset(self::$useranswers)) {
             $answers = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
-            if(!empty($answers)){
+            if(!empty($answers)) {
                 self::$useranswers = unserialize($answers['answers']);
-                if(!is_array($_SESSION['test'.$this->getTest()])){$_SESSION['test'.$this->getTest()] = self::$useranswers;}
-                if(!is_numeric($_SESSION['question_no']['test'.$this->getTest()])){$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
+                if(!is_array($_SESSION['test'.$this->getTest()])) {$_SESSION['test'.$this->getTest()] = self::$useranswers;}
+                if(!is_numeric($_SESSION['question_no']['test'.$this->getTest()])) {$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
                 $this->testID = $answers['id'];
                 return self::$useranswers;
             }
@@ -268,7 +287,7 @@ class TheoryTest implements TTInterface{
      * Returns the number of questions in the test
      * @return int Returns the number of questions
      */
-    public function numQuestions(){
+    public function numQuestions() {
         $this->getQuestions();
         return count($this->questions);
     }
@@ -277,8 +296,8 @@ class TheoryTest implements TTInterface{
      * Sets and returns the current question number
      * @return int Returns the current question number
      */
-    protected function currentQuestion(){
-        if(!isset($this->current)){
+    protected function currentQuestion() {
+        if(!isset($this->current)) {
             $this->current = $_SESSION['question_no']['test'.$this->getTest()];
         }
         return $this->current;
@@ -289,7 +308,7 @@ class TheoryTest implements TTInterface{
      * @param int $questionNo This should be the question number in the current test
      * @return int Returns the unique prim number for the question
      */
-    public function questionPrim($questionNo){
+    public function questionPrim($questionNo) {
         $this->getQuestions();
         return $this->questions[intval($questionNo)];
     }
@@ -299,7 +318,7 @@ class TheoryTest implements TTInterface{
      * @param int $prim This should be the prim number of the question you wish to fin the question number for
      * @return int Returns the question number
      */
-    public function questionNo($prim){
+    public function questionNo($prim) {
         $this->getQuestions();
         $key = array_keys($this->questions, $prim);
         return $key[0];
@@ -309,7 +328,7 @@ class TheoryTest implements TTInterface{
      * Returns the prim number of the first question
      * @return int Returns the first question prim number
      */
-    protected function getFirstQuestion(){
+    protected function getFirstQuestion() {
         $this->getQuestions();
         return $this->questions[1];
     }
@@ -318,7 +337,7 @@ class TheoryTest implements TTInterface{
      * Returns the prim number of the last question
      * @return int Returns the last question prim number
      */
-    protected function getLastQuestion(){
+    protected function getLastQuestion() {
         $this->getQuestions();
         return $this->questions[$this->numQuestions()];
     }
@@ -328,14 +347,14 @@ class TheoryTest implements TTInterface{
      * @param string $dir This should be set to 'next' for the next question or 'prev' for the previous question
      * @return int Returns the next question ID if one exists else will return false
      */
-    public function getNextFlagged($dir = 'next'){
+    public function getNextFlagged($dir = 'next') {
         $current = $this->currentQuestion();
-        foreach($_SESSION['test'.$this->getTest()] as $question => $value){
-            if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['flagged'] == 1){
+        foreach($_SESSION['test'.$this->getTest()] as $question => $value) {
+            if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['flagged'] == 1) {
                 return (int)$question;
             }
         }
-        if($this->numFlagged() > 1){
+        if($this->numFlagged() > 1) {
             return (int)$this->getNextFlagged($dir === 'next' ? 0 : $this->numQuestions() + 1);
         }
     }
@@ -345,14 +364,14 @@ class TheoryTest implements TTInterface{
      * @param string $dir This should be set to 'next' for the next question or 'prev' for the previous question
      * @return int Returns the next incomplete question ID if one exists else will return false
      */
-    public function getNextIncomplete($dir = 'next'){
+    public function getNextIncomplete($dir = 'next') {
         $current = $this->currentQuestion();
-        foreach($_SESSION['test'.$this->getTest()] as $question => $value){
-            if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['status'] < 3){
+        foreach($_SESSION['test'.$this->getTest()] as $question => $value) {
+            if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['status'] < 3) {
                 return (int)$question;
             }
         }
-        if($this->numIncomplete() > 1){
+        if($this->numIncomplete() > 1) {
             return (int)$this->getNextIncomplete($dir === 'next' ? 0 : $this->numQuestions() + 1);
         }
     }
@@ -362,8 +381,8 @@ class TheoryTest implements TTInterface{
      * @param string $status Should be set to either 'on' or 'off'
      * @return boolean if the settings are updated will return true else returns false
      */
-    public function audioEnable($status = 'on'){
-        if($status == 'on'){$this->audioEnabled = true;}else{$this->audioEnabled = false;}
+    public function audioEnable($status = 'on') {
+        if($status == 'on') {$this->audioEnabled = true;}else{$this->audioEnabled = false;}
         $settings = $this->checkSettings();
         $settings['audio'] = $status;
         return self::$user->setUserSettings($settings);
@@ -375,8 +394,8 @@ class TheoryTest implements TTInterface{
      * @param string $letter This should be the letter of the question or answer
      * @return string Returns the HTML needed for the audio
      */
-    protected function addAudio($prim, $letter, $folder = ''){
-        if($this->audioEnabled && is_numeric($prim)){
+    protected function addAudio($prim, $letter, $folder = '') {
+        if($this->audioEnabled && is_numeric($prim)) {
             return '<div class="sound fa fa-fw fa-volume-up" id="audioanswer'.$letter.$prim.'"><audio id="audio'.$letter.$prim.'" preload="auto"><source src="'.$this->getAudioLocation().$folder.'/mp3/'.strtoupper($letter).$prim.'.mp3" type="audio/mpeg"><source src="'.$this->getAudioLocation().$folder.'/ogg/'.strtoupper($letter).$prim.'.ogg" type="audio/ogg"></audio></div>';
         }
     }
@@ -385,8 +404,8 @@ class TheoryTest implements TTInterface{
      * Returns the audio switch button
      * @return string|boolean If the user can play audio the button will be returned else returns false
      */
-    protected function audioButton(){
-        if($this->audioEnabled === true){return '<div class="audioswitch audiooff"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span><span class="fa fa-ban fa-stack-2x text-danger"></span></span><span class="sr-only">Turn Sound OFF</span></div>';}
+    protected function audioButton() {
+        if($this->audioEnabled === true) {return '<div class="audioswitch audiooff"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span><span class="fa fa-ban fa-stack-2x text-danger"></span></span><span class="sr-only">Turn Sound OFF</span></div>';}
         else{return '<div class="audioswitch audioon"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span></span><span class="sr-only">Turn Sound ON</span></div>';}
     }
     
@@ -394,7 +413,7 @@ class TheoryTest implements TTInterface{
      * Updates the database to enable or disable the hint button and display/hide contents
      * @return boolean Returns true if DB updated else returns false
      */
-    public function hintEnable(){
+    public function hintEnable() {
         $settings = $this->checkSettings();
         $settings['hint'] = ($settings['hint'] === 'on' ? 'off' : 'on');
         return self::$user->setUserSettings($settings);
@@ -406,8 +425,8 @@ class TheoryTest implements TTInterface{
      * @param boolean $main If the image is from the question should be set to true
      * @return string|false Returns HTML image string if exists else returns false
      */
-    public function createImage($file, $main = false){
-        if($file != NULL && $file != '' && file_exists(ROOT.DS.'images'.DS.'prim'.DS.$file)){
+    public function createImage($file, $main = false) {
+        if($file != NULL && $file != '' && file_exists(ROOT.DS.'images'.DS.'prim'.DS.$file)) {
             list($width, $height) = getimagesize(ROOT.DS.'images'.DS.'prim'.DS.$file);
             return '<img src="/images/prim/'.$file.'" alt="" width="'.$width.'" height="'.$height.'" class="'.($main === true ? 'imageright questionimage ' : '').'img-responsive" />';
         }
@@ -419,11 +438,11 @@ class TheoryTest implements TTInterface{
      * @param boolean $review If in the review section should be set to true to force script
      * @return string Returns the script needed for the page the user is currently on
      */
-    protected function getScript($review = false){
-        if($this->review !== 'answers' && $review === false){
-            return '<script type="text/javascript" src="/js/theory/theory-test-questions.js"></script>';
+    protected function getScript($review = false) {
+        if($this->review !== 'answers' && $review === false) {
+            return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'theory-test-questions.js"></script>';
         }
-        return '<script type="text/javascript" src="/js/theory/review-questions.js"></script>';
+        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'review-questions.js"></script>';
     }
     
     /**
@@ -431,7 +450,7 @@ class TheoryTest implements TTInterface{
      * @param int $num This should be the number of answers to select
      * @return string Returns the HTML with the number of questions to mark
      */
-    protected function getMarkText($num){
+    protected function getMarkText($num) {
         $number = array(1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five', 6 => 'six');
         return '<span class="mark" title="'.$num.'">Mark '.$number[intval($num)].' answer'.($num > 1 ? 's' : '').'</span>';
     }
@@ -440,11 +459,11 @@ class TheoryTest implements TTInterface{
      * If reviewing a particular set of questions will provide the alert HTML of false
      * @return string|false Returns the alert HTML if in the correct section else return false
      */
-    protected function alert(){
-        if($this->review === 'flagged' || $this->review === 'incomplete'){
+    protected function alert() {
+        if($this->review === 'flagged' || $this->review === 'incomplete') {
             return '<div class="alert alert-danger">Reviewing '.$this->review.' questions only</div>';
         }
-        elseif(!$this->review && $this->numComplete() == $this->numQuestions()){
+        elseif(!$this->review && $this->numComplete() == $this->numQuestions()) {
             return '<div class="msg">You have now completed all of the questions, you can mark the test by clicking the "<span class="fa fa-binoculars fa-fw"></span><span class="hidden-xs"> Review</span>" and then "<span class="endtest"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> End Test</span></span>" buttons or click on the following button <div class="endtest btn btn-default">Mark my test</div></div>';
         }
         return false;
@@ -455,8 +474,8 @@ class TheoryTest implements TTInterface{
      * @param int $prim The current question prim number
      * @return string Returns the button HTML code
      */
-    protected function flagHintButton($prim){
-        if($this->review !== 'answers'){
+    protected function flagHintButton($prim) {
+        if($this->review !== 'answers') {
             return '<div class="flag'.($this->questionFlagged($prim) ? ' flagged' : '').' btn btn-theory"><span class="fa fa-flag fa-fw"></span><span class="hidden-xs"> Flag Question</span></div>';
         }
         $settings = $this->checkSettings();
@@ -467,8 +486,8 @@ class TheoryTest implements TTInterface{
      * Returns the review button HTML code
      * @return string Returns the button HTML code
      */
-    protected function reviewButton(){
-        if($this->review !== 'answers'){
+    protected function reviewButton() {
+        if($this->review !== 'answers') {
             return '<div class="review btn btn-theory"><span class="fa fa-binoculars fa-fw"></span><span class="hidden-xs"> Review</span></div>';
         }
         return '<div class="endreview btn btn-theory"><span class="fa fa-reply fa-fw"></span><span class="hidden-xs"> End Review</span></div>';
@@ -479,16 +498,16 @@ class TheoryTest implements TTInterface{
      * @param boolean $new If it is a new test should be set to true
      * @return array Returns the current test settings
      */
-    protected function checkSettings($new = false){
+    protected function checkSettings($new = false) {
         $settings = self::$user->getUserSettings();
-        if($new !== true){
-            if($settings['review'] == 'all'){$this->review = 'all';}
-            elseif($settings['review'] == 'flagged'){$this->review = 'flagged';}
-            elseif($settings['review'] == 'incomplete'){$this->review = 'incomplete';}
-            elseif($settings['review'] == 'answers'){$this->review = 'answers';}
+        if($new !== true) {
+            if($settings['review'] == 'all') {$this->review = 'all';}
+            elseif($settings['review'] == 'flagged') {$this->review = 'flagged';}
+            elseif($settings['review'] == 'incomplete') {$this->review = 'incomplete';}
+            elseif($settings['review'] == 'answers') {$this->review = 'answers';}
         }
         else{$this->review = false;}
-        if($settings['audio'] == 'on'){$this->audioEnabled = true;}
+        if($settings['audio'] == 'on') {$this->audioEnabled = true;}
         return $settings;
     }
     
@@ -497,7 +516,7 @@ class TheoryTest implements TTInterface{
      * @param string $type Should be the review type (e.g. 'all', 'flagged', 'incomplete', etc)
      * @return boolean Returns true if the settings are updated
      */
-    public function reviewOnly($type = 'all'){
+    public function reviewOnly($type = 'all') {
         $settings = $this->checkSettings();
         $settings['review'] = $type;
         return self::$user->setUserSettings($settings);
@@ -509,7 +528,7 @@ class TheoryTest implements TTInterface{
      * @param int $prim The current question number to add the answer to
      * @return boolean If answer added returns true else returns false
      */
-    public function addAnswer($answer, $prim){
+    public function addAnswer($answer, $prim) {
         $arraystring = str_replace($answer, '', trim(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'], FILTER_SANITIZE_STRING))).$answer;
         return $this->replaceAnswer($this->sortAnswers($arraystring), $prim);
     }
@@ -520,13 +539,13 @@ class TheoryTest implements TTInterface{
      * @param int $prim This should be the question prim number
      * @return boolean Returns true if the answer has been updated else returns false
      */
-    public function replaceAnswer($letters, $prim){
+    public function replaceAnswer($letters, $prim) {
         $qNo = $this->questionNo($prim);
         $questiondata = $this->getQuestionData($prim);
         $answer = strtoupper($letters);
         $_SESSION['test'.$this->getTest()][$qNo]['answer'] = $answer;
-        if(strlen($answer) == $questiondata['mark']){
-            if($answer == $questiondata['answerletters']){$_SESSION['test'.$this->getTest()][$qNo]['status'] = 4;}
+        if(strlen($answer) == $questiondata['mark']) {
+            if($answer == $questiondata['answerletters']) {$_SESSION['test'.$this->getTest()][$qNo]['status'] = 4;}
             else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 3;}
         }
         else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 1;}
@@ -540,11 +559,11 @@ class TheoryTest implements TTInterface{
      * @param int $prim This should be the question prim you wish to remove the answer from
      * @return boolean Returns true if database has been updated else return false
      */
-    public function removeAnswer($answer, $prim){
+    public function removeAnswer($answer, $prim) {
         $qNo = $this->questionNo($prim);
         $removed = str_replace(strtoupper($answer), '', filter_var($_SESSION['test'.$this->getTest()][$qNo]['answer'], FILTER_SANITIZE_STRING));
         $_SESSION['test'.$this->getTest()][$qNo]['answer'] = $removed;
-        if($removed === ''){$_SESSION['test'.$this->getTest()][$qNo]['status'] = 0;}
+        if($removed === '') {$_SESSION['test'.$this->getTest()][$qNo]['status'] = 0;}
         else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 1;}
 
         return $this->updateAnswers();
@@ -555,8 +574,8 @@ class TheoryTest implements TTInterface{
      * @param string $string If the string length is greater than 1 in length will break apart and sort else will simply return original value
      * @return string The ordered string or original string will be returned
      */
-    protected function sortAnswers($string){
-        if(strlen($string) > 1){
+    protected function sortAnswers($string) {
+        if(strlen($string) > 1) {
             $stringParts = str_split($string);
             sort($stringParts);
             $string = implode('', $stringParts);
@@ -569,8 +588,8 @@ class TheoryTest implements TTInterface{
      * @param int $prim This should be the question prim
      * @return boolean Should return true if flag status has been updated else returns false
      */
-    public function flagQuestion($prim){
-        if(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'], FILTER_SANITIZE_NUMBER_INT) === 0 || !filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'], FILTER_VALIDATE_INT)){
+    public function flagQuestion($prim) {
+        if(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'], FILTER_SANITIZE_NUMBER_INT) === 0 || !filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'], FILTER_VALIDATE_INT)) {
             $_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] = 1;
         }
         else{
@@ -583,14 +602,14 @@ class TheoryTest implements TTInterface{
      * Updates the `useranswers` field in the progress table in the database
      * @return boolean
      */
-    protected function updateAnswers(){
+    protected function updateAnswers() {
         return self::$db->update($this->progressTable, array('answers' => serialize($_SESSION['test'.$this->getTest()]), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $_SESSION['question_no']['test'.$this->getTest()]), array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
     }
     
     /**
      * Public function to save the users information before the page is exited
      */
-    public function saveProgress(){
+    public function saveProgress() {
         $this->updateAnswers();
     }
     
@@ -598,12 +617,12 @@ class TheoryTest implements TTInterface{
      * Returns the number of complete questions
      * @return int Should return the number of complete questions
      */
-    public function numComplete(){
+    public function numComplete() {
         $num = 0;
-        if(is_array($_SESSION['test'.$this->getTest()])){
-            foreach($_SESSION['test'.$this->getTest()] as $value){
+        if(is_array($_SESSION['test'.$this->getTest()])) {
+            foreach($_SESSION['test'.$this->getTest()] as $value) {
                 $value = trim($value['status']);
-                if($value >= 2){
+                if($value >= 2) {
                     $num++;
                 }
             }
@@ -615,7 +634,7 @@ class TheoryTest implements TTInterface{
      * Returns the number of incomplete questions
      * @return int Should return the number of incomplete questions
      */
-    public function numIncomplete(){
+    public function numIncomplete() {
         return (count($this->questions) - $this->numComplete());
     }
     
@@ -623,11 +642,11 @@ class TheoryTest implements TTInterface{
      * Returns the number of flagged questions
      * @return int Should return the number of flagged questions
      */
-    public function numFlagged(){
+    public function numFlagged() {
         $num = 0;
-        foreach(filter_var_array($_SESSION['test'.$this->getTest()]) as $value){
+        foreach(filter_var_array($_SESSION['test'.$this->getTest()]) as $value) {
             $value = trim($value['flagged']);
-            if($value == 1){
+            if($value == 1) {
                 $num++;
             }
         }
@@ -638,11 +657,11 @@ class TheoryTest implements TTInterface{
      * Returns the number of correct answers
      * @return int Returns the number of correct answers
      */
-    protected function numCorrect(){
+    protected function numCorrect() {
         $num = 0;
-        foreach(filter_var_array($_SESSION['test'.$this->getTest()]) as $value){
+        foreach(filter_var_array($_SESSION['test'.$this->getTest()]) as $value) {
             $value = trim($value['status']);
-            if($value == 4){
+            if($value == 4) {
                 $num++;
             }
         }
@@ -655,8 +674,8 @@ class TheoryTest implements TTInterface{
      * @param string $letter Should be the letter of the answer you are checking to see if it selected
      * @return boolean Returns true if answer selected else return false
      */
-    protected function answerSelected($prim, $letter){
-        if(strpos(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'], FILTER_SANITIZE_STRING), strtoupper($letter)) !== false){
+    protected function answerSelected($prim, $letter) {
+        if(strpos(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'], FILTER_SANITIZE_STRING), strtoupper($letter)) !== false) {
             return true;
         }
         return false;
@@ -668,12 +687,12 @@ class TheoryTest implements TTInterface{
      * @param string $letter Should be the letter of the answer you are checking if it is correct
      * @return string|false Returns string if correct and not selected, selected and correct, or selected and incorrect else returns false
      */
-    protected function answerSelectedCorrect($prim, $letter){
+    protected function answerSelectedCorrect($prim, $letter) {
         $isCorrect = self::$db->select($this->questionsTable, array('prim' => $prim, 'answerletters' => array('LIKE', '%'.strtoupper($letter).'%')), array('answerletters'));
         
-        if($this->answerSelected($prim, $letter) && !empty($isCorrect)){return 'CORRECT';}
-        elseif($this->answerSelected($prim, $letter) && $isCorrect === false){return 'INCORRECT';}
-        elseif(!empty($isCorrect)){return 'NSCORRECT';}
+        if($this->answerSelected($prim, $letter) && !empty($isCorrect)) {return 'CORRECT';}
+        elseif($this->answerSelected($prim, $letter) && $isCorrect === false) {return 'INCORRECT';}
+        elseif(!empty($isCorrect)) {return 'NSCORRECT';}
         return false;
     }
     
@@ -682,8 +701,8 @@ class TheoryTest implements TTInterface{
      * @param int $prim This should be the prim number of the question you are checking if it is flagged or not
      * @return boolean Returns true if current question is flagged else returns false
      */
-    public function questionFlagged($prim){
-        if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] === 1){
+    public function questionFlagged($prim) {
+        if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] === 1) {
             return true;
         }
         return false;
@@ -693,7 +712,7 @@ class TheoryTest implements TTInterface{
      * This is to add extra content if required (Used on extention classes)
      * @return string
      */
-    protected function extraContent(){
+    protected function extraContent() {
         return '';
     }
     
@@ -702,7 +721,7 @@ class TheoryTest implements TTInterface{
      * @param int $prim Should be the question prim number
      * @return array|boolean Returns question data as array if data exists else returns false
      */
-    protected function getQuestionData($prim){
+    protected function getQuestionData($prim) {
         return self::$db->select($this->questionsTable, array('prim' => $prim), array('prim', 'question', 'mark', 'option1', 'option2', 'option3', 'option4', 'option5', 'option6', 'answerletters', 'dsaimageid', 'format', 'dsaexplanation', 'casestudyno'));
     }
     
@@ -715,15 +734,15 @@ class TheoryTest implements TTInterface{
      * @param boolean $new If the test is new this should be set to true else set to false
      * @return string Should return the option HTML for the given option
      */
-    protected function getOptions($question, $option, $letter, $image = false, $new = false){
-        if($new === false && $this->review != 'answers'){
-            if($this->answerSelected($question, $letter)){$selected = ($image === false ? ' selected' : ' imgselected');}
+    protected function getOptions($question, $option, $letter, $image = false, $new = false) {
+        if($new === false && $this->review != 'answers') {
+            if($this->answerSelected($question, $letter)) {$selected = ($image === false ? ' selected' : ' imgselected');}
         }
-        elseif($new === false){
+        elseif($new === false) {
             $iscorrect = $this->answerSelectedCorrect($question, $letter);
-            if($iscorrect == 'CORRECT'){$selected = ($image === false ? ' selectedcorrect' : ' imgcorrect');}
-            elseif($iscorrect == 'INCORRECT'){$selected = ($image === false ? ' selectedincorrect' : ' imgincorrect');}
-            elseif($iscorrect == 'NSCORRECT'){$selected = ($image === false ? ' nscorrect' : ' imgnscorrect');}
+            if($iscorrect == 'CORRECT') {$selected = ($image === false ? ' selectedcorrect' : ' imgcorrect');}
+            elseif($iscorrect == 'INCORRECT') {$selected = ($image === false ? ' selectedincorrect' : ' imgincorrect');}
+            elseif($iscorrect == 'NSCORRECT') {$selected = ($image === false ? ' nscorrect' : ' imgnscorrect');}
         }
         else{$selected = '';}
         return '<div class="answer'.$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($question, $letter).$option : $option.$this->createImage($question.strtolower($letter).'.png')).'</div>';
@@ -732,7 +751,7 @@ class TheoryTest implements TTInterface{
     /**
      * Produces the HTML information for the review page
      */
-    public function reviewSection(){
+    public function reviewSection() {
         $this->updateAnswers();
         self::$layout->assign('test_questions', $this->numQuestions(), true);
         self::$layout->assign('complete_questions', $this->numComplete(), true);
@@ -750,8 +769,8 @@ class TheoryTest implements TTInterface{
      * Creates the HTML for an entire Theory Test for use when creating a new test
      * @return string Returns the test HTML code
      */
-    public function buildTest(){
-        if($this->exists){$this->existingLayout();}
+    public function buildTest() {
+        if($this->exists) {$this->existingLayout();}
         else{$this->createQuestionHTML($this->getFirstQuestion(), true);}
         self::$layout->assign('test_name', $this->getTestName(), true);
         self::$layout->assign('question_no', '1', true);
@@ -765,7 +784,7 @@ class TheoryTest implements TTInterface{
      * @param boolean $mark If the test needs to be marked should be set to true else should be false
      * @return string Returns the report HTML code
      */
-    public function buildReport($mark = true){
+    public function buildReport($mark = true) {
         $this->endTest($this->getTime(), $mark);
         self::$layout->assign('test_name', $this->getTestName(), true);
         self::$layout->assign('question_data', $this->questiondata, true);
@@ -779,12 +798,12 @@ class TheoryTest implements TTInterface{
      * @param boolean $new If if is a new test should be set to true else should be false
      * @return string|boolean Returns the question HTML and Question number as a JSON encoded string if question exists else returns false
      */
-    public function createQuestionHTML($prim, $new = false){
+    public function createQuestionHTML($prim, $new = false) {
         $this->updateTestProgress($prim);
         $this->checkSettings($new);
         $question = $this->getQuestionData($prim);
-        if(!empty($question)){
-            if(is_numeric($question['casestudyno'])){$this->setCaseStudy($question['casestudyno']);}
+        if(!empty($question)) {
+            if(is_numeric($question['casestudyno'])) {$this->setCaseStudy($question['casestudyno']);}
             $image = (($question['format'] == '0' || $question['format'] == '2') ? false : true);
             self::$layout->assign('mark', $this->getMarkText($question['mark']));
             self::$layout->assign('question', '<div class="questiontext" id="'.$prim.'">'.$this->addAudio($prim, 'Q').$question['question'].'</div>');
@@ -820,7 +839,7 @@ class TheoryTest implements TTInterface{
      * @param int $prim this is the question unique number
      * @return array Returns that particular prim info
      */
-    public function questionInfo($prim){    
+    public function questionInfo($prim) {    
         $info = array();
         $questioninfo = self::$db->select($this->questionsTable, array('prim' => $prim), array('prim', 'dsacat', 'dsaqposition'));
         $catinfo = self::$db->select($this->dsaCategoriesTable, array('section' => $questioninfo['dsacat']));
@@ -834,9 +853,9 @@ class TheoryTest implements TTInterface{
      * Updates the test progress in the database
      * @param int $prim This should be the current question prim number
      */
-    protected function updateTestProgress($prim){
+    protected function updateTestProgress($prim) {
         $this->current = $this->questionNo($prim);
-        if($this->current < 1){$this->current = 1;} 
+        if($this->current < 1) {$this->current = 1;} 
         $_SESSION['question_no']['test'.$this->getTest()] = $this->current;
     }
 
@@ -844,10 +863,10 @@ class TheoryTest implements TTInterface{
      * Gets the first Flagged question prim if one exists else returns 'none'
      * @return int|string Should be the first flagged question prim or 'none' if none exist
      */
-    protected function getFlaggedQuestion(){
+    protected function getFlaggedQuestion() {
         $q = 1;
-        foreach($_SESSION['test'.$this->getTest()] as $value){
-            if($value['flagged'] == 1){
+        foreach($_SESSION['test'.$this->getTest()] as $value) {
+            if($value['flagged'] == 1) {
                 return $this->questionPrim($q);
             }
             $q++;
@@ -859,10 +878,10 @@ class TheoryTest implements TTInterface{
      * Gets the first Incomplete question prim if one exists else returns 'none'
      * @return int|string Should be the first incomplete question prim or 'none' if none exist
      */
-    protected function getIncompleteQuestion(){
+    protected function getIncompleteQuestion() {
         $q = 1;
-        foreach($_SESSION['test'.$this->getTest()] as $value){
-            if($value['status'] <= 1){
+        foreach($_SESSION['test'.$this->getTest()] as $value) {
+            if($value['status'] <= 1) {
                 return $this->questionPrim($q);
             }
             $q++;
@@ -876,8 +895,8 @@ class TheoryTest implements TTInterface{
      * @param int $prim Should be the prim number of the current question
      * @return string|false Returns the HTML string if in the review section else returns false
      */
-    public function dsaExplanation($explanation, $prim){
-        if($this->review == 'answers'){
+    public function dsaExplanation($explanation, $prim) {
+        if($this->review == 'answers') {
             $settings = $this->checkSettings();
             return '<div class="col-md-12"><div class="explanation'.($settings['hint'] === 'on' ? ' visable' : '').'">'.$this->addAudio($prim, 'DSA').'<strong>Official DVSA answer explanation:</strong> '.$explanation.'</div></div>';
         }
@@ -888,7 +907,7 @@ class TheoryTest implements TTInterface{
      * This should set the case study for this group of questions
      * @param int $casestudy This should be the case study number for the set of questions
      */
-    protected function setCaseStudy($casestudy){
+    protected function setCaseStudy($casestudy) {
         $case = self::$db->fetchColumn($this->caseTable, array('casestudyno' => $casestudy), array('cssituation'));
         $this->casestudy = $this->addAudio($casestudy, 'CS').$case;
     }
@@ -897,7 +916,7 @@ class TheoryTest implements TTInterface{
      * Clears the test settings in the database
      * @return boolean Returns true if the settings are cleared and updated else returns false
      */
-    protected function clearSettings(){
+    protected function clearSettings() {
         $settings = $this->checkSettings();
         unset($settings['review']);
         return self::$user->setUserSettings($settings);
@@ -907,9 +926,9 @@ class TheoryTest implements TTInterface{
      * Sets the current test number
      * @param int $testNo This should be the current test number
      */
-    public function setTest($testNo){
+    public function setTest($testNo) {
         $this->testNo = $testNo;
-        if(self::$user->setUserSettings(array('current_test' => $this->testNo))){
+        if(self::$user->setUserSettings(array('current_test' => $this->testNo))) {
             unset($this->questions);
             unset(self::$useranswers);
             $this->getQuestions();
@@ -921,8 +940,8 @@ class TheoryTest implements TTInterface{
      * Returns the test number
      * @return int Returns the current test number
      */
-    public function getTest(){
-        if($this->testNo){
+    public function getTest() {
+        if($this->testNo) {
             return $this->testNo;
         }
         else{
@@ -936,8 +955,8 @@ class TheoryTest implements TTInterface{
      * Sets the current test name
      * @param string $name This should be the name of the test you wish to set it to if left blank will just be Theory Test plus test number
      */
-    protected function setTestName($name = ''){
-        if(!empty($name)){
+    protected function setTestName($name = '') {
+        if(!empty($name)) {
             $this->testName = $name;
         }
         else{
@@ -949,8 +968,8 @@ class TheoryTest implements TTInterface{
      * Returns the test name
      * @return string Returns the current test name
      */
-    public function getTestName(){
-        if(empty($this->testName)){
+    public function getTestName() {
+        if(empty($this->testName)) {
             $this->testName = '<span class="hidden-xs">Theory </span>Test '.$this->getTest();
         }
         return $this->testName;
@@ -962,9 +981,9 @@ class TheoryTest implements TTInterface{
      * @param string $type This should be either set to 'taken' or 'remaining' depending on which you wish to update 'taken' by default
      * @return void
      */
-    public function setTime($time, $type = 'taken'){
-        if($time){
-            if($type == 'taken'){
+    public function setTime($time, $type = 'taken') {
+        if($time) {
+            if($type == 'taken') {
                 list($mins, $secs) = explode(':', $time);
                 $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
                 self::$db->update($this->progressTable, array('time_'.$type => $newtime), array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
@@ -980,7 +999,7 @@ class TheoryTest implements TTInterface{
      * @param string $type This should be either set to 'taken' or 'remaining' depending on which you wish to get 'taken' by default
      * @return string Returns the time from the database
      */
-    public function getTime($type = 'taken'){
+    public function getTime($type = 'taken') {
         return self::$db->fetchColumn($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('time_'.$type), 0, array('started' => 'DESC'));
     }
     
@@ -988,7 +1007,7 @@ class TheoryTest implements TTInterface{
      * Gets the number of seconds remaining for the current test
      * @return int Returns the current number of seconds remaining for the test
      */
-    protected function getSeconds(){
+    protected function getSeconds() {
         list($minutes, $seconds) = explode(':', $this->getTime('remaining'));
         return intval((intval($minutes) * 60) + intval($seconds));
     }
@@ -997,14 +1016,14 @@ class TheoryTest implements TTInterface{
      * Returns the previous question button HTML with correct id in code
      * @return string Returns the previous question button HTML code
      */
-    protected function prevQuestion(){
-        if(($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ((int)$this->currentQuestion() != 1 && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))){
-            if($this->review == 'flagged' && $this->numFlagged() > 1){$prev = $this->questionPrim($this->getNextFlagged('prev'));}
-            elseif($this->review == 'incomplete' && $this->numIncomplete() > 1){$prev = $this->questionPrim($this->getNextIncomplete('prev'));}
+    protected function prevQuestion() {
+        if(($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ((int)$this->currentQuestion() != 1 && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))) {
+            if($this->review == 'flagged' && $this->numFlagged() > 1) {$prev = $this->questionPrim($this->getNextFlagged('prev'));}
+            elseif($this->review == 'incomplete' && $this->numIncomplete() > 1) {$prev = $this->questionPrim($this->getNextIncomplete('prev'));}
             else{$prev = $this->questionPrim(($this->currentQuestion() - 1));}
             return '<div class="prevquestion btn btn-theory" id="'.$prev.'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
         }
-        if($this->review === 'all' || $this->review === 'answers' || $this->review === false){
+        if($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
             return '<div class="prevquestion btn btn-theory" id="'.$this->getLastQuestion().'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
         }
         return '<div class="noprev"></div>';
@@ -1014,14 +1033,14 @@ class TheoryTest implements TTInterface{
      * Returns the next question button HTML with correct id in code
      * @return string Returns the next question button HTML code
      */
-    protected function nextQuestion(){
-        if(($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ($this->currentQuestion() != $this->numQuestions() && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))){
-            if($this->review == 'flagged' && $this->numFlagged() > 1){$next = $this->questionPrim($this->getNextFlagged());}
-            elseif($this->review == 'incomplete' && $this->numIncomplete() > 1){$next = $this->questionPrim($this->getNextIncomplete());}
+    protected function nextQuestion() {
+        if(($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ($this->currentQuestion() != $this->numQuestions() && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))) {
+            if($this->review == 'flagged' && $this->numFlagged() > 1) {$next = $this->questionPrim($this->getNextFlagged());}
+            elseif($this->review == 'incomplete' && $this->numIncomplete() > 1) {$next = $this->questionPrim($this->getNextIncomplete());}
             else{$next = $this->questionPrim(($this->currentQuestion() + 1));}
             return '<div class="nextquestion btn btn-theory" id="'.$next.'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
         }
-        if($this->review === 'all' || $this->review === 'answers' || $this->review == false){
+        if($this->review === 'all' || $this->review === 'answers' || $this->review == false) {
             return '<div class="nextquestion btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
         }
         return '';
@@ -1032,7 +1051,7 @@ class TheoryTest implements TTInterface{
      * @param int $prim This should be the prim number of the current question
      * @return int Returns the DSA Category number of the current question
      */
-    protected function getDSACat($prim){
+    protected function getDSACat($prim) {
         return self::$db->fetchColumn($this->questionsTable, array('prim' => $prim), array('dsacat'));
     }
     
@@ -1040,7 +1059,7 @@ class TheoryTest implements TTInterface{
      * Deletes the existing test for the current user if they wish to start again
      * @return boolean If existing tests are deleted will return true else will return false
      */
-    public function startNewTest(){
+    public function startNewTest() {
         return self::$db->delete($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
     }
     
@@ -1050,8 +1069,8 @@ class TheoryTest implements TTInterface{
      * @param boolean $mark If the test needed to be marked should set to true
      * @return string The end test HTML code will be returned
      */
-    public function endTest($time, $mark = true){
-        if($mark === true){
+    public function endTest($time, $mark = true) {
+        if($mark === true) {
             $this->setTime($time);
             $this->markTest();
         }
@@ -1073,10 +1092,10 @@ class TheoryTest implements TTInterface{
      * Marks the current test
      * @return void Nothing is returned
      */
-    protected function markTest(){
+    protected function markTest() {
         $this->getQuestions();
-        foreach($this->questions as $prim){
-             if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == 4){$type = 'correct';}
+        foreach($this->questions as $prim) {
+             if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == 4) {$type = 'correct';}
              else{$type = 'incorrect';}
              
              $dsa = $this->getDSACat($prim);
@@ -1093,7 +1112,7 @@ class TheoryTest implements TTInterface{
         $this->testresults['percent']['flagged'] = round(($this->testresults['flagged'] / $this->testresults['numquestions']) * 100);
         $this->testresults['percent']['incomplete'] = round(($this->testresults['incomplete'] / $this->testresults['numquestions']) * 100);
         $this->updateLearningSection();
-        if($this->numCorrect() >= $this->getPassmark()){
+        if($this->numCorrect() >= $this->getPassmark()) {
             $this->testresults['status'] = 'pass';
             $status = 1;
         }
@@ -1108,14 +1127,14 @@ class TheoryTest implements TTInterface{
      * Updated the learning progress to show what questions have been correctly answer in the test
      * @return boolean Returns true if the learning progress has been updated
      */
-    public function updateLearningSection(){
+    public function updateLearningSection() {
         $info = self::$db->select($this->learningProgressTable, array('user_id' => self::$user->getUserID()), array('progress'));
         $userprogress = unserialize($info['progress']);
         $this->getQuestions();
-        foreach($this->questions as $prim){
+        foreach($this->questions as $prim) {
             $userprogress[$prim]['answer'] = $_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'];
-            if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == '4'){$userprogress[$prim]['status'] = 2;}
-            elseif($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == '3'){$userprogress[$prim]['status'] = 1;}
+            if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == '4') {$userprogress[$prim]['status'] = 2;}
+            elseif($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == '3') {$userprogress[$prim]['status'] = 1;}
             else{$userprogress[$prim]['status'] = 0;}
         }
         return self::$db->update($this->learningProgressTable, array('progress' => serialize(array_filter($userprogress))), array('user_id' => self::$user->getUserID()));
@@ -1125,8 +1144,8 @@ class TheoryTest implements TTInterface{
      * Returns the print certificate button
      * @return string Returns the print certificate/report button depending on how the user has done on the test
      */
-    protected function printCertif(){
-        if($this->testresults['status'] === 'pass'){
+    protected function printCertif() {
+        if($this->testresults['status'] === 'pass') {
             return '<a href="/certificate.pdf?type=theory&amp;testID='.$this->getTest().'" title="Print Certificate" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Certificate</span></a>';
         }
         return '<a href="/certificate.pdf?type=theory&amp;testID='.$this->getTest().'" title="Print Results" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Results</span></a>';
@@ -1136,9 +1155,9 @@ class TheoryTest implements TTInterface{
      * Returns the test results for the current test
      * @return boolean|array If the test has been completed the test results will be returned as an array else will return false
      */
-    public function getTestResults(){
+    public function getTestResults() {
         $results = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'status' => array('>', 0)), array('id', 'test_id', 'results', 'started', 'complete', 'time_taken', 'status'), array('started' => 'DESC'));
-        if(!empty($results)){
+        if(!empty($results)) {
             $this->testresults = unserialize($results['results']);
             $this->testresults['id'] = $results['id'];
             $this->testresults['test_id'] = $results['test_id'];
@@ -1152,8 +1171,8 @@ class TheoryTest implements TTInterface{
      * Returns the test status HTML code either pass or failed
      * @return string Returns the test status HTML code either pass or failed
      */
-    public function testStatus(){
-        if($this->testresults['status'] === 'pass'){return '<strong class="pass">Passed</strong>';}
+    public function testStatus() {
+        if($this->testresults['status'] === 'pass') {return '<strong class="pass">Passed</strong>';}
         else{return '<strong class="fail">Failed</strong>';}
     }
     
@@ -1161,7 +1180,7 @@ class TheoryTest implements TTInterface{
      * Returns the test report table
      * @return string Returns the test report table
      */
-    protected function testReport(){
+    protected function testReport() {
         $report = array();
         $this->getTestResults();
         $report['testname'] = ucwords($this->getTestName());
@@ -1177,7 +1196,7 @@ class TheoryTest implements TTInterface{
      * Returns the test percentages table
      * @return string Returns the test percentages table
      */
-    protected function testPercentages(){
+    protected function testPercentages() {
         return $this->testresults;
     }
     
@@ -1185,10 +1204,10 @@ class TheoryTest implements TTInterface{
      * Creates an overview of the test results
      * @return string Returns an overview of the test results table
      */
-    protected function createOverviewResults(){
+    protected function createOverviewResults() {
         $dsacats = self::$db->selectAll($this->dsaCategoriesTable);
         $catresults = array();
-        foreach($dsacats as $i => $dsacat){
+        foreach($dsacats as $i => $dsacat) {
             $catresults[$i]['section'] = $dsacat['section'];
             $catresults[$i]['name'] = $dsacat['name'];
             $catresults[$i]['correct'] = (int)$this->testresults['dsa'][$dsacat['section']]['correct'];
@@ -1202,12 +1221,12 @@ class TheoryTest implements TTInterface{
      * Returns the status of each questions and the styles for the review answers section
      * @return string|false Returns the HTML code if they are in the reviewing answers section else return false
      */
-    protected function reviewAnswers(){
-        if($this->review == 'answers'){
+    protected function reviewAnswers() {
+        if($this->review == 'answers') {
             $questions = '<div class="numreviewq">';
-            for($r = 1; $r <= $this->numQuestions(); $r++){                
-                if($_SESSION['test'.$this->getTest()][$r]['status'] == '4'){$class = ' correct';}
-                elseif($_SESSION['test'.$this->getTest()][$r]['status'] == '3'){$class = ' incorrect';}
+            for($r = 1; $r <= $this->numQuestions(); $r++) {                
+                if($_SESSION['test'.$this->getTest()][$r]['status'] == '4') {$class = ' correct';}
+                elseif($_SESSION['test'.$this->getTest()][$r]['status'] == '3') {$class = ' incorrect';}
                 else{$class = ' incomplete';}
                 
                 $questions.= '<div class="questionreview'.$class.($this->currentQuestion() == $r ? ' currentreview' : '').'" id="'.$this->questionPrim($r).'">'.$r.'</div>';

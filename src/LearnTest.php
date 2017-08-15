@@ -196,12 +196,12 @@ class LearnTest extends TheoryTest{
      * @return string Returns the previous question HTML with the correct prim number for the previous question
      */
     protected function prevQuestion(){
-        if($_COOKIE['skipCorrect'] == 1){return '<div class="prevquestion btn btn-theory" id="'.$this->getIncomplete('prev').'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';}
+        if($_COOKIE['skipCorrect'] == 1){$prim = $this->getIncomplete('prev');}
         elseif($this->currentQuestion() != 1 && $this->testInfo['category']){
-            $question = $this->db->select($this->questionsTable, array($this->testInfo['sort'] => array('<', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => 'DESC'));
-            return '<div class="prevquestion btn btn-theory" id="'.$question['prim'].'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
+            $prim = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('<', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
         }
-        else{return '<div class="prevquestion btn btn-theory" id="'.$this->getLastQuestion().'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';}
+        else{$prim = $this->getLastQuestion();}
+        return '<div class="prevquestion btn btn-theory" id="'.$prim.'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
     }
     
     /**
@@ -209,12 +209,12 @@ class LearnTest extends TheoryTest{
      * @return string Returns the next question HTML with the correct prim number for the next question
      */
     protected function nextQuestion(){
-        if($_COOKIE['skipCorrect'] == 1){return '<div class="nextquestion btn btn-theory" id="'.$this->getIncomplete().'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';}
+        if($_COOKIE['skipCorrect'] == 1){$prim = $this->getIncomplete();}
         elseif(($this->currentQuestion() < $this->numQuestions()) && $this->testInfo['category']){
-            $question = $this->db->select($this->questionsTable, array($this->testInfo['sort'] => array('>', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => 'ASC'));
-            return '<div class="nextquestion btn btn-theory" id="'.$question['prim'].'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
+            $prim = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('>', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'ASC'));
         }
-        else{return '<div class="nextquestion btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';}
+        else{$prim = $this->getFirstQuestion();}
+        return '<div class="nextquestion btn btn-theory" id="'.$prim.'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
     }
     
     /**

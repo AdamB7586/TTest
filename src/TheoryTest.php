@@ -188,7 +188,7 @@ class TheoryTest implements TTInterface{
     public function createTestReport($theorytest = 1) {
         $this->setTest($theorytest);
         if($this->getTestResults()) {
-            $this->setTestName();
+            $this->setTestName($this->testName);
             return $this->buildReport(false);
         }
         return self::$layout->fetch('report'.DS.'report-unavail.tpl');

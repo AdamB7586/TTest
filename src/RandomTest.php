@@ -35,20 +35,6 @@ class RandomTest extends TheoryTest{
     }
     
     /**
-     * Creates the test report HTML if the test has been completed
-     * @param int $theorytest The test number you wish to view the report for
-     * @return string Returns the HTML for the test report for the given test ID
-     */
-    public function createTestReport($theorytest = 15){
-        $this->setTest($theorytest);
-        if($this->getTestResults()){
-            $this->setTestName($this->testName);
-            return $this->buildReport();
-        }
-        return $this->layout->fetch('report'.DS.'report-unavail.tpl');
-    }
-    
-    /**
      * Chooses the random questions for the test and inserts them into the database
      * @param int $testNo This should be the test number you which to get the questions for
      * @return boolean If the questions are inserted into the database will return true else returns false

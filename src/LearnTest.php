@@ -459,11 +459,10 @@ class LearnTest extends TheoryTest{
     /**
      * Returns the instructors comments for the given question
      * @param int $prim This should be the questions unique prim number
-     * @return string Returns the questions explanation
+     * @return string|false Returns the questions explanation if it exists else return false
      */
     protected function instructorComments($prim){
-        $comments = $this->db->select($this->questionsTable, array('prim' => $prim), array('explanation'));
-        return $comments['explanation'];
+        return $this->db->fetchColumn($this->questionsTable, array('prim' => $prim), array('explanation'));
     }
     
     /**

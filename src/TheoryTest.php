@@ -1,7 +1,7 @@
 <?php
 namespace TheoryTest\Car;
 
-use TheoryTest\Essential\TTInterface;
+use TheoryTest\Car\Essential\TTInterface;
 use Smarty;
 use DBAL\Database;
 use User;

@@ -1,6 +1,6 @@
 <?php
 
-namespace TheoryTest\Essential;
+namespace TheoryTest\Car\Essential;
 
 interface TTInterface{
     public function createNewTest($test = 1);

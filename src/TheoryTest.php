@@ -44,6 +44,7 @@ class TheoryTest implements TTInterface{
     
     protected $testNo;
     protected $testName;
+    protected $testData;
     
     protected $questiondata;
     protected $current;
@@ -181,6 +182,17 @@ class TheoryTest implements TTInterface{
     }
     
     /**
+     * Return the test data from the session for the current user
+     * @return array This should be any test data that exists in the current session
+     */
+    protected function getUserTestInfo(){
+        if(!is_array($this->testData)){
+            $this->testData = $_SESSION['test'.$this->getTest()];
+        }
+        return $this->testData;
+    }
+    
+    /**
      * Creates the test report HTML if the test has been completed
      * @param int $theorytest The test number you wish to view the report for
      * @return string Returns the HTML for the test report for the given test ID
@@ -276,7 +288,7 @@ class TheoryTest implements TTInterface{
             $answers = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
             if(!empty($answers)) {
                 self::$useranswers = unserialize($answers['answers']);
-                if(!is_array($_SESSION['test'.$this->getTest()])) {$_SESSION['test'.$this->getTest()] = self::$useranswers;}
+                if(!is_array($this->getUserTestInfo())) {$_SESSION['test'.$this->getTest()] = self::$useranswers;}
                 if(!is_numeric($_SESSION['question_no']['test'.$this->getTest()])) {$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
                 $this->testID = $answers['id'];
                 return self::$useranswers;
@@ -351,7 +363,7 @@ class TheoryTest implements TTInterface{
      */
     public function getNextFlagged($dir = 'next') {
         $current = $this->currentQuestion();
-        foreach($_SESSION['test'.$this->getTest()] as $question => $value) {
+        foreach($this->getUserTestInfo() as $question => $value) {
             if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['flagged'] == 1) {
                 return (int)$question;
             }
@@ -368,7 +380,7 @@ class TheoryTest implements TTInterface{
      */
     public function getNextIncomplete($dir = 'next') {
         $current = $this->currentQuestion();
-        foreach($_SESSION['test'.$this->getTest()] as $question => $value) {
+        foreach($this->getUserTestInfo() as $question => $value) {
             if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['status'] < 3) {
                 return (int)$question;
             }
@@ -531,7 +543,7 @@ class TheoryTest implements TTInterface{
      * @return boolean If answer added returns true else returns false
      */
     public function addAnswer($answer, $prim) {
-        $arraystring = str_replace($answer, '', trim(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'], FILTER_SANITIZE_STRING))).$answer;
+        $arraystring = str_replace($answer, '', trim(filter_var($this->getUserTestInfo()[$this->questionNo($prim)]['answer'], FILTER_SANITIZE_STRING))).$answer;
         return $this->replaceAnswer($this->sortAnswers($arraystring), $prim);
     }
        
@@ -563,7 +575,7 @@ class TheoryTest implements TTInterface{
      */
     public function removeAnswer($answer, $prim) {
         $qNo = $this->questionNo($prim);
-        $removed = str_replace(strtoupper($answer), '', filter_var($_SESSION['test'.$this->getTest()][$qNo]['answer'], FILTER_SANITIZE_STRING));
+        $removed = str_replace(strtoupper($answer), '', filter_var($this->getUserTestInfo()[$qNo]['answer'], FILTER_SANITIZE_STRING));
         $_SESSION['test'.$this->getTest()][$qNo]['answer'] = $removed;
         if($removed === '') {$_SESSION['test'.$this->getTest()][$qNo]['status'] = 0;}
         else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 1;}
@@ -591,7 +603,7 @@ class TheoryTest implements TTInterface{
      * @return boolean Should return true if flag status has been updated else returns false
      */
     public function flagQuestion($prim) {
-        if(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'], FILTER_SANITIZE_NUMBER_INT) === 0 || !filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'], FILTER_VALIDATE_INT)) {
+        if(filter_var($this->getUserTestInfo()[$this->questionNo($prim)]['flagged'], FILTER_SANITIZE_NUMBER_INT) === 0 || !filter_var($this->getUserTestInfo()[$this->questionNo($prim)]['flagged'], FILTER_VALIDATE_INT)) {
             $_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] = 1;
         }
         else{
@@ -605,7 +617,7 @@ class TheoryTest implements TTInterface{
      * @return boolean
      */
     protected function updateAnswers() {
-        return self::$db->update($this->progressTable, array('answers' => serialize($_SESSION['test'.$this->getTest()]), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $_SESSION['question_no']['test'.$this->getTest()]), array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
+        return self::$db->update($this->progressTable, array('answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()), array('user_id' => self::$user->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
     }
     
     /**
@@ -621,8 +633,8 @@ class TheoryTest implements TTInterface{
      */
     public function numComplete() {
         $num = 0;
-        if(is_array($_SESSION['test'.$this->getTest()])) {
-            foreach($_SESSION['test'.$this->getTest()] as $value) {
+        if(is_array($this->getUserTestInfo())) {
+            foreach($this->getUserTestInfo() as $value) {
                 $value = trim($value['status']);
                 if($value >= 2) {
                     $num++;
@@ -646,7 +658,7 @@ class TheoryTest implements TTInterface{
      */
     public function numFlagged() {
         $num = 0;
-        foreach(filter_var_array($_SESSION['test'.$this->getTest()]) as $value) {
+        foreach(filter_var_array($this->getUserTestInfo()) as $value) {
             $value = trim($value['flagged']);
             if($value == 1) {
                 $num++;
@@ -661,7 +673,7 @@ class TheoryTest implements TTInterface{
      */
     protected function numCorrect() {
         $num = 0;
-        foreach(filter_var_array($_SESSION['test'.$this->getTest()]) as $value) {
+        foreach(filter_var_array($this->getUserTestInfo()) as $value) {
             $value = trim($value['status']);
             if($value == 4) {
                 $num++;
@@ -677,7 +689,7 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if answer selected else return false
      */
     protected function answerSelected($prim, $letter) {
-        if(strpos(filter_var($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'], FILTER_SANITIZE_STRING), strtoupper($letter)) !== false) {
+        if(strpos(filter_var($this->getUserTestInfo()[$this->questionNo($prim)]['answer'], FILTER_SANITIZE_STRING), strtoupper($letter)) !== false) {
             return true;
         }
         return false;
@@ -704,7 +716,7 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if current question is flagged else returns false
      */
     public function questionFlagged($prim) {
-        if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] === 1) {
+        if($this->getUserTestInfo()[$this->questionNo($prim)]['flagged'] === 1) {
             return true;
         }
         return false;
@@ -867,7 +879,7 @@ class TheoryTest implements TTInterface{
      */
     protected function getFlaggedQuestion() {
         $q = 1;
-        foreach($_SESSION['test'.$this->getTest()] as $value) {
+        foreach($this->getUserTestInfo() as $value) {
             if($value['flagged'] == 1) {
                 return $this->questionPrim($q);
             }
@@ -882,7 +894,7 @@ class TheoryTest implements TTInterface{
      */
     protected function getIncompleteQuestion() {
         $q = 1;
-        foreach($_SESSION['test'.$this->getTest()] as $value) {
+        foreach($this->getUserTestInfo() as $value) {
             if($value['status'] <= 1) {
                 return $this->questionPrim($q);
             }
@@ -1097,7 +1109,7 @@ class TheoryTest implements TTInterface{
     protected function markTest() {
         $this->getQuestions();
         foreach($this->questions as $prim) {
-             if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == 4) {$type = 'correct';}
+             if($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == 4) {$type = 'correct';}
              else{$type = 'incorrect';}
              
              $dsa = $this->getDSACat($prim);
@@ -1134,9 +1146,9 @@ class TheoryTest implements TTInterface{
         $userprogress = unserialize($info['progress']);
         $this->getQuestions();
         foreach($this->questions as $prim) {
-            $userprogress[$prim]['answer'] = $_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['answer'];
-            if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == '4') {$userprogress[$prim]['status'] = 2;}
-            elseif($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == '3') {$userprogress[$prim]['status'] = 1;}
+            $userprogress[$prim]['answer'] = $this->getUserTestInfo()[$this->questionNo($prim)]['answer'];
+            if($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == '4') {$userprogress[$prim]['status'] = 2;}
+            elseif($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == '3') {$userprogress[$prim]['status'] = 1;}
             else{$userprogress[$prim]['status'] = 0;}
         }
         return self::$db->update($this->learningProgressTable, array('progress' => serialize(array_filter($userprogress))), array('user_id' => self::$user->getUserID()));
@@ -1227,8 +1239,8 @@ class TheoryTest implements TTInterface{
         if($this->review == 'answers') {
             $questions = '<div class="numreviewq">';
             for($r = 1; $r <= $this->numQuestions(); $r++) {                
-                if($_SESSION['test'.$this->getTest()][$r]['status'] == '4') {$class = ' correct';}
-                elseif($_SESSION['test'.$this->getTest()][$r]['status'] == '3') {$class = ' incorrect';}
+                if($this->getUserTestInfo()[$r]['status'] == '4') {$class = ' correct';}
+                elseif($this->getUserTestInfo()[$r]['status'] == '3') {$class = ' incorrect';}
                 else{$class = ' incomplete';}
                 
                 $questions.= '<div class="questionreview'.$class.($this->currentQuestion() == $r ? ' currentreview' : '').'" id="'.$this->questionPrim($r).'">'.$r.'</div>';

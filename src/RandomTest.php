@@ -2,7 +2,7 @@
 namespace TheoryTest\Car;
 
 class RandomTest extends TheoryTest{
-    protected $testName = 'Random Theory Test';
+    protected $testName = 'Random <span class="hidden-xs"> Theory</span> Test';
     protected $testNo = 15;
     
     protected $scriptVar = 'random';
@@ -27,7 +27,7 @@ class RandomTest extends TheoryTest{
     public function createNewTest($theorytest = 15){
         $this->clearSettings();
         $this->setTest($this->testNo);
-        $this->setTestName('Random Theory Test');
+        $this->setTestName($this->testName);
         if($this->anyExisting() === false){
             $this->chooseQuestions($this->testNo);
         }
@@ -42,7 +42,7 @@ class RandomTest extends TheoryTest{
     public function createTestReport($theorytest = 15){
         $this->setTest($theorytest);
         if($this->getTestResults()){
-            $this->setTestName('Random Theory Test');
+            $this->setTestName($this->testName);
             return $this->buildReport();
         }
         return $this->layout->fetch('report'.DS.'report-unavail.tpl');

@@ -5,6 +5,13 @@ class RandomTest extends TheoryTest{
     protected $testName = 'Random Theory Test';
     protected $testNo = 15;
     
+    /**
+     * Connects to the database sets the current user and gets any user answers
+     * @param Database $db
+     * @param Smarty $layout
+     * @param User $user
+     * @param int|false $userID
+     */
     public function __construct(Database $db, Smarty $layout, User $user, $userID = false) {
         parent::__construct($db, $layout, $user, $userID);
     }

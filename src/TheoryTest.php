@@ -33,7 +33,8 @@ class TheoryTest implements TTInterface{
 	
     protected $audioLocation = '/audio';
     protected $javascriptLocation = '/js/theory/';
-    
+    protected $scriptVar = 'questions';
+
     protected $seconds = 3420;
     protected $section = 'theory';
     
@@ -227,7 +228,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the JavaScript script to be displayed on the page
      */
     protected function existingScript() {
-        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'existing-questions.js"></script>';
+        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'existing-'.$this->scriptVar.'.js"></script>';
     }
 
     /**
@@ -441,9 +442,9 @@ class TheoryTest implements TTInterface{
      */
     protected function getScript($review = false) {
         if($this->review !== 'answers' && $review === false) {
-            return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'theory-test-questions.js"></script>';
+            return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'theory-test-'.$this->scriptVar.'.js"></script>';
         }
-        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'review-questions.js"></script>';
+        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'review-'.$this->scriptVar.'.js"></script>';
     }
     
     /**

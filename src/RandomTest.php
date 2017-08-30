@@ -5,6 +5,9 @@ class RandomTest extends TheoryTest{
     protected $testName = 'Random Theory Test';
     protected $testNo = 15;
     
+    protected $scriptVar = 'random';
+
+
     /**
      * Connects to the database sets the current user and gets any user answers
      * @param Database $db
@@ -74,24 +77,5 @@ UNION (SELECT `prim` FROM `".$this->questionsTable."` WHERE `casestudyno` = '".r
             $q++;
         }
         return $this->db->insert($this->progressTable, array('user_id' => self::$user->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => strtolower($this->getTestType())));
-    }
-    
-    /**
-     * Returns the correct JavaScript file required for the page
-     * @return string Returns the script needed for the page the user is currently on
-     */
-    protected function getScript($review = false){
-        if($this->review !== 'answers' && $review === false){
-            return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'theory-test-random.js"></script>';
-        }
-        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'review-random.js"></script>';
-    }
-    
-    /**
-     * Returns the JavaScript HTML code to be added to the page
-     * @return string Returns the JavaScript HTML code to be added to the page
-     */
-    protected function existingScript(){
-        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'existing-random.js"></script>';
     }
 }

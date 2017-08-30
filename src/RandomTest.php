@@ -74,7 +74,7 @@ UNION (SELECT `prim` FROM `".$this->questionsTable."` WHERE `casestudyno` = '".r
      * @return string Returns the script needed for the page the user is currently on
      */
     protected function getScript($review = false){
-        if($this->review != 'answers' && $review == false){
+        if($this->review !== 'answers' && $review === false){
             return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'theory-test-random.js"></script>';
         }
         return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'review-random.js"></script>';

@@ -12,6 +12,7 @@ class RandomTest extends TheoryTest{
     /**
      * Create a new Random Theory Test for the test number given
      * @param int $theorytest Should be the test number
+     * @return string Returns the HTML for a test
      */
     public function createNewTest($theorytest = 15){
         $this->clearSettings();

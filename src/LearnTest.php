@@ -9,7 +9,7 @@
  * @copyright &copy; Teaching Driving Ltd
  * @link https://www.learnerdriving.com
  */
-namespace TheoryTest;
+namespace TheoryTest\Car;
 
 use DBAL\Database;
 
@@ -28,8 +28,9 @@ class LearnTest extends TheoryTest{
      * @param Database $db
      * @param Smarty $layout
      * @param User $user
+     * @param int|false $userID
      */
-    public function __construct(Database $db, Smarty $layout, User $user) {
+    public function __construct(Database $db, Smarty $layout, User $user, $userID = false) {
         parent::__construct($db, $layout, $user);
         $this->getTestInfo();
     }

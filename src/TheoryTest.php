@@ -1,5 +1,5 @@
 <?php
-namespace TheoryTest;
+namespace TheoryTest\Car;
 
 use TheoryTest\Essential\TTInterface;
 use Smarty;
@@ -59,8 +59,9 @@ class TheoryTest implements TTInterface{
      * @param Database $db
      * @param Smarty $layout
      * @param User $user
+     * @param int|false $userID
      */
-    public function __construct(Database $db, Smarty $layout, User $user) {
+    public function __construct(Database $db, Smarty $layout, User $user, $userID = false) {
         self::$db = $db;
         self::$user = $user;
         self::$layout = $layout;

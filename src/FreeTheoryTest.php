@@ -1,5 +1,5 @@
 <?php
-namespace TheoryTest;
+namespace TheoryTest\Car;
 
 class FreeTheoryTest extends TheoryTest{
     

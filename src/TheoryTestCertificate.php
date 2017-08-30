@@ -1,5 +1,5 @@
 <?php
-namespace TheoryTest;
+namespace TheoryTest\Car;
 
 use TheoryTest\Essential\CertificateInterface;
 use DBAL\Database;

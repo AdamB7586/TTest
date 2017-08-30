@@ -23,6 +23,10 @@ class LearnTest extends TheoryTest{
     
     public $progressTable = 'users_progress';
     
+    protected $categories = array('dsa' => 'dsacat', 'hc' => 'hcsection', 'l2d' => 'ldclessonno', 'casestudy' => 'casestudyno');
+    protected $sortBy = array('dsa' => 'dsaqposition', 'hc' => 'hcqposition', 'l2d' => 'ldcqno', 'casestudy' => 'csqposition');
+
+
     /**
      * Connects to the database sets the current user and gets any user answers
      * @param Database $db
@@ -62,21 +66,9 @@ class LearnTest extends TheoryTest{
      */
     protected function chooseQuestions($sectionNo, $type) {
         $this->testInfo['casestudy'] = array('IS', 'NULL');
-        if($type == 'dsa'){
-            $this->testInfo['category'] = 'dsacat';
-            $this->testInfo['sort'] = 'dsaqposition';
-        }
-        elseif($type == 'hc'){
-            $this->testInfo['category'] = 'hcsection';
-            $this->testInfo['sort'] = 'hcqposition';
-        }
-        elseif($type == 'l2d'){
-            $this->testInfo['category'] = 'ldclessonno';
-            $this->testInfo['sort'] = 'ldcqno';
-        }
-        elseif($type == 'casestudy'){
-            $this->testInfo['category'] = 'casestudyno';
-            $this->testInfo['sort'] = 'csqposition';
+        $this->testInfo['category'] = $this->categories[strtolower($type)];
+        $this->testInfo['sort'] = $this->sortBy[strtolower($type)];
+        if($type == 'casestudy'){
             $this->testInfo['casestudy'] = '1';
         }
         $this->testInfo['section'] = $sectionNo;
@@ -186,7 +178,7 @@ class LearnTest extends TheoryTest{
     protected function getOptions($prim, $option, $letter, $image = false) {
         if($this->answerSelected($prim, $letter)){
             $selected = ($image === false ? ' selected' : ' imgselected');
-            if($this->questionStatus() != 'unattempted'){$selected.= ' selected'.$this->questionStatus();}
+            if($this->questionStatus() !== 'unattempted'){$selected.= ' selected'.$this->questionStatus();}
         }
         else{$selected = '';}
         return '<div class="answer'($image === true ? 'image' : '').$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($prim, $letter).$option : $option.$this->createImage($prim.strtolower($letter).'.png')).'</div>';
@@ -390,7 +382,7 @@ class LearnTest extends TheoryTest{
      * @return string Returns the script HTML information
      */
     protected function getScript(){
-        return '<script async type="text/javascript" src="/js/theory/learning-learn.js"></script>';
+        return '<script async type="text/javascript" src="'.$this->getJavascriptLocation().'learning-learn.js"></script>';
     }
     
     /**

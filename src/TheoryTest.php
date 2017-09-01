@@ -31,6 +31,7 @@ class TheoryTest implements TTInterface{
     protected $audioLocation = '/audio';
     protected $javascriptLocation = '/js/theory/';
     protected $scriptVar = 'questions';
+    protected $imagePath;
 
     protected $seconds = 3420;
     protected $section = 'theory';
@@ -67,6 +68,7 @@ class TheoryTest implements TTInterface{
         self::$layout->addTemplateDir(dirname(__FILE__).DS.'templates');
         if(is_numeric($userID)){$this->userClone = (int) $userID;}
         $this->getUserAnswers();
+        $this->setImagePath();
     }
     
     /**
@@ -188,6 +190,29 @@ class TheoryTest implements TTInterface{
      */
     public function getJavascriptLocation() {
         return $this->javascriptLocation;
+    }
+    
+    /**
+     * Sets the path where images can be found
+     * @param string $path This should be the path that you want to set where the test images can be found
+     * @return $this
+     */
+    public function setImagePath($path = ''){
+        if(strlen($path) >= 3){
+            $this->imagePath = $path;
+        }
+        else{
+            $this->imagePath = ROOT.DS.'images'.DS.'prim'.DS;
+        }
+        return $this;
+    }
+    
+    /**
+     * Returns the path where the test images can be located
+     * @return string This will be the image location path
+     */
+    public function getImagePath(){
+        return $this->imagePath;
     }
     
     /**
@@ -417,9 +442,9 @@ class TheoryTest implements TTInterface{
      * @param string $letter This should be the letter of the question or answer
      * @return string Returns the HTML needed for the audio
      */
-    protected function addAudio($prim, $letter, $folder = '') {
+    protected function addAudio($prim, $letter) {
         if($this->audioEnabled && is_numeric($prim)) {
-            return '<div class="sound fa fa-fw fa-volume-up" id="audioanswer'.$letter.$prim.'"><audio id="audio'.$letter.$prim.'" preload="auto"><source src="'.$this->getAudioLocation().$folder.'/mp3/'.strtoupper($letter).$prim.'.mp3" type="audio/mpeg"><source src="'.$this->getAudioLocation().$folder.'/ogg/'.strtoupper($letter).$prim.'.ogg" type="audio/ogg"></audio></div>';
+            return '<div class="sound fa fa-fw fa-volume-up" id="audioanswer'.$letter.$prim.'"><audio id="audio'.$letter.$prim.'" preload="auto"><source src="'.$this->getAudioLocation().'/mp3/'.strtoupper($letter).$prim.'.mp3" type="audio/mpeg"><source src="'.$this->getAudioLocation().'/ogg/'.strtoupper($letter).$prim.'.ogg" type="audio/ogg"></audio></div>';
         }
     }
     
@@ -449,8 +474,8 @@ class TheoryTest implements TTInterface{
      * @return string|false Returns HTML image string if exists else returns false
      */
     public function createImage($file, $main = false) {
-        if($file != NULL && $file != '' && file_exists(ROOT.DS.'images'.DS.'prim'.DS.$file)) {
-            list($width, $height) = getimagesize(ROOT.DS.'images'.DS.'prim'.DS.$file);
+        if($file != NULL && $file != '' && file_exists($this->getImagePath().$file)) {
+            list($width, $height) = getimagesize($this->getImagePath().$file);
             return '<img src="/images/prim/'.$file.'" alt="" width="'.$width.'" height="'.$height.'" class="'.($main === true ? 'imageright questionimage ' : '').'img-responsive" />';
         }
         return false;
@@ -950,7 +975,9 @@ class TheoryTest implements TTInterface{
      * @param int $testNo This should be the current test number
      */
     public function setTest($testNo) {
-        $this->testNo = $testNo;
+        if(is_int($testNo) && !is_int($this->testNo)){
+            $this->testNo = $testNo;
+        }
         if(self::$user->setUserSettings(array('current_test' => $this->testNo))) {
             unset($this->questions);
             unset(self::$useranswers);
@@ -1169,9 +1196,9 @@ class TheoryTest implements TTInterface{
      */
     protected function printCertif() {
         if($this->testresults['status'] === 'pass') {
-            return '<a href="/certificate.pdf?type=theory&amp;testID='.$this->getTest().'" title="Print Certificate" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Certificate</span></a>';
+            return '<a href="/certificate.pdf?testID='.$this->getTest().'" title="Print Certificate" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Certificate</span></a>';
         }
-        return '<a href="/certificate.pdf?type=theory&amp;testID='.$this->getTest().'" title="Print Results" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Results</span></a>';
+        return '<a href="/certificate.pdf?testID='.$this->getTest().'" title="Print Results" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Results</span></a>';
     }
     
     /**

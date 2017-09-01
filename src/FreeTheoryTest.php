@@ -62,10 +62,10 @@ class FreeTheoryTest extends TheoryTest{
     protected function checkSettings($new = false) {
         $settings = unserialize($_SESSION['settings']);
         if($new !== true){
-            if($settings['review'] == 'all'){$this->review = 'all';}
-            elseif($settings['review'] == 'flagged'){$this->review = 'flagged';}
-            elseif($settings['review'] == 'incomplete'){$this->review = 'incomplete';}
-            elseif($settings['review'] == 'answers'){$this->review = 'answers';}
+            if($settings['review'] == 'all'){$this->review = (string) 'all';}
+            elseif($settings['review'] == 'flagged'){$this->review = (string) 'flagged';}
+            elseif($settings['review'] == 'incomplete'){$this->review = (string) 'incomplete';}
+            elseif($settings['review'] == 'answers'){$this->review = (string) 'answers';}
         }
         else{$this->review = false;}
         if($settings['audio'] == 'on'){$this->audioEnabled = true;}

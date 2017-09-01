@@ -65,7 +65,7 @@ class TheoryTest implements TTInterface{
         self::$user = $user;
         self::$layout = $layout;
         self::$layout->addTemplateDir(dirname(__FILE__).DS.'templates');
-        if(is_numeric($userID)){$this->userClone = (int)$userID;}
+        if(is_numeric($userID)){$this->userClone = (int) $userID;}
         $this->getUserAnswers();
     }
     
@@ -524,10 +524,10 @@ class TheoryTest implements TTInterface{
     protected function checkSettings($new = false) {
         $settings = self::$user->getUserSettings();
         if($new !== true) {
-            if($settings['review'] == 'all') {$this->review = 'all';}
-            elseif($settings['review'] == 'flagged') {$this->review = 'flagged';}
-            elseif($settings['review'] == 'incomplete') {$this->review = 'incomplete';}
-            elseif($settings['review'] == 'answers') {$this->review = 'answers';}
+            if($settings['review'] == 'all') {$this->review = (string) 'all';}
+            elseif($settings['review'] == 'flagged') {$this->review = (string) 'flagged';}
+            elseif($settings['review'] == 'incomplete') {$this->review = (string) 'incomplete';}
+            elseif($settings['review'] == 'answers') {$this->review = (string) 'answers';}
         }
         else{$this->review = false;}
         if($settings['audio'] == 'on') {$this->audioEnabled = true;}

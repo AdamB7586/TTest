@@ -428,6 +428,7 @@ class LearnTest extends TheoryTest{
      * @return string Returns any highway rules associated with the current question
      */
     protected function highwayCodePlus($prim){
+        $this->setAudioLocation('/audio/highway-code');
         $hcRules = $this->db->select($this->questionsTable, array('prim' => $prim), array('hcrule1', 'hcrule2', 'hcrule3'));
         $highwaycode = '';
         foreach($hcRules as $ruleno){
@@ -438,7 +439,7 @@ class LearnTest extends TheoryTest{
             else{
                 $rule = $ruleinfo['hcrule'].$this->ruleImageHC($ruleinfo['imagetitle1'], $ruleinfo['hctitle']);
             }
-            $highwaycode.= $this->addAudio($ruleno, 'HC', '/highway-code').$rule;
+            $highwaycode.= $this->addAudio($ruleno, 'HC').$rule;
         }
         return $highwaycode;
     }

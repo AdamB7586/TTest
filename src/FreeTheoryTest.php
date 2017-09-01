@@ -61,7 +61,7 @@ class FreeTheoryTest extends TheoryTest{
      */
     protected function checkSettings($new = false) {
         $settings = unserialize($_SESSION['settings']);
-        if($new != true){
+        if($new !== true){
             if($settings['review'] == 'all'){$this->review = 'all';}
             elseif($settings['review'] == 'flagged'){$this->review = 'flagged';}
             elseif($settings['review'] == 'incomplete'){$this->review = 'incomplete';}

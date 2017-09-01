@@ -9,7 +9,7 @@
         "adamb/user": "^1.0",
         "adamb/hcldc": "^1.0"
     },
-    "suggests": {
+    "suggest": {
         "fortawesome/font-awesome": "^4.7"
     },
     "license": "None",

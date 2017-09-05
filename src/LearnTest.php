@@ -1,14 +1,4 @@
 <?php
-/**
- * Produces a Theory Test including HTML5 audio if compatible. Requires a number of external files and classes in order to work correctly.
- * 
- * @package LDC Theory Test
- * @author Learner Driving Centres <https://www.learnerdriving.com>
- * @author Adam Binnersley <adam.binnersley@learnerdriving.com>
- * @version LDC Theory Test 1.0
- * @copyright &copy; Teaching Driving Ltd
- * @link https://www.learnerdriving.com
- */
 namespace TheoryTest\Car;
 
 use DBAL\Database;

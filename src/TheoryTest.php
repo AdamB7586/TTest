@@ -4,7 +4,7 @@ namespace TheoryTest\Car;
 use TheoryTest\Car\Essential\TTInterface;
 use Smarty;
 use DBAL\Database;
-use User;
+use UserAuth\User;
 
 /**
  * Produces a Theory Test including HTML5 audio if compatible

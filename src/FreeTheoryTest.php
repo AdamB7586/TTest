@@ -321,7 +321,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return string Returns the test report table to be displayed
      */
     protected function testReport(){
-        if(!$this->user->getUserID()){self::$layout->assign('free_test', 'Yes', true);}
+        self::$layout->assign('free_test', 'Yes', true);
         $this->getTestResults();
         $report['testname'] = ucwords($this->getTestName());
         $report['status'] = $this->testStatus();

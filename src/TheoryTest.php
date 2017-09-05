@@ -1090,7 +1090,7 @@ class TheoryTest implements TTInterface{
             else{$next = $this->questionPrim(($this->currentQuestion() + 1));}
             return '<div class="nextquestion btn btn-theory" id="'.$next.'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
         }
-        if($this->review === 'all' || $this->review === 'answers' || $this->review == false) {
+        if($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
             return '<div class="nextquestion btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
         }
         return '';

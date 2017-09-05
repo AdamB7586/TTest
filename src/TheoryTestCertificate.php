@@ -137,7 +137,7 @@ class TheoryTestCertificate implements CertificateInterface{
         $overall = array('', 'Overall Status', $totalcorrect, $totalincorrect, $totalq, $grouppercent.'%', $status);
         $this->pdf->SetFont('Arial','B', 9);
         foreach($widths as $col){
-            if($first == true){$first = false; $currentvalue = current($overall);}else{$currentvalue = next($overall);}
+            if($first === true){$first = false; $currentvalue = current($overall);}else{$currentvalue = next($overall);}
             $this->pdf->Cell($col, 6, $currentvalue, 1, 0, 'C');
         }
         

@@ -12,6 +12,7 @@
 namespace TheoryTest\Car;
 
 use DBAL\Database;
+use HighwayCode;
 
 class LearnTest extends TheoryTest{
     protected $section = 'learn';
@@ -50,7 +51,7 @@ class LearnTest extends TheoryTest{
         $this->chooseQuestions($sectionNo, $type);
         $this->setTest($type.$sectionNo);
         if($type != 'casestudy'){
-            $learnName = $this->db->select('theory_'.strtolower($type).'_sections', array('section' => $sectionNo), array('name', 'free'));
+            $learnName = self::$db->select('theory_'.strtolower($type).'_sections', array('section' => $sectionNo), array('name', 'free'));
             $name = $sectionNo.'. '.$learnName['name'];
             if($learnName['free'] == 0){$this->user->checkUserAccess();}
         }
@@ -124,13 +125,13 @@ class LearnTest extends TheoryTest{
      */
     public function getUserAnswers() {
         if(!isset($this->useranswers)){
-            $answers = $this->db->select($this->progressTable, array('user_id' => $this->user->getUserID()), array('progress'));
+            $answers = self::$db->select($this->progressTable, array('user_id' => $this->user->getUserID()), array('progress'));
             if(!empty($answers)){
                 if($_SESSION['answers']){$this->useranswers = $_SESSION['answers'] + unserialize(stripslashes($answers['progress']));}
                 else{$this->useranswers = unserialize(stripslashes($answers['progress']));}
             }
             else{
-                $this->db->insert($this->progressTable, array('user_id' => $this->user->getUserID(), 'progress' => serialize(array())));
+                self::$db->insert($this->progressTable, array('user_id' => $this->user->getUserID(), 'progress' => serialize(array())));
             }
         }
     }
@@ -141,7 +142,7 @@ class LearnTest extends TheoryTest{
      */
     public function numQuestions(){
         if($this->testInfo['category']){
-            return count($this->db->selectAll($this->questionsTable, array($this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim')));
+            return count(self::$db->selectAll($this->questionsTable, array($this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim')));
         }
         return 0;
     }
@@ -161,7 +162,7 @@ class LearnTest extends TheoryTest{
      */
     protected function currentQuestion(){
         if(!isset($this->current) && $this->testInfo['category']){
-            $currentnum = $this->db->select($this->questionsTable, array('prim' => $this->currentPrim, $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array($this->testInfo['sort']));
+            $currentnum = self::$db->select($this->questionsTable, array('prim' => $this->currentPrim, $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array($this->testInfo['sort']));
             $this->current = $currentnum[$this->testInfo['sort']];
         }
         return $this->current;
@@ -191,7 +192,7 @@ class LearnTest extends TheoryTest{
     protected function prevQuestion(){
         if($_COOKIE['skipCorrect'] == 1){$prim = $this->getIncomplete('prev');}
         elseif($this->currentQuestion() != 1 && $this->testInfo['category']){
-            $prim = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('<', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
+            $prim = self::$db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('<', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
         }
         else{$prim = $this->getLastQuestion();}
         return '<div class="prevquestion btn btn-theory" id="'.$prim.'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
@@ -204,7 +205,7 @@ class LearnTest extends TheoryTest{
     protected function nextQuestion(){
         if($_COOKIE['skipCorrect'] == 1){$prim = $this->getIncomplete();}
         elseif(($this->currentQuestion() < $this->numQuestions()) && $this->testInfo['category']){
-            $prim = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('>', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'ASC'));
+            $prim = self::$db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('>', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'ASC'));
         }
         else{$prim = $this->getFirstQuestion();}
         return '<div class="nextquestion btn btn-theory" id="'.$prim.'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
@@ -240,7 +241,7 @@ class LearnTest extends TheoryTest{
      * @return int|false
      */
     protected function findNextQuestion($dir, $start, $sort){
-        foreach($this->db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $start), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort)) as $question){
+        foreach(self::$db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $start), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort)) as $question){
             if($this->useranswers[$question['prim']]['status'] <= 1){
                 return $question['prim'];
             }
@@ -254,7 +255,7 @@ class LearnTest extends TheoryTest{
      */
     protected function getFirstQuestion(){
         if($this->testInfo['category']){
-            return $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => '1', $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'));
+            return self::$db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => '1', $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'));
         }
     }
     
@@ -264,7 +265,7 @@ class LearnTest extends TheoryTest{
      */
     protected function getLastQuestion(){
         if($this->testInfo['category']){
-            return $this->db->fetchColumn($this->questionsTable, array($this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
+            return self::$db->fetchColumn($this->questionsTable, array($this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
         }
     }
 
@@ -314,7 +315,7 @@ class LearnTest extends TheoryTest{
      */
     public function updateLearningProgress(){
         unset($_SESSION['answers']);
-        return $this->db->update($this->progressTable, array('progress' => serialize($this->useranswers)), array('user_id' => $this->user->getUserID()));
+        return self::$db->update($this->progressTable, array('progress' => serialize($this->useranswers)), array('user_id' => $this->user->getUserID()));
     }
     
     /**
@@ -428,33 +429,22 @@ class LearnTest extends TheoryTest{
      * @return string Returns any highway rules associated with the current question
      */
     protected function highwayCodePlus($prim){
-        $this->setAudioLocation('/audio/highway-code');
-        $hcRules = $this->db->select($this->questionsTable, array('prim' => $prim), array('hcrule1', 'hcrule2', 'hcrule3'));
         $highwaycode = '';
+        $hcClass = new HighwayCode(self::$db, ROOT, '/audio/highway-code');
+        $hcRules = $hcClass->getRule(self::$db->select($this->questionsTable, array('prim' => $prim), array('hcrule1', 'hcrule2', 'hcrule3')));
         foreach($hcRules as $ruleno){
-            $ruleinfo = $this->db->select('highway_code', array('hcno' => $ruleno), array('hcrule', 'hctitle', 'imagetitle1', 'imagetitle2'));
-            if(!$ruleinfo['hcrule']){
-                $rule = '<p class="center">'.$this->ruleImageHC($ruleinfo['imagetitle1'], $ruleinfo['hctitle']).$this->ruleImageHC($ruleinfo['imagetitle2'], $ruleinfo['hctitle']).'</p><p class="center">'.$ruleinfo['hctitle'].'</p>';
+            if(!$ruleno['hcrule']){
+                $image = $hcClass->buildImage($ruleno['imagetitle1']);
+                $image2 = $hcClass->buildImage($ruleno['imagetitle2']);
+                $rule = '<p class="center">'.($image ? '<img src="'.$image['image'].'" alt="'.$ruleno['hctitle'].'" width="'.$image['width'].'" height="'.$image['height'].'" class="img-responsive center-block" /> ' : '').($image2 ? '<img src="'.$image2['image'].'" alt="'.$ruleno['hctitle'].'" width="'.$image2['width'].'" height="'.$image2['height'].'" class="img-responsive center-block" /> ' : '').'</p><p class="center">'.$ruleno['hctitle'].'</p>';
             }
             else{
-                $rule = $ruleinfo['hcrule'].$this->ruleImageHC($ruleinfo['imagetitle1'], $ruleinfo['hctitle']);
+                $image = $hcClass->buildImage($ruleno['imagetitle1']);
+                $rule = $ruleno['hcrule'].($image ? '<img src="'.$image['image'].'" alt="'.$ruleno['hctitle'].'" width="'.$image['width'].'" height="'.$image['height'].'" class="img-responsive center-block" /> ' : '');
             }
             $highwaycode.= $this->addAudio($ruleno, 'HC').$rule;
         }
         return $highwaycode;
-    }
-    
-    /**
-     * Create a image tag for the Highway Code Plus section
-     * @param string|boolean $image If the image exists will create the image tag
-     * @param string $alt This should be the image alt tag text
-     * @return string If the image exists will return the image HTML tag else will not return anything
-     */
-    protected function ruleImageHC($image, $alt){
-        if(strlen($image) >= 4){
-            list($width, $height) = getimagesize(ROOT.DS.'images/highway-code/'.$image);
-            return '<img src="/images/highway-code/'.$image.'" alt="'.$alt.'" width="'.$width.'" height="'.$height.'" class="img-responsive center-block" /> ';
-        }
     }
     
     /**
@@ -463,7 +453,7 @@ class LearnTest extends TheoryTest{
      * @return string|false Returns the questions explanation if it exists else return false
      */
     protected function instructorComments($prim){
-        return $this->db->fetchColumn($this->questionsTable, array('prim' => $prim), array('explanation'));
+        return self::$db->fetchColumn($this->questionsTable, array('prim' => $prim), array('explanation'));
     }
     
     /**
@@ -473,7 +463,7 @@ class LearnTest extends TheoryTest{
      */
     private function getRealCaseID($sectionNo){
         if($this->getTestType() == 'CAR'){$type = 'car';}else{$type = 'M/C';}
-        $caseInfo = $this->db->select('theory_case_studies', array('type' => $type, 'lp' => 1, 'dsacat' => $sectionNo), array('casestudyno'));
+        $caseInfo = self::$db->select('theory_case_studies', array('type' => $type, 'lp' => 1, 'dsacat' => $sectionNo), array('casestudyno'));
         if(!empty($caseInfo)){
             return $caseInfo['casestudyno'];
         }

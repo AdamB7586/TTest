@@ -424,10 +424,10 @@ class LearnTest extends TheoryTest{
         $hcRules = $hcClass->getRule(self::$db->select($this->questionsTable, array('prim' => $prim), array('hcrule1', 'hcrule2', 'hcrule3')));
         foreach($hcRules as $ruleno){
             if(!$ruleno['hcrule']){
-                $rule = '<p class="center">'.$this->createImage($ruleno['imagetitle1'], $ruleno['hctitle']).$this->createImage($ruleno['imagetitle2'], $ruleno['hctitle']).'</p><p class="center">'.$ruleno['hctitle'].'</p>';
+                $rule = '<p class="center">'.$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']).$this->hcImage($ruleno['imagetitle2'], $ruleno['hctitle']).'</p><p class="center">'.$ruleno['hctitle'].'</p>';
             }
             else{
-                $rule = $ruleno['hcrule'].$this->createImage($ruleno['imagetitle1'], $ruleno['hctitle']);
+                $rule = $ruleno['hcrule'].$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']);
             }
             $this->setAudioLocation('/audio/highway-code');
             $highwaycode.= $this->addAudio($ruleno, 'HC').$rule;
@@ -436,12 +436,12 @@ class LearnTest extends TheoryTest{
     }
     
     /**
-     * Return the formated image HTML code
+     * Returns the formated image HTML code
      * @param string $imagesrc This should be the image name
      * @param string $alttext This needs to be any alt text you want to give to the image
      * @return string|boolean If the image exists will return the image HTML else will return false
      */
-    public function createImage($imagesrc, $alttext){
+    public function hcImage($imagesrc, $alttext){
         $hcClass = new HighwayCode(self::$db, ROOT);
         $image = $hcClass->buildImage($imagesrc);
         if(!empty($image)){

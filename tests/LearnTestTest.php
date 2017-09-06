@@ -7,7 +7,7 @@ use UserAuth\User;
 use TheoryTest\Car\LearnTest;
 use PHPUnit\Framework\TestCase;
 
-class LearnTest extends TestCase{
+class LearnTestTest extends TestCase{
     
     protected static $db;
     protected static $user;

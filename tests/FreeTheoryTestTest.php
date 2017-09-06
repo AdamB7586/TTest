@@ -7,7 +7,7 @@ use UserAuth\User;
 use TheoryTest\Car\FreeTheoryTest;
 use PHPUnit\Framework\TestCase;
 
-class FreeTheoryTest extends TestCase{
+class FreeTheoryTestTest extends TestCase{
     
     protected static $db;
     protected static $user;

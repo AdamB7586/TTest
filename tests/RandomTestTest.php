@@ -7,7 +7,7 @@ use UserAuth\User;
 use TheoryTest\Car\RandomTest;
 use PHPUnit\Framework\TestCase;
 
-class RandomTest extends TestCase{
+class RandomTestTest extends TestCase{
     
     protected static $db;
     protected static $user;

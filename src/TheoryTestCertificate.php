@@ -3,10 +3,12 @@ namespace TheoryTest\Car;
 
 use TheoryTest\Essential\CertificateInterface;
 use DBAL\Database;
+use UserAuth\User;
 use FPDF_Protection;
 
 class TheoryTestCertificate implements CertificateInterface{
-    protected $db;
+    protected static $db;
+    protected static $user;
     protected $pdf;
     private $theory;
     private $testType;
@@ -14,9 +16,10 @@ class TheoryTestCertificate implements CertificateInterface{
     protected $questions;
 
     public function __construct(Database $db, $layout, $testID, $type = 'theory') {
-        $this->db = $db;
+        self::$db = $db;
+        self::$user = new User(self::$db);
         $this->pdf = new FPDF_Protection();
-        $this->theory = new TheoryTest($this->db, $layout);
+        $this->theory = new TheoryTest(self::$db, $layout, self::$user);
         $this->theory->setTest($testID);
         $this->testType = $type;
     }
@@ -47,7 +50,7 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->theory->getQuestions();
         $this->theory->getTestResults();
         $this->theory->getUserAnswers();
-        $userInfo = $this->theory->user->getUserInfo();
+        $userInfo = self::$user->getUserInfo();
         if(!$this->theory->testresults['status']){redirect('/tests/theory.htm');}
         
         $this->PDFInfo();
@@ -116,7 +119,8 @@ class TheoryTestCertificate implements CertificateInterface{
     
     private function overallResults(){
         $header = array('Group', 'Topics in group', 'Correct', 'Incorrect', 'Total', 'Percentage', 'Status');
-        foreach($this->db->selectAll($this->theory->dsaCategoriesTable) as $group => $data){
+        $groupdata = array();
+        foreach(self::$db->selectAll($this->theory->dsaCategoriesTable) as $group => $data){
             $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
             $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
             $total = $correct + $incorrect;
@@ -144,6 +148,7 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->pdf->AddPage('P', 'A4');
         $this->pdf->SetFont('Arial','B', 9);
         $testheader = array('Question', 'Learning Section', 'Question No.', 'Status');
+        $testdata = array();
         foreach($this->theory->questions as $question => $prim){
             if($this->theory->useranswers[$question]['status'] == '4'){$correct = 'Correct';}else{$correct = 'Incorrect';}
             $questioninfo = $this->theory->questionInfo($prim);

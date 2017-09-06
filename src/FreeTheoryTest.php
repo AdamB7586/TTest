@@ -323,6 +323,7 @@ class FreeTheoryTest extends TheoryTest{
     protected function testReport(){
         self::$layout->assign('free_test', 'Yes', true);
         $this->getTestResults();
+        $report = array();
         $report['testname'] = ucwords($this->getTestName());
         $report['status'] = $this->testStatus();
         $report['time'] = $this->getTime();

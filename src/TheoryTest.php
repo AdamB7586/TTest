@@ -135,7 +135,7 @@ class TheoryTest implements TTInterface{
     protected $testData;
     
     /**
-     * @var array The current question information
+     * @var string The current question information
      */
     protected $questiondata;
     
@@ -479,7 +479,7 @@ class TheoryTest implements TTInterface{
     public function questionNo($prim) {
         $this->getQuestions();
         $key = array_keys($this->questions, $prim);
-        return $key[0];
+        return intval($key[0]);
     }
     
     /**

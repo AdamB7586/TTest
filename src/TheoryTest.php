@@ -15,17 +15,17 @@ use UserAuth\User;
 class TheoryTest implements TTInterface{
     
     /**
-     * @var resource Should be an instance of the Database object
+     * @var object Should be an instance of the Database object
      */
     protected static $db;
     
     /**
-     * @var resource Should be an instance of the Smarty Template object
+     * @var object Should be an instance of the Smarty Template object
      */
     protected static $layout;
     
     /**
-     * @var resource Should be an instance of the User object
+     * @var object Should be an instance of the User object
      */
     protected static $user;
     

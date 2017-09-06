@@ -13,50 +13,155 @@ use UserAuth\User;
  * @version 2.1
  */
 class TheoryTest implements TTInterface{
+    
+    /**
+     * @var resource Should be an instance of the Database object
+     */
     protected static $db;
+    
+    /**
+     * @var resource Should be an instance of the Smarty Template object
+     */
     protected static $layout;
+    
+    /**
+     * @var resource Should be an instance of the User object
+     */
     protected static $user;
+    
+    /**
+     * @var int|false If you want to emulate a user to see their test details set this to their User ID else set to false 
+     */
     protected $userClone = false;
     
+    /**
+     * @var int This is the unique number given to each test attempted
+     */
     protected $testID;
+    
+    /**
+     * @var boolean If any tests for the current test number exists should be set to true else set to false 
+     */
     protected $exists = false;
+    
+    /**
+     * @var int This is the number of questions needed to be correct to pass the test
+     */
     public $passmark = 43;
     
+    /**
+     * @var string The name of the user progress for the learning section database table
+     */
     public $learningProgressTable = 'users_progress';
+    
+    /**
+     * @var string The name of the questions database table
+     */
     public $questionsTable = 'theory_questions_2016';
+    
+    /**
+     * @var string The name of the user tests database table
+     */
     public $progressTable = 'users_test_progress';
+    
+    /**
+     * @var string The name of the case studies database table
+     */
     public $caseTable = 'theory_case_studies';
+    
+    /**
+     * @var string The name of the DVSA sections database table
+     */
     public $dsaCategoriesTable = 'theory_dsa_sections';
-	
+    
+    /**
+     * @var string The location where any audio can be found relative to where the Theory Test is located
+     */
     protected $audioLocation = '/audio';
+    
+    /**
+     * @var string The location where the JavaScript files can be found relative to where the Theory Test is located
+     */
     protected $javascriptLocation = '/js/theory/';
+    
+    /**
+     * @var string The variant of the JavaScript file being looked at for the current test 
+     */
     protected $scriptVar = 'questions';
+    
+    /**
+     * @var string The location relative to the theory test where any images can be found
+     */
     protected $imagePath;
-
+    
+    /**
+     * @var int The number of seconds that are allowed to complete a new test
+     */
     protected $seconds = 3420;
+    
+    /**
+     * @var string This should either be set to 'theory' or 'learn' depending on what section is being accessed
+     */
     protected $section = 'theory';
     
+    /**
+     * @var boolean If audio should be shown set to true else set to false
+     */
     public $audioEnabled = false;
+    
+    /**
+     * @var array This is an array of all of the test questions and their prim numbers
+     */
     public $questions;
+    
+    /**
+     * @var array This should be an array of any answers given by the user
+     */
     public $useranswers;
     
+    /**
+     * @var int The number of the current set test
+     */
     protected $testNo;
+    
+    /**
+     * @var string This is the name to be displayed at the top of the test
+     */
     protected $testName;
+    
+    /**
+     * @var array This should be the test information the user has given
+     */
     protected $testData;
     
+    /**
+     * @var array The current question information
+     */
     protected $questiondata;
+    
+    /**
+     * @var int This is the current question number 
+     */
     protected $current;
     
+    /**
+     * @var string If the question is a case study question, this should be the case study information to display 
+     */
     protected $casestudy;
     
     /**
-     * This is what type of review is currently active
      * @var false|string If no review active should be false else set to review type i.e. all, flagged, incomplete or answers
      */
     protected $review = false;
-    public $testresults;
-    public $dsacat;
     
+    /**
+     * @var array This should be the marking information and how the user has done once the test has been marked
+     */
+    public $testresults;
+    
+    /**
+     * @var string The current test type used for extended classes and test storage
+     */
     protected static $testType = 'car';
     
     /**
@@ -71,7 +176,7 @@ class TheoryTest implements TTInterface{
         self::$user = $user;
         self::$layout = $layout;
         self::$layout->addTemplateDir(dirname(__FILE__).DS.'templates');
-        if(is_numeric($userID)){$this->userClone = (int) $userID;}
+        if(is_numeric($userID)){$this->userClone = $userID;}
         $this->getUserAnswers();
         $this->setImagePath();
     }

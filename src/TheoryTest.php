@@ -176,7 +176,7 @@ class TheoryTest implements TTInterface{
         self::$user = $user;
         self::$layout = $layout;
         self::$layout->addTemplateDir(dirname(__FILE__).DS.'templates');
-        if(is_numeric($userID)){$this->userClone = $userID;}
+        if(is_int($userID)){$this->userClone = $userID;}
         $this->getUserAnswers();
         $this->setImagePath();
     }
@@ -621,7 +621,7 @@ class TheoryTest implements TTInterface{
         if($this->review === 'flagged' || $this->review === 'incomplete') {
             return '<div class="alert alert-danger">Reviewing '.$this->review.' questions only</div>';
         }
-        elseif(!$this->review && $this->numComplete() == $this->numQuestions()) {
+        elseif($this->review === false && $this->numComplete() == $this->numQuestions()) {
             return '<div class="msg">You have now completed all of the questions, you can mark the test by clicking the "<span class="fa fa-binoculars fa-fw"></span><span class="hidden-xs"> Review</span>" and then "<span class="endtest"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> End Test</span></span>" buttons or click on the following button <div class="endtest btn btn-default">Mark my test</div></div>';
         }
         return false;
@@ -893,7 +893,8 @@ class TheoryTest implements TTInterface{
      * @return string Should return the option HTML for the given option
      */
     protected function getOptions($question, $option, $letter, $image = false, $new = false) {
-        if($new === false && $this->review != 'answers') {
+        $selected = '';
+        if($new === false && $this->review !== 'answers') {
             if($this->answerSelected($question, $letter)) {$selected = ($image === false ? ' selected' : ' imgselected');}
         }
         elseif($new === false) {
@@ -902,7 +903,6 @@ class TheoryTest implements TTInterface{
             elseif($iscorrect == 'INCORRECT') {$selected = ($image === false ? ' selectedincorrect' : ' imgincorrect');}
             elseif($iscorrect == 'NSCORRECT') {$selected = ($image === false ? ' nscorrect' : ' imgnscorrect');}
         }
-        else{$selected = '';}
         return '<div class="answer'.$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($question, $letter).$option : $option.$this->createImage($question.strtolower($letter).'.png')).'</div>';
     }
     

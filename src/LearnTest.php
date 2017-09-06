@@ -444,7 +444,7 @@ class LearnTest extends TheoryTest{
      * @return string|boolean If the image exists will return the image HTML else will return false
      */
     public function hcImage($imagesrc, $alttext){
-        $hcClass = new HighwayCode(self::$db, ROOT);
+        $hcClass = new HighwayCode(self::$db, $_SERVER["DOCUMENT_ROOT"]);
         $image = $hcClass->buildImage($imagesrc);
         if(!empty($image)){
             return '<img src="'.$image['image'].'" alt="'.$alttext.'" width="'.$image['width'].'" height="'.$image['height'].'" class="img-responsive center-block" />';

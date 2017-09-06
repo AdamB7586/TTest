@@ -175,7 +175,7 @@ class TheoryTest implements TTInterface{
         self::$db = $db;
         self::$user = $user;
         self::$layout = $layout;
-        self::$layout->addTemplateDir(dirname(__FILE__).DS.'templates');
+        self::$layout->addTemplateDir(dirname(__FILE__).DIRECTORY_SEPARATOR.'templates');
         if(is_int($userID)){$this->userClone = $userID;}
         $this->getUserAnswers();
         $this->setImagePath();
@@ -312,7 +312,7 @@ class TheoryTest implements TTInterface{
             $this->imagePath = $path;
         }
         else{
-            $this->imagePath = ROOT.DS.'images'.DS.'prim'.DS;
+            $this->imagePath = $_SERVER["DOCUMENT_ROOT"].DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'prim'.DIRECTORY_SEPARATOR;
         }
         return $this;
     }
@@ -347,7 +347,7 @@ class TheoryTest implements TTInterface{
             $this->setTestName($this->testName);
             return $this->buildReport(false);
         }
-        return self::$layout->fetch('report'.DS.'report-unavail.tpl');
+        return self::$layout->fetch('report'.DIRECTORY_SEPARATOR.'report-unavail.tpl');
     }
 
     /**

@@ -3,7 +3,7 @@ namespace TheoryTest\Car;
 
 use TheoryTest\Essential\CertificateInterface;
 use DBAL\Database;
-use UserAuth\User;
+use Smarty;
 use FPDF_Protection;
 
 class TheoryTestCertificate implements CertificateInterface{
@@ -15,9 +15,8 @@ class TheoryTestCertificate implements CertificateInterface{
     
     protected $questions;
 
-    public function __construct(Database $db, $layout, $testID, $type = 'theory') {
+    public function __construct(Database $db, Smarty $layout, $user, $testID, $type = 'theory') {
         self::$db = $db;
-        self::$user = new User(self::$db);
         $this->pdf = new FPDF_Protection();
         $this->theory = new TheoryTest(self::$db, $layout, self::$user);
         $this->theory->setTest($testID);

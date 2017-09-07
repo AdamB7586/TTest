@@ -3,6 +3,7 @@ namespace TheoryTest\Car;
 
 use DBAL\Database;
 use Smarty;
+use UserAuth\User;
 use HighwayCode;
 
 class LearnTest extends TheoryTest{
@@ -23,10 +24,10 @@ class LearnTest extends TheoryTest{
      * Set up all of the components needed to create a Theory Test
      * @param Database $db This should be an instance of Database
      * @param Smarty $layout This needs to be an instance of Smarty Templating
-     * @param object $user This should be and instance if the User Class
+     * @param User $user This should be and instance if the User Class
      * @param false|int $userID If you wish to emulate a user set this value to the users ID else set to false
      */
-    public function __construct(Database $db, Smarty $layout, $user, $userID = false) {
+    public function __construct(Database $db, Smarty $layout, User $user, $userID = false) {
         parent::__construct($db, $layout, $user, $userID);
         $this->getTestInfo();
     }

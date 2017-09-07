@@ -4,6 +4,7 @@ namespace TheoryTest\Car;
 use TheoryTest\Car\Essential\TTInterface;
 use Smarty;
 use DBAL\Database;
+use UserAuth\User;
 
 /**
  * Produces a Theory Test including HTML5 audio if compatible
@@ -165,12 +166,12 @@ class TheoryTest implements TTInterface{
     
     /**
      * Connects to the database sets the current user and gets any user answers
-     * @param Database $db This should be an instance of the Database class
-     * @param Smarty $layout This needs to be an instance of the Smarty Templating class
-     * @param object $user This should be the user class used
-     * @param int|false $userID If you wish to emulate a user the users ID should be provided
+     * @param Database $db
+     * @param Smarty $layout
+     * @param User $user
+     * @param int|false $userID
      */
-    public function __construct(Database $db, Smarty $layout, $user, $userID = false) {
+    public function __construct(Database $db, Smarty $layout, User $user, $userID = false) {
         self::$db = $db;
         self::$user = $user;
         self::$layout = $layout;

@@ -16,6 +16,11 @@ class RandomTestTest extends TestCase{
     
     public function setUp() {
         self::$db = new Database($GLOBALS['DB_HOST'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'], $GLOBALS['DB_DBNAME']);
+        if(!self::$db->isConnected()){
+             $this->markTestSkipped(
+                'No local database connection is available'
+            );
+        }
         self::$template = new Smarty();
         self::$user = new User(self::$db);
         self::$randomTest = new RandomTest(self::$db, self::$template, self::$user);

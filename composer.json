@@ -6,7 +6,6 @@
         "adamb/database": "^1.0",
         "smarty/smarty": "^3.1",
         "setasign/fpdf": "^1.8",
-        "adamb/user": "^1.0",
         "adamb/hcldc": "^1.0"
     },
     "suggest": {

@@ -166,12 +166,12 @@ class TheoryTest implements TTInterface{
     
     /**
      * Connects to the database sets the current user and gets any user answers
-     * @param Database $db
-     * @param Smarty $layout
-     * @param User $user
-     * @param int|false $userID
+     * @param Database $db This needs to be an instance of the database class
+     * @param Smarty $layout This needs to be an instance of the Smarty Templating class
+     * @param object $user This should be the user class used
+     * @param int|false $userID If you want to emulate a user set the us
      */
-    public function __construct(Database $db, Smarty $layout, User $user, $userID = false) {
+    public function __construct(Database $db, Smarty $layout, $user, $userID = false) {
         self::$db = $db;
         self::$user = $user;
         self::$layout = $layout;

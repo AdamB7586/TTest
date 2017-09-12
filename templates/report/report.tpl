@@ -20,7 +20,7 @@
             {foreach $testReports as $i => $test}
                 {if $test.status == 1}{$result = "Passed"}{else}{$result = "Failed"}{/if}
             <tr>
-                <td><a href="theory?test={$i}">{if $test.status >= 1}Retake {/if}{if ($i == 11 OR $i == 12)}DVSA {if $i == 12}CGI {/if}{/if}Theory Test {$i}</a></td>
+                <td><a href="theory?test={$i}">{if $test.status >= 1}Retake {/if}Theory Test {$i}</a></td>
                 <td class="text-center"><strong>{$test.totalscore|string_format:"%d"} / {if !$adiReport}50{else}100{/if}</strong></td>
                 {if $test.status >= 1}<td class="text-center {$result|strtolower}">{$result}</td><td class="text-center"><a href="certificate.pdf?testID={$i}" title="View PDF" target="_blank"><span class="fa fa-file-pdf-o"></span> View PDF {if $test.status == 1}Certificate{else}Report{/if}</a></td>
                 {else}<td class="text-center" colspan="2">&nbsp;</td>{/if}

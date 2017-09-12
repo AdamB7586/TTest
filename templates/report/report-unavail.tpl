@@ -5,7 +5,6 @@
             <div class="panel-heading">Review not yet available</div>
             <div class="panel-body">
                 <p>A review for this test is not yet available. You may not have completed this test yet or arrived here by mistake.</p>
-                <p class="text-center"><a href="{if $instructor}/student/progress?pupil={$smarty.get.pupil}{else}{$smarty.server.REQUEST_URI|strtok:"?"}{/if}" title="Return to summary page" class="btn btn-danger">&laquo; Go back to the summary page</a></p>
             </div>
         </div>
     </div>

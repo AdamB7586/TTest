@@ -7,7 +7,6 @@ use HighwayCode;
 
 class LearnTest extends TheoryTest{
     protected $section = 'learn';
-    public $review = 'all';
       
     protected $testInfo;
     protected $current;

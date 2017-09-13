@@ -935,6 +935,7 @@ class TheoryTest implements TTInterface{
         self::$layout->assign('question_no', '1', true);
         self::$layout->assign('no_questions', $this->numQuestions(), true);
         self::$layout->assign('question_data', $this->questiondata, true);
+        self::$layout->assign('js_script_location', $this->getJavascriptLocation());
         return self::$layout->fetch($this->section.'test.tpl');
     }
     

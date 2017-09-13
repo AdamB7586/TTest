@@ -1,11 +1,5 @@
 {strip}
 {nocache}
-{if $instructor}
-<div class="col-md-12">
-    <a href="/student/progress?pupil={$smarty.get.pupil}" title="Back" class="btn btn-danger" id="backButton"><span class="fa fa-angle-left fa-fw"></span> Back to Lesson Progress</a>
-    <h3>Results for {$pupilInfo.firstname} {$pupilInfo.surname}</h3>
-</div>
-{/if}
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1 col-md-12">
         <div class="row">
@@ -19,7 +13,7 @@
     </div>
 </div>
 {/nocache}
-{if $report != 'true'}<script type="text/javascript" src="/js/student/testtimer.js"></script>{/if}
+{if $report != 'true'}<script type="text/javascript" src="{$js_script_location}testtimer.js"></script>{/if}
 <div class="row">
     <div class="col-md-12 text-center">
         <small>Crown copyright material reproduced under licence from the Driver and Vehicle Standards Agency, which does not accept any responsibility for the accuracy of the reproduction.</small>

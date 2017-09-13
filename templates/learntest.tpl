@@ -1,13 +1,4 @@
 {strip}
-<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header"><span class="page-header-text"><span class="fa fa-graduation-cap"></span> {$test_name}</span></h1>
-    </div>
-</div>
-<div class="row{if !$instructor} hidden-lg{/if}">
-    <a href="/student/{if !$instructor}study{else}progress?pupil={$smarty.get.pupil}{/if}" title="Back" class="btn btn-danger" id="backButton"><span class="fa fa-angle-left fa-fw"></span> Back to {if !$instructor}Study &amp; Practice{else}Lesson Progress{/if}</a>
-</div>
-{if $instructor}<h3>Progress for {$pupilInfo.firstname} {$pupilInfo.surname}</h3>{/if}
 {nocache}
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1 col-md-12">

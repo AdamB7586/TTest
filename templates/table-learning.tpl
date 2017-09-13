@@ -12,7 +12,7 @@
     </thead>
     {foreach $table.ans as $a => $cat}
     <tr>
-        <td><a href="/student/study?test={$cat.section}&amp;section={$table.section}" title="{$cat.name}">{$cat.name}</a></td>
+        <td><a href="study?test={$cat.section}&amp;section={$table.section}" title="{$cat.name}">{$cat.name}</a></td>
         <td class="text-center noquestions">{$cat.numquestions}</td>
         <td class="text-center reviewcorrect">{$cat.correct}</td>
         <td class="text-center reviewincorrect">{$cat.incorrect}</td>

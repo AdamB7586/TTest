@@ -177,6 +177,7 @@ class TheoryTest implements TTInterface{
         self::$layout = $layout;
         self::$layout->addTemplateDir(str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates');
         if(is_int($userID)){$this->userClone = $userID;}
+        if(!session_id()){session_start();}
         $this->getUserAnswers();
         $this->setImagePath();
     }

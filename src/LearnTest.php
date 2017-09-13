@@ -173,7 +173,7 @@ class LearnTest extends TheoryTest{
             if($this->questionStatus() !== 'unattempted'){$selected.= ' selected'.$this->questionStatus();}
         }
         else{$selected = '';}
-        return '<div class="answer'($image === true ? 'image' : '').$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($prim, $letter).$option : $option.$this->createImage($prim.strtolower($letter).'.png')).'</div>';
+        return '<div class="answer'.($image === true ? 'image' : '').$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($prim, $letter).$option : $option.$this->createImage($prim.strtolower($letter).'.png')).'</div>';
     }
     
     /**

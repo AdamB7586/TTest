@@ -2,7 +2,7 @@
 {nocache}
 <div id="results">
     <div class="row">
-    <h3 class="col-md-12 text-center"><img src="/images/theory/ldc-theory-logo.png" alt="LDC Logo" width="47" height="32" />{$report.testname} Report</h3>
+    <h3 class="col-md-12 text-center">{$report.testname} Report</h3>
     <div class="text-center col-md-12">
         {if $results.status == 'pass'}
             <p>Congratulations {$report.user}, you have passed this test with {$results.correct}%</p>

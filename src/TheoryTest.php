@@ -1239,7 +1239,8 @@ class TheoryTest implements TTInterface{
         else{
             $this->getTestResults();
         }
-        self::$layout->assign('test_report', $this->testReport());
+        self::$layout->assign('report', $this->testReport());
+        self::$layout->assign('results', $this->testresults);
         self::$layout->assign('percentages', $this->testPercentages());
         self::$layout->assign('dsa_cat_results', $this->createOverviewResults());
         self::$layout->assign('review_test', '<div class="reviewtest btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-question fa-fw"></span><span class="hidden-xs"> Review Test</span></div>');
@@ -1363,11 +1364,19 @@ class TheoryTest implements TTInterface{
     }
     
     /**
+     * Creates an array of all of the categories
+     * @return string Returns an array of all of the categories
+     */
+    protected function getCategories(){
+        return $this->db->selectAll($this->dsaCategoriesTable);
+    }
+    
+    /**
      * Creates an overview of the test results
      * @return string Returns an overview of the test results table
      */
     protected function createOverviewResults() {
-        $dsacats = self::$db->selectAll($this->dsaCategoriesTable);
+        $dsacats = $this->getCategories();
         $catresults = array();
         foreach($dsacats as $i => $dsacat) {
             $catresults[$i]['section'] = $dsacat['section'];

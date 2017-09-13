@@ -76,17 +76,14 @@
 <th class="text-center">% <span class="hidden-xs">Correct</span></th>
 </tr>
 </thead>
-{foreach $categories as $cat}
-    {assign var="section" value=$cat.section}
-    {assign var="values" value=$results.dsa.$section}
-    {$questions = round(($values.correct + $values.incorrect + $values.unattempted), 0)}
-    {$percent = round(($values.correct / $questions) * 100, 0)}
+{foreach $dsa_cat_results as $cat_results}
+{$percent = round(($cat_results.correct / $cat_results.total) * 100, 0)}
 <tr>
-    <td>{$section}. {$cat.name}</td>
-    <td class="text-center">{$values.correct|string_format:"%d"}</td>
-    <td class="text-center">{$values.incorrect|string_format:"%d"}</td>
-    <td class="text-center">{$questions|intval}</td>
-    <td class="text-center">{$percent|intval}%</td>
+    <td>{$cat_results.section}. {$cat_results.name}</td>
+    <td class="text-center">{$cat_results.correct}</td>
+    <td class="text-center">{$cat_results.incorrect}</td>
+    <td class="text-center">{$cat_results.total}</td>
+    <td class="text-center"><img src="/images/s.gif" alt="{$cat_results.name}" width="0" height="20" />{$percent} %</td>
 </tr>
 {/foreach}
 </table>

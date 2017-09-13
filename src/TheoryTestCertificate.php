@@ -49,7 +49,7 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->theory->getTestResults();
         $this->theory->getUserAnswers();
         $userInfo = self::$user->getUserInfo();
-        if(!$this->theory->testresults['status']){redirect('/tests/theory.htm');}
+        if(!$this->theory->testresults['status']){redirect('/');}
         
         $this->PDFInfo();
         if($this->theory->testresults['status'] == 'pass'){

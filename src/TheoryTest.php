@@ -428,14 +428,14 @@ class TheoryTest implements TTInterface{
      * @return array|false Returns the current users answers for the current test if any exist else returns false
      */
     public function getUserAnswers() {
-        if(!isset(self::$useranswers)) {
+        if(!isset($this->useranswers)) {
             $answers = self::$db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
             if(!empty($answers)) {
-                self::$useranswers = unserialize($answers['answers']);
-                if(!is_array($this->getUserTestInfo())) {$_SESSION['test'.$this->getTest()] = self::$useranswers;}
+                $this->useranswers = unserialize($answers['answers']);
+                if(!is_array($this->getUserTestInfo())) {$_SESSION['test'.$this->getTest()] = $this->useranswers;}
                 if(!is_numeric($_SESSION['question_no']['test'.$this->getTest()])) {$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
                 $this->testID = $answers['id'];
-                return self::$useranswers;
+                return $this->useranswers;
             }
             return false;
         }
@@ -1090,7 +1090,7 @@ class TheoryTest implements TTInterface{
         }
         if(self::$user->setUserSettings(array('current_test' => $this->testNo))) {
             unset($this->questions);
-            unset(self::$useranswers);
+            unset($this->useranswers);
             $this->getQuestions();
             $this->getUserAnswers();
         }

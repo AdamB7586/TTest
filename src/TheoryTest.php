@@ -1368,7 +1368,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns an array of all of the categories
      */
     protected function getCategories(){
-        return $this->db->selectAll($this->dsaCategoriesTable);
+        return self::$db->selectAll($this->dsaCategoriesTable);
     }
     
     /**

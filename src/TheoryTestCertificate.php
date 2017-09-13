@@ -11,17 +11,15 @@ class TheoryTestCertificate implements CertificateInterface{
     protected static $user;
     protected $pdf;
     private $theory;
-    private $testType;
     
     protected $questions;
 
-    public function __construct(Database $db, Smarty $layout, $user, $testID, $type = 'theory') {
+    public function __construct(Database $db, Smarty $layout, $user, $testID) {
         self::$db = $db;
         self::$user = $user;
         $this->pdf = new FPDF_Protection();
         $this->theory = new TheoryTest(self::$db, $layout, self::$user);
         $this->theory->setTest($testID);
-        $this->testType = $type;
     }
     
     public function PDFInfo(){
@@ -124,7 +122,7 @@ class TheoryTestCertificate implements CertificateInterface{
             $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
             $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
             $total = $correct + $incorrect;
-            $groupdata[] = array($data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format((($correct / $total) * 100), 0).'%');
+            $groupdata[] = array($data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format((($correct / $total) * 100), 0).'%', '');
             
             $totalcorrect = $totalcorrect + $correct;
             $totalincorrect = $totalincorrect + $incorrect;

@@ -1,7 +1,7 @@
 <?php
 namespace TheoryTest\Car;
 
-use TheoryTest\Essential\CertificateInterface;
+use TheoryTest\Car\Essential\CertificateInterface;
 use DBAL\Database;
 use Smarty;
 use FPDF_Protection;

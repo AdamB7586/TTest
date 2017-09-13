@@ -44,7 +44,7 @@ class LearnTest extends TheoryTest{
         if($type != 'casestudy'){
             $learnName = self::$db->select('theory_'.strtolower($type).'_sections', array('section' => $sectionNo), array('name', 'free'));
             $name = $sectionNo.'. '.$learnName['name'];
-            if($learnName['free'] == 0){$this->user->checkUserAccess();}
+            if($learnName['free'] == 0){self::$user->checkUserAccess();}
         }
         else{$name = 'Case Study '.$sectionNo;}
         $this->setTestName($name);
@@ -116,13 +116,13 @@ class LearnTest extends TheoryTest{
      */
     public function getUserAnswers() {
         if(!isset($this->useranswers)){
-            $answers = self::$db->select($this->progressTable, array('user_id' => $this->user->getUserID()), array('progress'));
+            $answers = self::$db->select($this->progressTable, array('user_id' => self::$user->getUserID()), array('progress'));
             if(!empty($answers)){
                 if($_SESSION['answers']){$this->useranswers = $_SESSION['answers'] + unserialize(stripslashes($answers['progress']));}
                 else{$this->useranswers = unserialize(stripslashes($answers['progress']));}
             }
             else{
-                self::$db->insert($this->progressTable, array('user_id' => $this->user->getUserID(), 'progress' => serialize(array())));
+                self::$db->insert($this->progressTable, array('user_id' => self::$user->getUserID(), 'progress' => serialize(array())));
             }
         }
     }
@@ -306,7 +306,7 @@ class LearnTest extends TheoryTest{
      */
     public function updateLearningProgress(){
         unset($_SESSION['answers']);
-        return self::$db->update($this->progressTable, array('progress' => serialize($this->useranswers)), array('user_id' => $this->user->getUserID()));
+        return self::$db->update($this->progressTable, array('progress' => serialize($this->useranswers)), array('user_id' => self::$user->getUserID()));
     }
     
     /**

@@ -176,7 +176,7 @@ class TheoryTest implements TTInterface{
         self::$user = $user;
         self::$layout = $layout;
         self::$layout->addTemplateDir(str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates');
-        if(is_int($userID)){$this->userClone = $userID;}
+        if(is_numeric($userID)){$this->userClone = $userID;}
         if(!session_id()){session_start();}
         $this->getUserAnswers();
         $this->setImagePath();
@@ -187,7 +187,7 @@ class TheoryTest implements TTInterface{
      * @return int Returns the UserID or mocked up userID if valid
      */
     public function getUserID(){
-        if(is_int($this->userClone)){
+        if(is_numeric($this->userClone)){
             return $this->userClone;
         }
         return self::$user->getUserID();
@@ -1087,10 +1087,10 @@ class TheoryTest implements TTInterface{
      * @param int $testNo This should be the current test number
      */
     public function setTest($testNo) {
-        if(is_int($testNo) && !is_int($this->testNo)){
+        if(is_numeric($testNo) && !is_numeric($this->testNo)){
             $this->testNo = $testNo;
         }
-        if(self::$user->setUserSettings(array('current_test' => $this->testNo))) {
+        if(self::$user->setUserSettings(array('current_test' => $testNo))) {
             unset($this->questions);
             unset($this->useranswers);
             $this->getQuestions();

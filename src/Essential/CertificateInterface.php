@@ -1,5 +1,5 @@
 <?php
-namespace TheoryTest\Essential;
+namespace TheoryTest\Car\Essential;
 
 interface CertificateInterface{
     public function PDFInfo();

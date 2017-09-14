@@ -147,7 +147,6 @@ class Review{
             unset($_SESSION['test'.$i]);
             $answers[$testID] = $this->db->select($this->testProgressTable, array('user_id' => $this->getUserID(), 'test_id' => $i, 'status' => array('>=', 1)), array('status', 'totalscore', 'complete'));
         }
-        $this->checkForNewer();
         return $answers;
     }
     

@@ -14,8 +14,6 @@ class Review{
     public $where = array('carquestion' => 'Y', 'alertcasestudy' => array('IS', 'NULL'));
     
     public $noOfTests = 15;
-    public $noOfHPTests = 12;
-    public $type = 'CAR';
     
     protected $questionsTable = 'theory_questions_2016';
     protected $DSACatTable = 'theory_dsa_sections';
@@ -34,7 +32,7 @@ class Review{
         self::$db = $db;
         self::$layout = $layout;
         self::$user = $user;
-        self::$layout->addTemplateDir($templateDir !== false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir);
+        self::$layout->addTemplateDir($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir);
         if(is_numeric($userID)){$this->userClone = $userID;}
     }
     
@@ -154,7 +152,7 @@ class Review{
      */
     public function reviewTests(){
         for($i = 1; $i <= $this->numberOfTests(); $i++){
-            if($i == $this->numberOfTests() && ($this->type == 'CAR' || $this->type == 'Fleet')){$testID = 'random';}else{$testID = $i;}
+            if($i == $this->numberOfTests()){$testID = 'random';}else{$testID = $i;}
             unset($_SESSION['test'.$i]);
             $answers[$testID] = self::$db->select($this->testProgressTable, array('user_id' => $this->getUserID(), 'test_id' => $i, 'status' => array('>=', 1)), array('status', 'totalscore', 'complete'));
         }

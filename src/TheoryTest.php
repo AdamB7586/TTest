@@ -518,7 +518,6 @@ class TheoryTest implements TTInterface{
         else{
             for($q = $current; $q >= 1; $q--) {
                 if($q != $current && $this->getUserTestInfo()[$q]['flagged'] == 1) {
-                    echo($dir.$current.':'.$q.'<br />');
                     return (int)$q;
                 }
             }

@@ -503,34 +503,57 @@ class TheoryTest implements TTInterface{
     /**
      * Returns the next flagged question number
      * @param string $dir This should be set to 'next' for the next question or 'prev' for the previous question
+     * @param int|false If you want to search for anything above or below a current question set this to the question number else set to false
      * @return int Returns the next question ID if one exists else will return false
      */
-    public function getNextFlagged($dir = 'next') {
-        $current = $this->currentQuestion();
-        foreach($this->getUserTestInfo() as $question => $value) {
-            if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['flagged'] == 1) {
-                return (int)$question;
+    public function getNextFlagged($dir = 'next', $current = false) {
+        if(!is_numeric($current)){$current = $this->currentQuestion();}
+        if($dir === 'next'){
+            for($q = $current; $q <= $this->numQuestions(); $q++) {
+                if($q != $current && $this->getUserTestInfo()[$q]['flagged'] == 1) {
+                    return (int)$q;
+                }
+            }
+        }
+        else{
+            for($q = $current; $q >= 1; $q--) {
+                if($q != $current && $this->getUserTestInfo()[$q]['flagged'] == 1) {
+                    echo($dir.$current.':'.$q.'<br />');
+                    return (int)$q;
+                }
             }
         }
         if($this->numFlagged() > 1) {
-            return (int)$this->getNextFlagged($dir === 'next' ? 0 : $this->numQuestions() + 1);
+            return (int)$this->getNextFlagged($dir, $dir === 'next' ? 0 : ($this->numQuestions() + 1));
         }
     }
     
     /**
      * Returns the next incomplete question
      * @param string $dir This should be set to 'next' for the next question or 'prev' for the previous question
+     * @param int|false $questionNo The number to start the count from
      * @return int Returns the next incomplete question ID if one exists else will return false
      */
-    public function getNextIncomplete($dir = 'next') {
+    public function getNextIncomplete($dir = 'next', $questionNo = false) {
         $current = $this->currentQuestion();
-        foreach($this->getUserTestInfo() as $question => $value) {
-            if((($dir === 'next' && $question > $current) || ($dir !== 'next' && $question < $current)) && $value['status'] < 3) {
-                return (int)$question;
+        if($dir === 'next'){
+            for($q = (is_numeric($questionNo) ? $questionNo : $current); $q <= $this->numQuestions(); $q++) {
+                $value = $this->getUserTestInfo()[$q]['status'];
+                if($q != $current && ($value < 3 || !$value)) {
+                    return (int)$q;
+                }
+            }
+        }
+        else{
+            for($q = (is_numeric($questionNo) ? $questionNo : $current); $q >= 1; $q--) {
+                $value = $this->getUserTestInfo()[$q]['status'];
+                if($q != $current && ($value < 3 || !$value)) {
+                    return (int)$q;
+                }
             }
         }
         if($this->numIncomplete() > 1) {
-            return (int)$this->getNextIncomplete($dir === 'next' ? 0 : $this->numQuestions() + 1);
+            return (int)$this->getNextIncomplete($dir, ($dir === 'next' ? 1 : $this->numQuestions()));
         }
     }
     
@@ -1038,12 +1061,10 @@ class TheoryTest implements TTInterface{
      * @return int|string Should be the first incomplete question prim or 'none' if none exist
      */
     protected function getIncompleteQuestion() {
-        $q = 1;
-        foreach($this->getUserTestInfo() as $value) {
-            if($value['status'] <= 1) {
+        for($q = 1; $q < $this->numQuestions(); $q++){
+            if($this->getUserTestInfo()[$q]['status'] <= 1 || !isset($this->getUserTestInfo()[$q])) {
                 return $this->questionPrim($q);
             }
-            $q++;
         }
         return 'none';
     }

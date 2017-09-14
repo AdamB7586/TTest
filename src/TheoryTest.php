@@ -168,13 +168,14 @@ class TheoryTest implements TTInterface{
      * @param Database $db This needs to be an instance of the database class
      * @param Smarty $layout This needs to be an instance of the Smarty Templating class
      * @param object $user This should be the user class used
-     * @param int|false $userID If you want to emulate a user set the us
+     * @param int|false $userID If you want to emulate a user set the user ID here
+     * @param string|false $templateDir If you want to change the template location set this location here else set to false
      */
-    public function __construct(Database $db, Smarty $layout, $user, $userID = false) {
+    public function __construct(Database $db, Smarty $layout, $user, $userID = false, $templateDir = false) {
         self::$db = $db;
         self::$user = $user;
         self::$layout = $layout;
-        self::$layout->addTemplateDir(str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates');
+        self::$layout->addTemplateDir($templateDir !== false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir);
         if(is_numeric($userID)){$this->userClone = $userID;}
         if(!session_id()){session_start();}
         $this->getUserAnswers();

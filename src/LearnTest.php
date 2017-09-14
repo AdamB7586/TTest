@@ -24,9 +24,10 @@ class LearnTest extends TheoryTest{
      * @param Smarty $layout This needs to be an instance of Smarty Templating
      * @param object $user This should be and instance if the User Class
      * @param false|int $userID If you wish to emulate a user set this value to the users ID else set to false
+     * @param string|false $templateDir If you want to change the template location set this location here else set to false
      */
-    public function __construct(Database $db, Smarty $layout, $user, $userID = false) {
-        parent::__construct($db, $layout, $user, $userID);
+    public function __construct(Database $db, Smarty $layout, $user, $userID = false, $templateDir = false) {
+        parent::__construct($db, $layout, $user, $userID, $templateDir);
         $this->getTestInfo();
     }
     

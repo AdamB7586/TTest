@@ -27,12 +27,6 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate{
             $this->pdf->Ln(30);
             $this->pdf->Cell(190, 15, strip_tags($this->theory->getTestName()), 0, 0, 'C');
             $this->pdf->Ln(30);
-            $this->pdf->SetFont('Arial','B', 18);
-            $this->pdf->Cell(10, 14, '', 0); $this->pdf->Cell(28, 14, 'Candidate', 0);
-            $this->pdf->Ln(12);
-            $this->certLine('Name:', $userInfo['first_name'].' '.$userInfo['last_name']);
-            $this->pdf->Ln(10);
-            $this->pdf->SetFont('Arial','B', 18);
             $this->pdf->Cell(10, 10, '', 0); $this->pdf->Cell(14, 10, 'Test', 0);
             $this->pdf->Ln(12);
             $this->certLine('Test ID:', strtoupper($this->testType).$this->theory->testresults['id']);

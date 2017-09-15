@@ -384,8 +384,7 @@ class LearnTest extends TheoryTest{
     protected function extraContent(){
         $extra = '';
         if(is_array($this->testInfo['casestudy'])){
-            $skipcorrect = ($_COOKIE['skipCorrect'] === 1 ? ' flagged' : '');
-            $extra.= '</div></div><div class="row"><div><div class="col-xs-12 skipcorrectclear"><div class="skipcorrect btn btn-theory'.$skipcorrect.'">Skip Correct</div></div>';
+            $extra.= '</div></div><div class="row"><div><div class="col-xs-12 skipcorrectclear"><div class="skipcorrect btn btn-theory'.($_COOKIE['skipCorrect'] == 1 ? ' flagged' : '').'">Skip Correct</div></div>';
         }
         $extra.='<div class="signal signal'.$this->questionStatus().'"></div>';
         return $extra;

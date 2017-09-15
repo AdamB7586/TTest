@@ -114,7 +114,7 @@ class Review{
      */
     public function buildReviewTable($table, $tableSecNo, $title, $section){
         $this->getUserAnswers();
-        $categories = self::$db->selectAll($table, '', '*', array('section' => 'ASC'));
+        $categories = self::$db->selectAll($table, array(), '*', array('section' => 'ASC'));
         $review = array();
         $review['title'] = $title;
         $review['section'] = $section;
@@ -146,7 +146,7 @@ class Review{
     public function reviewCaseStudy(){
         $this->getUserAnswers();
         $case = array();
-        foreach(self::$db->selectAll($this->DSACatTable, '', '*', array('section' => 'ASC')) as $cat){
+        foreach(self::$db->selectAll($this->DSACatTable, array(), '*', array('section' => 'ASC')) as $cat){
             $case[$cat['section']] = $cat;
             foreach(self::$db->selectAll($this->questionsTable, array('casestudyno' => $cat['section']), '*', array('caseqposition' => 'ASC')) as $num => $question){
                 $case[$cat['section']]['q'][$num]['status'] = $this->useranswers[$question['prim']]['status'];

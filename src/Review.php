@@ -138,7 +138,7 @@ class Review{
         $this->getUserAnswers();
         foreach(self::$db->selectAll($this->DSACatTable, '', '*', array('section' => 'ASC')) as $cat){
             $case[$cat['section']] = $cat;
-            foreach(self::$db->selectAll($this->questionsTable, array('casestudyno' => $cat['section']), '*', array('csqposition' => 'ASC')) as $num => $question){
+            foreach(self::$db->selectAll($this->questionsTable, array('casestudyno' => $cat['section']), '*', array('caseqposition' => 'ASC')) as $num => $question){
                 $case[$cat['section']]['q'][$num]['status'] = $this->useranswers[$question['prim']]['status'];
                 $case[$cat['section']]['q'][$num]['num'] = ($num + 1);
             }

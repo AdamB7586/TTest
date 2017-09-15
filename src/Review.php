@@ -145,6 +145,7 @@ class Review{
      */
     public function reviewCaseStudy(){
         $this->getUserAnswers();
+        $case = array();
         foreach(self::$db->selectAll($this->DSACatTable, '', '*', array('section' => 'ASC')) as $cat){
             $case[$cat['section']] = $cat;
             foreach(self::$db->selectAll($this->questionsTable, array('casestudyno' => $cat['section']), '*', array('caseqposition' => 'ASC')) as $num => $question){
@@ -160,6 +161,7 @@ class Review{
      * @return type Returns the answers for each of the tests ready to review
      */
     public function reviewTests(){
+        $answers = array();
         for($i = 1; $i <= $this->numberOfTests(); $i++){
             if($i == $this->numberOfTests()){$testID = 'random';}else{$testID = $i;}
             unset($_SESSION['test'.$i]);
@@ -177,7 +179,8 @@ class Review{
         $notattempted = 0;
         $incorrect = 0;
         $correct = 0;
-
+        $info = array();
+        
         $questions = self::$db->selectAll($this->questionsTable, $this->where, array('prim'));
         $info['noQuestions'] = self::$db->rowCount();
         foreach($questions as $question){

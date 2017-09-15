@@ -15,7 +15,7 @@ class LearnTest extends TheoryTest{
     public $progressTable = 'users_progress';
     
     protected $categories = array('dsa' => 'dsacat', 'hc' => 'hcsection', 'l2d' => 'ldclessonno', 'casestudy' => 'casestudyno');
-    protected $sortBy = array('dsa' => 'dsaqposition', 'hc' => 'hcqposition', 'l2d' => 'ldcqno', 'casestudy' => 'csqposition');
+    protected $sortBy = array('dsa' => 'dsaqposition', 'hc' => 'hcqposition', 'l2d' => 'ldcqno', 'casestudy' => 'caseqposition');
 
 
     /**

@@ -524,7 +524,7 @@ class TheoryTest implements TTInterface{
             }
         }
         if($this->numFlagged() > 1) {
-            return (int)$this->getNextFlagged($dir, $dir === 'next' ? 0 : ($this->numQuestions() + 1));
+            return (int)$this->getNextFlagged($dir, ($dir === 'next' ? 0 : ($this->numQuestions() + 1)));
         }
     }
     
@@ -1385,7 +1385,7 @@ class TheoryTest implements TTInterface{
     
     /**
      * Creates an array of all of the categories
-     * @return string Returns an array of all of the categories
+     * @return array Returns an array of all of the categories
      */
     protected function getCategories(){
         return self::$db->selectAll($this->dsaCategoriesTable);

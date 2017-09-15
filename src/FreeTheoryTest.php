@@ -129,12 +129,11 @@ class FreeTheoryTest extends TheoryTest{
         foreach($questions as $question){
             $this->questions[$q] = $question['prim'];
             $this->useranswers[$q]['answer'] = '';
-            $this->useranswers[$q]['flagged'] = 0;
             $this->useranswers[$q]['status'] = 0;
             $q++;
         }
         $_SESSION['test'.$testNo.'q'] = serialize($this->questions);
-        $_SESSION['test'.$testNo] = $this->useranswers;
+        $_SESSION['test'.$testNo.'a'] = serialize($this->useranswers);
         return true;
     }
     
@@ -155,7 +154,7 @@ class FreeTheoryTest extends TheoryTest{
      */
     public function getUserAnswers() {
         if(!isset($this->useranswers)){
-            $this->useranswers = $_SESSION['test'.$this->getTest()];
+            $this->useranswers = unserialize($_SESSION['test'.$this->getTest().'a']);
         }
         return $this->useranswers;
     }
@@ -165,7 +164,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return void Nothing is returned
      */
     protected function updateAnswers(){
-        $_SESSION['test'.$this->getTest()] = $this->useranswers;
+        $_SESSION['test'.$this->getTest().'a'] = serialize($this->useranswers);
     }
     
     /**
@@ -266,7 +265,7 @@ class FreeTheoryTest extends TheoryTest{
     protected function markTest(){
         $this->getQuestions();
         foreach($this->questions as $prim){
-             if($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['status'] == 4){$type = 'correct';}
+             if($_SESSION['test'.$this->getTest().'a'][$this->questionNo($prim)]['status'] == 4){$type = 'correct';}
              else{$type = 'incorrect';}
              
              $dsa = $this->getDSACat($prim);

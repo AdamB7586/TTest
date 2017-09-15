@@ -20,6 +20,8 @@ class Review{
     protected $progressTable = 'user_progress';
     protected $testProgressTable = 'user_test_progress';
     
+    protected $useranswers;
+    
     /**
      * Connects to the database sets the current user and gets any user answers
      * @param Database $db This needs to be an instance of the database class
@@ -122,8 +124,8 @@ class Review{
             $review['ans'][$cat['section']]['incorrect'] = 0;
             $review['ans'][$cat['section']]['correct'] = 0;
 
-            $questions = self::$db->selectAll($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where), array('prim'));
-            $review['ans'][$cat['section']]['numquestions'] = count($questions);
+            $questions = self::$db->count($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where), array('prim'));
+            $review['ans'][$cat['section']]['numquestions'] = self::$db->count($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where));
             foreach($questions as $question){
                 if($this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}
                 elseif($this->useranswers[$question['prim']]['status'] == 1){$review['ans'][$cat['section']]['incorrect']++;}

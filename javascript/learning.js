@@ -8,9 +8,6 @@ var correctcheck = false;
 if($(".signal").hasClass('signalcorrect') || $(".signal").hasClass('signalincorrect')){correctcheck = true;}
 else{correctcheck = false;}
 
-var prevq = false;
-var nextq = false;
-
 var audio;
 
 var process = false;
@@ -21,32 +18,6 @@ var imageselectednum = $(".imgselected").length;
 if((selectednum || imageselectednum)!= 0){
     if(selectednum != 0){numchecked = selectednum;}
     else{numchecked = imageselectednum;}
-}
-
-$.get('/modules/<?php echo($page); ?>?question=' + $(".nextquestion").attr('id'), function(data){
-    data = $.parseJSON(data);
-    nextq = data.html;
-    nextqnum = data.questionnum;
-});
-
-$.get('/modules/<?php echo($page); ?>?question=' + $(".prevquestion").attr('id'), function(data){
-    data = $.parseJSON(data);
-    prevq = data.html;
-    prevqnum = data.questionnum;
-});
-
-function reloadCached(){   
-    $.get('/modules/<?php echo($page); ?>?question=' + $(".nextquestion").attr('id'), function(data){
-        data = $.parseJSON(data);
-        nextq = data.html;
-        nextqnum = data.questionnum;
-        $.get('/modules/<?php echo($page); ?>?question=' + $(".prevquestion").attr('id'), function(data){
-            data = $.parseJSON(data);
-            prevq = data.html;
-            prevqnum = data.questionnum;
-            process = false;
-        });
-    });
 }
 
 $(".answer").click(function(event){
@@ -118,10 +89,7 @@ function markAnswer(answer, question, remove, replace){
                 $.get("/modules/<?php echo($page); ?>?add=" + answer + "&prim=" + question, function(data){
                     if(numchecked == max){$(".check").addClass("recheck"); $(".check").html('<span class="fa fa-fw fa-question"></span><span class="hidden-xs"> Check Answer</span>');}
                     $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
-                    if($(".prevquestion").attr('id') == $(".nextquestion").attr('id')){
-                        reloadCached();
-                    }
-                    else{process = false;}
+                    process = false;
                 });
             }
             else{
@@ -129,10 +97,7 @@ function markAnswer(answer, question, remove, replace){
                     $(".check").addClass("recheck");
                     $(".check").html('<span class="fa fa-fw fa-question"></span><span class="hidden-xs"> Check Answer</span>');
                     $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
-                    if($(".prevquestion").attr('id') == $(".nextquestion").attr('id')){
-                        reloadCached();
-                    }
-                    else{process = false;}
+                    process = false;
                 });
             }
         }
@@ -242,9 +207,7 @@ $(".hint").click(function(){
             $(document).scrollTop(500);
         }
     });
-    $.get("/modules/<?php echo($page); ?>?hint=true", function(){
-        reloadCached();
-    });
+    $.get("/modules/<?php echo($page); ?>?hint=true");
 });
 
 $(".check").click(function(){
@@ -272,7 +235,6 @@ function checkCorrect(question){
                     $(".check").removeClass("recheck checkincorrect").addClass("checkcorrect");
                     $(".check").html('<span class="fa fa-check fa-fw"></span><span class="hidden-xs"> Correct</span>');
                     correctcheck = true;
-                    reloadCached();
                 }
                 else{
                     $(".selected").removeClass("selectedcorrect").addClass("selectedincorrect");
@@ -311,9 +273,11 @@ function questionData(question){
 
 function moveToNext(){
     if(nextq != false && process == false){
-        $("#qnum").html(nextqnum);
-        $("#question").html(nextq);
-        //$('html, body').animate({ scrollTop: 0 }, 0);
+        $.get('/modules/<?php echo($page); ?>?question=' + $(".nextquestion").attr('id'), function(data){
+            $("#question").html(data.html);
+            $("#qnum").html(data.questionnum);
+            //$('html, body').animate({ scrollTop: 0 }, 0);
+        }, 'json');
     }
     else{
         setTimeout(function(){
@@ -324,9 +288,11 @@ function moveToNext(){
 
 function moveToPrevious(){
     if(prevq != false && process == false){
-        $("#qnum").html(prevqnum);
-        $("#question").html(prevq);
-        //$('html, body').animate({ scrollTop: 0 }, 0);
+        $.get('/modules/<?php echo($page); ?>?question=' + $(".prevquestion").attr('id'), function(data){
+            $("#question").html(data.html);
+            $("#qnum").html(data.questionnum);
+            //$('html, body').animate({ scrollTop: 0 }, 0);
+        }, 'json');
     }
     else{
         setTimeout(function(){

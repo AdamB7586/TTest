@@ -260,12 +260,10 @@ class FreeTheoryTest extends TheoryTest{
     
     /**
      * Marks the current test
-     * @return void Nothing is returned
      */
     protected function markTest(){
-        $this->getQuestions();
-        foreach($this->questions as $prim){
-             if($_SESSION['test'.$this->getTest().'a'][$this->questionNo($prim)]['status'] == 4){$type = 'correct';}
+        foreach($this->getQuestions() as $prim){
+             if($this->getUserAnswers()[$this->questionNo($prim)]['status'] == 4){$type = 'correct';}
              else{$type = 'incorrect';}
              
              $dsa = $this->getDSACat($prim);

@@ -36,6 +36,13 @@ class Review{
         if(is_numeric($userID)){$this->userClone = $userID;}
     }
     
+    /*
+     * Setter Allows table names to be changed if needed
+     */
+    public function __set($name, $value) {
+        if(isset($this->$name)){$this->name = $value;}
+    }
+    
     /**
      * Returns the userID or the mock userID if you wish to look at users progress
      * @return int Returns the UserID or mocked up userID if valid

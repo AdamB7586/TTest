@@ -332,7 +332,7 @@ class TheoryTest implements TTInterface{
      */
     protected function getUserTestInfo(){
         if(!is_array($this->testData)){
-            $this->testData = unserialize($_SESSION['test'.$this->getTest().'a']);
+            $this->testData = $_SESSION['test'.$this->getTest()];
         }
         return $this->testData;
     }
@@ -360,7 +360,6 @@ class TheoryTest implements TTInterface{
         $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
         self::$db->delete($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()));
         unset($_SESSION['test'.$this->getTest()]);
-        unset($_SESSION['test'.$this->getTest().'a']);
         foreach($questions as $i => $question) {
             $this->questions[($i + 1)] = $question['prim'];
         }
@@ -434,7 +433,7 @@ class TheoryTest implements TTInterface{
             $answers = self::$db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
             if(!empty($answers)) {
                 $this->useranswers = unserialize($answers['answers']);
-                if(!is_array($this->getUserTestInfo())) {$_SESSION['test'.$this->getTest().'a'] = serialize($this->useranswers);}
+                if(!is_array($this->getUserTestInfo())) {$_SESSION['test'.$this->getTest()] = $this->useranswers;}
                 if(!is_numeric($_SESSION['question_no']['test'.$this->getTest()])) {$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
                 $this->testID = $answers['id'];
                 return $this->useranswers;
@@ -725,12 +724,12 @@ class TheoryTest implements TTInterface{
         $qNo = $this->questionNo($prim);
         $questiondata = $this->getQuestionData($prim);
         $answer = strtoupper($letters);
-        $_SESSION['test'.$this->getTest().'a'][$qNo]['answer'] = $answer;
+        $_SESSION['test'.$this->getTest()][$qNo]['answer'] = $answer;
         if(strlen($answer) == $questiondata['mark']) {
-            if($answer == $questiondata['answerletters']) {$_SESSION['test'.$this->getTest().'a'][$qNo]['status'] = 4;}
-            else{$_SESSION['test'.$this->getTest().'a'][$qNo]['status'] = 3;}
+            if($answer == $questiondata['answerletters']) {$_SESSION['test'.$this->getTest()][$qNo]['status'] = 4;}
+            else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 3;}
         }
-        else{$_SESSION['test'.$this->getTest().'a'][$qNo]['status'] = 1;}
+        else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 1;}
         
         return $this->updateAnswers();
     }
@@ -744,9 +743,9 @@ class TheoryTest implements TTInterface{
     public function removeAnswer($answer, $prim) {
         $qNo = $this->questionNo($prim);
         $removed = str_replace(strtoupper($answer), '', filter_var($this->getUserTestInfo()[$qNo]['answer'], FILTER_SANITIZE_STRING));
-        $_SESSION['test'.$this->getTest().'a'][$qNo]['answer'] = $removed;
-        if($removed === '') {$_SESSION['test'.$this->getTest().'a'][$qNo]['status'] = 0;}
-        else{$$_SESSION['test'.$this->getTest().'a'][$qNo]['status'] = 1;}
+        $_SESSION['test'.$this->getTest()][$qNo]['answer'] = $removed;
+        if($removed === '') {$_SESSION['test'.$this->getTest()][$qNo]['status'] = 0;}
+        else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 1;}
 
         return $this->updateAnswers();
     }
@@ -772,10 +771,10 @@ class TheoryTest implements TTInterface{
      */
     public function flagQuestion($prim) {
         if(filter_var($this->getUserTestInfo()[$this->questionNo($prim)]['flagged'], FILTER_SANITIZE_NUMBER_INT) === 0 || !filter_var($this->getUserTestInfo()[$this->questionNo($prim)]['flagged'], FILTER_VALIDATE_INT)) {
-            $_SESSION['test'.$this->getTest().'a'][$this->questionNo($prim)]['flagged'] = 1;
+            $_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] = 1;
         }
         else{
-            $_SESSION['test'.$this->getTest().'a'][$this->questionNo($prim)]['flagged'] = 0;
+            $_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] = 0;
         }
         return $this->updateAnswers();
     }

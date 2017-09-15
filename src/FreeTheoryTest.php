@@ -201,7 +201,7 @@ class FreeTheoryTest extends TheoryTest{
         self::$layout->assign('existing_text', $text);
         self::$layout->assign('start_new_test', '<div class="newtest btn btn-theory"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Start Test</span></div>');
         self::$layout->assign('script', $this->existingScript());
-        $this->questiondata = self::$layout->fetch('theory'.DIRECTORY_SEPARATOR.'existing.tpl');
+        $this->questiondata = self::$layout->fetch('existing.tpl');
     }
     
     /**
@@ -234,7 +234,8 @@ class FreeTheoryTest extends TheoryTest{
         self::$layout->assign('question_no', '1', true);
         self::$layout->assign('no_questions', $this->numQuestions(), true);
         self::$layout->assign('question_data', $this->questiondata, true);
-        return self::$layout->fetch('theory'.DIRECTORY_SEPARATOR.$this->section.'test.tpl');
+        self::$layout->assign('js_script_location', $this->getJavascriptLocation());
+        return self::$layout->fetch($this->section.'test.tpl');
     }
     
     /**

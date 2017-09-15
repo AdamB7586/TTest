@@ -14,9 +14,4 @@
 </div>
 {/nocache}
 {if $report != 'true'}<script type="text/javascript" src="{$js_script_location}testtimer.js"></script>{/if}
-<div class="row">
-    <div class="col-md-12 text-center">
-        <small>Crown copyright material reproduced under licence from the Driver and Vehicle Standards Agency, which does not accept any responsibility for the accuracy of the reproduction.</small>
-    </div>
-</div>
 {/strip}

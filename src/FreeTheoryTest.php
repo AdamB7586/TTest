@@ -124,10 +124,6 @@ class FreeTheoryTest extends TheoryTest{
      * @return boolean Returns true
      */
     protected function chooseQuestions($testNo){
-        if(!session_id()){
-            session_name(SESSION_NAME);
-            session_start();
-        }
         $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
         $q = 1;
         foreach($questions as $question){
@@ -138,7 +134,7 @@ class FreeTheoryTest extends TheoryTest{
             $q++;
         }
         $_SESSION['test'.$testNo.'q'] = serialize($this->questions);
-        $_SESSION['test'.$testNo.'a'] = serialize($this->useranswers);
+        $_SESSION['test'.$testNo] = $this->useranswers;
         return true;
     }
     
@@ -159,7 +155,7 @@ class FreeTheoryTest extends TheoryTest{
      */
     public function getUserAnswers() {
         if(!isset($this->useranswers)){
-            $this->useranswers = unserialize($_SESSION['test'.$this->getTest().'a']);
+            $this->useranswers = $_SESSION['test'.$this->getTest()];
         }
         return $this->useranswers;
     }
@@ -169,7 +165,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return void Nothing is returned
      */
     protected function updateAnswers(){
-        $_SESSION['test'.$this->getTest().'a'] = serialize($this->useranswers);
+        $_SESSION['test'.$this->getTest()] = $this->useranswers;
     }
     
     /**

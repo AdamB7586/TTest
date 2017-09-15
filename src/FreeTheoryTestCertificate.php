@@ -1,12 +1,15 @@
 <?php
 namespace TheoryTest\Car;
 
+use DBAL\Database;
+use Smarty;
+
 class FreeTheoryTestCertificate extends TheoryTestCertificate{
-    private $theory;
+    protected $testType = 'FREE';
 
     public function __construct(Database $db, Smarty $layout, $user, $testID) {
         parent::__construct($db, $layout, $user, $testID);
-        $this->theory = new TheoryTest(self::$db, $layout, self::$user);
+        $this->theory = new FreeTheoryTest(self::$db, $layout, self::$user);
     }
     
     public function generateCertificate(){
@@ -32,7 +35,7 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate{
             $this->pdf->SetFont('Arial','B', 18);
             $this->pdf->Cell(10, 10, '', 0); $this->pdf->Cell(14, 10, 'Test', 0);
             $this->pdf->Ln(12);
-            $this->certLine('Test ID:', 'FREE'.$this->theory->testresults['id']);
+            $this->certLine('Test ID:', strtoupper($this->testType).$this->theory->testresults['id']);
             $this->certLine('Test Name:', strip_tags($this->theory->getTestName()));
             $this->certLine('Completion Date/Time:', date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])));
             $this->certLine('Score:', $this->theory->testresults['correct'].' / '.$this->theory->numQuestions());
@@ -47,9 +50,9 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate{
         $this->pdf->AddPage('P', 'A4');
         $this->pdf->SetFont('Arial','B', 8);
         $this->pdf->BasicTable(
-            array('Name', 'Test Name', 'Unique Test ID', 'Taken on Date/Time'),
-            array(array($userInfo['first_name'].' '.$userInfo['last_name'], strip_tags($this->theory->getTestName()), $this->theory->testresults['id'], date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])))),
-            array(52,52,39,47)
+            array('Test Name', 'Unique Test ID', 'Taken on Date/Time'),
+            array(array(strip_tags($this->theory->getTestName()), $this->theory->testresults['id'], date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])))),
+            array(69,57,64)
         );
         $this->pdf->Ln();
         $this->pdf->SetFont('Arial','B', 16);
@@ -72,7 +75,6 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate{
         $this->infoLine('Status:', strip_tags($this->theory->testStatus()));
         $this->infoLine('Questions:', $this->theory->testresults['numquestions']);
         $this->pdf->Ln(6);
-        $this->infoLine('Candidate:', $userInfo['first_name'].' '.$userInfo['last_name']);
         $this->infoLine('Time Taken:', $this->theory->getTime());
         $this->pdf->Ln(16);
         $this->pdf->SetFont('Arial','B', 8);

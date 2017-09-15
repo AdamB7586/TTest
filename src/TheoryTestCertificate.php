@@ -10,9 +10,10 @@ class TheoryTestCertificate implements CertificateInterface{
     protected static $db;
     protected static $user;
     protected $pdf;
-    private $theory;
+    protected $theory;
     
     protected $questions;
+    protected $testType = 'CAR';
 
     public function __construct(Database $db, Smarty $layout, $user, $testID) {
         self::$db = $db;
@@ -29,7 +30,7 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->pdf->SetCreator('Teaching Driving Ltd');
     }
     
-    private function certLine($text, $text2){
+    protected function certLine($text, $text2){
         $this->pdf->SetFont('Arial','B', 14);
         $this->pdf->Cell(10, 10, '', 0); $this->pdf->Cell(72, 10, $text, 0);
         $this->pdf->SetFont('Arial','', 14);
@@ -37,7 +38,7 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->pdf->Ln(8);
     }
     
-    private function infoLine($text, $text2){
+    protected function infoLine($text, $text2){
         $this->pdf->SetFont('Arial','B', 12);
         $this->pdf->Cell(46, 10, $text);
         $this->pdf->SetFont('Arial','', 12);
@@ -67,7 +68,7 @@ class TheoryTestCertificate implements CertificateInterface{
             $this->pdf->SetFont('Arial','B', 18);
             $this->pdf->Cell(10, 10, '', 0); $this->pdf->Cell(14, 10, 'Test', 0);
             $this->pdf->Ln(12);
-            $this->certLine('Test ID:', 'CAR'.$this->theory->testresults['id']);
+            $this->certLine('Test ID:', strtoupper($this->testType).$this->theory->testresults['id']);
             $this->certLine('Test Name:', strip_tags($this->theory->getTestName()));
             $this->certLine('Completion Date/Time:', date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])));
             $this->certLine('Score:', $this->theory->testresults['correct'].' / '.$this->theory->numQuestions());
@@ -115,10 +116,10 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->overallResults();
     }
     
-    private function overallResults(){
+    protected function overallResults(){
         $header = array('Group', 'Topics in group', 'Correct', 'Incorrect', 'Total', 'Percentage', 'Status');
         $groupdata = array();
-        foreach(self::$db->selectAll($this->theory->dsaCategoriesTable) as $group => $data){
+        foreach(self::$db->selectAll($this->theory->dsaCategoriesTable) as $data){
             $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
             $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
             $total = $correct + $incorrect;

@@ -332,7 +332,7 @@ class TheoryTest implements TTInterface{
      */
     protected function getUserTestInfo(){
         if(!is_array($this->testData)){
-            $this->testData = $this->useranswers;
+            $this->testData = unserialize($_SESSION['test'.$this->getTest().'a']);
         }
         return $this->testData;
     }
@@ -360,6 +360,7 @@ class TheoryTest implements TTInterface{
         $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
         self::$db->delete($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()));
         unset($_SESSION['test'.$this->getTest()]);
+        unset($_SESSION['test'.$this->getTest().'a']);
         foreach($questions as $i => $question) {
             $this->questions[($i + 1)] = $question['prim'];
         }
@@ -433,7 +434,7 @@ class TheoryTest implements TTInterface{
             $answers = self::$db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
             if(!empty($answers)) {
                 $this->useranswers = unserialize($answers['answers']);
-                if(!is_array($this->getUserTestInfo())) {$_SESSION['test'.$this->getTest()] = $this->useranswers;}
+                if(!is_array($this->getUserTestInfo())) {$_SESSION['test'.$this->getTest().'a'] = serialize($this->useranswers);}
                 if(!is_numeric($_SESSION['question_no']['test'.$this->getTest()])) {$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
                 $this->testID = $answers['id'];
                 return $this->useranswers;
@@ -784,6 +785,7 @@ class TheoryTest implements TTInterface{
      * @return boolean
      */
     protected function updateAnswers() {
+        $_SESSION['test'.$this->getTest().'a'] = serialize($this->useranswers);
         return self::$db->update($this->progressTable, array('answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()), array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
     }
     

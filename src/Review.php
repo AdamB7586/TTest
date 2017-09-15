@@ -124,7 +124,7 @@ class Review{
             $review['ans'][$cat['section']]['incorrect'] = 0;
             $review['ans'][$cat['section']]['correct'] = 0;
 
-            $questions = self::$db->count($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where), array('prim'));
+            $questions = self::$db->selectAll($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where), array('prim'));
             $review['ans'][$cat['section']]['numquestions'] = self::$db->count($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where));
             foreach($questions as $question){
                 if($this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}

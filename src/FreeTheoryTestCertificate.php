@@ -59,7 +59,7 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate{
             $this->pdf->Cell(184, 10, "You answered ".$this->theory->testresults['correct']." out of ".$this->theory->testresults['numquestions']." questions correctly");
         }
         else{
-            $this->pdf->Cell(184, 10, "Sorry ".$userInfo['first_name'].", but you have not passed this time."); $this->pdf->Ln(4);
+            $this->pdf->Cell(184, 10, "Sorry, but you have not passed this time."); $this->pdf->Ln(4);
             $this->pdf->Cell(184, 10, "You answered ".$this->theory->testresults['correct'].' out of '.$this->theory->testresults['numquestions']." questions correctly, the pass rate is ".$this->theory->passmark." out of ".$this->theory->testresults['numquestions']);
         }
         $this->pdf->Ln(12);

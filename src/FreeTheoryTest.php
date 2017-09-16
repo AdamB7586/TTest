@@ -24,7 +24,6 @@ class FreeTheoryTest extends TheoryTest{
      */
     protected function clearCookies($testNo){
         unset($_SESSION['test'.$testNo.'q']);
-        unset($_SESSION['test'.$testNo.'a']);
         unset($_SESSION['test'.$testNo]);
         unset($_SESSION['question_no']);
         unset($_COOKIE['testinfo']);
@@ -128,12 +127,9 @@ class FreeTheoryTest extends TheoryTest{
         $q = 1;
         foreach($questions as $question){
             $this->questions[$q] = $question['prim'];
-            $this->useranswers[$q]['answer'] = '';
-            $this->useranswers[$q]['status'] = 0;
             $q++;
         }
         $_SESSION['test'.$testNo.'q'] = serialize($this->questions);
-        $_SESSION['test'.$testNo.'a'] = serialize($this->useranswers);
         return true;
     }
     
@@ -154,7 +150,7 @@ class FreeTheoryTest extends TheoryTest{
      */
     public function getUserAnswers() {
         if(!isset($this->useranswers)){
-            $this->useranswers = unserialize($_SESSION['test'.$this->getTest().'a']);
+            $this->useranswers = $_SESSION['test'.$this->getTest()];
         }
         return $this->useranswers;
     }
@@ -164,7 +160,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return void Nothing is returned
      */
     protected function updateAnswers(){
-        $_SESSION['test'.$this->getTest().'a'] = serialize($this->useranswers);
+        return false;
     }
     
     /**

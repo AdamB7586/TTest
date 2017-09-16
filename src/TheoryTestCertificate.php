@@ -123,7 +123,7 @@ class TheoryTestCertificate implements CertificateInterface{
             $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
             $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
             $total = $correct + $incorrect;
-            $groupdata[] = array($data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format((($correct / $total) * 100), 0).'%', '');
+            $groupdata[] = array($data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format(intval(($correct / $total) * 100), 0).'%', '');
             
             $totalcorrect = $totalcorrect + $correct;
             $totalincorrect = $totalincorrect + $incorrect;

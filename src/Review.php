@@ -146,16 +146,16 @@ class Review{
         $this->getUserAnswers();
         foreach ($this->getSectionTables() as $i => $tables){
             if(is_array($tables)){
-                $this->template->assign('table', $this->buildReviewTable($tables['table'], $tables['sectionNo'], $tables['name'], $tables['section']), true);
-                $this->template->assign('table'.($i + 1).'name', $tables['name'], true);
-                $this->template->assign($tables['section'].'section', $this->template->fetch('table-learning.tpl'), true);
+                self::$layout->assign('table', $this->buildReviewTable($tables['table'], $tables['sectionNo'], $tables['name'], $tables['section']), true);
+                self::$layout->assign('table'.($i + 1).'name', $tables['name'], true);
+                self::$layout->assign($tables['section'].'section', self::$layout->fetch('table-learning.tpl'), true);
             }
             elseif($tables === true){
-                $this->template->assign('cases', $this->reviewCaseStudy(), true);
-                $this->template->assign('reviewsection', $this->template->fetch('table-case.tpl'), true);
+                self::$layout->assign('cases', $this->reviewCaseStudy(), true);
+                self::$layout->assign('reviewsection', self::$layout->fetch('table-case.tpl'), true);
             }
         }
-        return $this->template->fetch('study.tpl');
+        return self::$layout->fetch('study.tpl');
     }
     
     /**

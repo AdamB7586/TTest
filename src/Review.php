@@ -112,8 +112,7 @@ class Review{
      * @param string $title The title that should be given to the table
      * @return string|boolean Returns the table as a HTML string if the information exists else will return false
      */
-    public function buildReviewTable($table, $tableSecNo, $title, $section){
-        $this->getUserAnswers();
+    protected function buildReviewTable($table, $tableSecNo, $title, $section){
         $categories = self::$db->selectAll($table, array(), '*', array('section' => 'ASC'));
         $review = array();
         $review['title'] = $title;
@@ -137,6 +136,26 @@ class Review{
             $review['totalincorrect'] = $review['totalincorrect'] + $review['ans'][$cat['section']]['incorrect'];
         }
         return $review;
+    }
+    
+    /**
+     * Returns the HTML Table for the review section 
+     * @return string Returns the HTML code for the learning review section
+     */
+    public function buildTables(){
+        $this->getUserAnswers();
+        foreach ($this->getSectionTables() as $i => $tables){
+            if(is_array($tables)){
+                $this->template->assign('table', $this->buildReviewTable($tables['table'], $tables['sectionNo'], $tables['name'], $tables['section']), true);
+                $this->template->assign('table'.($i + 1).'name', $tables['name'], true);
+                $this->template->assign($tables['section'].'section', $this->template->fetch('table-learning.tpl'), true);
+            }
+            elseif($tables === true){
+                $this->template->assign('cases', $this->reviewCaseStudy(), true);
+                $this->template->assign('reviewsection', $this->template->fetch('table-case.tpl'), true);
+            }
+        }
+        return $this->template->fetch('study.tpl');
     }
     
     /**

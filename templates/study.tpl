@@ -11,7 +11,7 @@
         {if $dsasection}<div class="tab-content">
             <div class="tab-pane active" id="hc">{/if}{$hcsection}{if $dsasection}</div>
             <div class="tab-pane" id="dvsa">{$dsasection}</div>
-            {if $ldcsection}<div class="tab-pane" id="l2d">{$ldcsection}</div>{/if}
+            {if $ldcsection}<div class="tab-pane" id="l2d">{$l2dsection}</div>{/if}
             {if $reviewsection}<div class="tab-pane" id="cases">{$reviewsection}</div>{/if}
         </div>{/if}
     </div>

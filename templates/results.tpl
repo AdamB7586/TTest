@@ -5,24 +5,24 @@
     <h3 class="col-md-12 text-center">{$report.testname} Report</h3>
     <div class="text-center col-md-12">
         {if $results.status == 'pass'}
-            <p>Congratulations {$report.user}, you have passed this test with {$results.correct}%</p>
+            <p>Congratulations{if $report.user} {$report.user}{/if}, you have passed this test with {$results.correct}%</p>
             <p>You answered {$results.correct} out of {$results.numquestions} questions correctly</p>
         {else}
-            <p>Sorry {$report.user}, but you have not passed this time.</p>
+            <p>Sorry{if $report.user} {$report.user}{/if}, but you have not passed this time.</p>
             <p>You answered {$results.correct} out of {$results.numquestions} questions correctly, the pass rate is {$report.passmark} out of {$results.numquestions}{if $testType == 'adi'} with at least 20 correct in all 4 of the DVSA categories{/if}</p>
         {/if}
     </div>
     </div>
 <div class="panel panel-default">
     <table class="table table-striped">
-    <tr>
+    {if $report.user}<tr>
         <td><strong>Candidate:</strong></td>
         <td><strong>Date:</strong></td>
     </tr>
     <tr>
         <td>{$report.user}</td>
         <td>{$report.testdate}</td>
-    </tr>
+    </tr>{/if}
     <tr>
         <td><strong>Test :</strong></td>
         <td><strong>Questions:</strong></td>

@@ -22,6 +22,9 @@ class Review{
     
     protected $useranswers;
     
+    protected $testType = 'CAR';
+
+
     /**
      * Connects to the database sets the current user and gets any user answers
      * @param Database $db This needs to be an instance of the database class
@@ -94,7 +97,7 @@ class Review{
      * @return int Returns The number of tests the user has passed
      */
     public function testsPassed(){
-        return self::$db->count($this->testProgressTable, array('status' => 1, 'user_id' => $this->getUserID()));
+        return self::$db->count($this->testProgressTable, array('status' => 1, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)));
     }
     
     /**
@@ -102,7 +105,7 @@ class Review{
      * @return int Returns The number of tests the user has failed
      */
     public function testsFailed(){
-        return self::$db->count($this->testProgressTable, array('status' => 2, 'user_id' => $this->getUserID()));
+        return self::$db->count($this->testProgressTable, array('status' => 2, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)));
     }
     
     /**
@@ -184,7 +187,7 @@ class Review{
         for($i = 1; $i <= $this->numberOfTests(); $i++){
             if($i == $this->numberOfTests()){$testID = 'random';}else{$testID = $i;}
             unset($_SESSION['test'.$i]);
-            $answers[$testID] = self::$db->select($this->testProgressTable, array('user_id' => $this->getUserID(), 'test_id' => $i, 'status' => array('>=', 1)), array('status', 'totalscore', 'complete'));
+            $answers[$testID] = self::$db->select($this->testProgressTable, array('user_id' => $this->getUserID(), 'test_id' => $i, 'status' => array('>=', 1), 'type' => strtoupper($this->testType)), array('status', 'totalscore', 'complete'));
         }
         return $answers;
     }

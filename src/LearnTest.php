@@ -17,7 +17,6 @@ class LearnTest extends TheoryTest{
     protected $categories = array('dsa' => 'dsacat', 'hc' => 'hcsection', 'l2d' => 'ldclessonno', 'casestudy' => 'casestudyno');
     protected $sortBy = array('dsa' => 'dsaqposition', 'hc' => 'hcqposition', 'l2d' => 'ldcqno', 'casestudy' => 'caseqposition');
 
-
     /**
      * Set up all of the components needed to create a Theory Test
      * @param Database $db This should be an instance of Database
@@ -226,10 +225,10 @@ class LearnTest extends TheoryTest{
     
     /**
      * Finds the next question from the given parameters
-     * @param string $dir
-     * @param int $start
-     * @param string $sort
-     * @return int|false
+     * @param string $dir This should be the direction to search for the next question '>' or '<'
+     * @param int $start The start number to search for the next question
+     * @param string $sort The sort order for the next question ASC or DESC
+     * @return int|false Will return the prim number for the next question
      */
     protected function findNextQuestion($dir, $start, $sort){
         foreach(self::$db->selectAll($this->questionsTable, array($this->testInfo['sort'] => array($dir, $start), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), array($this->testInfo['sort'] => $sort)) as $question){

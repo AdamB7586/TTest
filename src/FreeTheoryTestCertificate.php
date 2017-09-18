@@ -43,7 +43,7 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate{
         
         $this->pdf->AddPage('P', 'A4');
         $this->pdf->SetFont('Arial','B', 8);
-        $this->pdf->BasicTable(
+        $this->pdf->basicTable(
             array('Test Name', 'Unique Test ID', 'Taken on Date/Time'),
             array(array(strip_tags($this->theory->getTestName()), $this->theory->testresults['id'], date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])))),
             array(69,57,64)

@@ -4,7 +4,7 @@ namespace TheoryTest\Car;
 use TheoryTest\Car\Essential\CertificateInterface;
 use DBAL\Database;
 use Smarty;
-use FPDF_Protection;
+use FPDF;
 
 class TheoryTestCertificate implements CertificateInterface{
     protected static $db;
@@ -82,7 +82,7 @@ class TheoryTestCertificate implements CertificateInterface{
         
         $this->pdf->AddPage('P', 'A4');
         $this->pdf->SetFont('Arial','B', 8);
-        $this->pdf->BasicTable(
+        $this->pdf->basicTable(
             array('Name', 'Test Name', 'Unique Test ID', 'Taken on Date/Time'),
             array(array($userInfo['first_name'].' '.$userInfo['last_name'], strip_tags($this->theory->getTestName()), $this->theory->testresults['id'], date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])))),
             array(52,52,39,47)
@@ -130,7 +130,7 @@ class TheoryTestCertificate implements CertificateInterface{
             $totalq = $totalq + $total;
         }
         $widths = array(14,78,19,19,19,20,21);
-        $this->pdf->BasicTable($header, $groupdata, $widths, 6, 2);
+        $this->pdf->basicTable($header, $groupdata, $widths, 6, 2);
         $first = true;
         $grouppercent = round(($totalcorrect / $totalq) * 100);
         
@@ -153,11 +153,37 @@ class TheoryTestCertificate implements CertificateInterface{
             $questioninfo = $this->theory->questionInfo($prim);
             $testdata[] = array($question, $questioninfo['cat'], $questioninfo['topic'], $correct);
         }
-        $this->pdf->BasicTable($testheader, $testdata, array(22,98,30,40), 5, 2);
+        $this->pdf->basicTable($testheader, $testdata, array(22,98,30,40), 5, 2);
     }
     
     public function createPDF(){
         $this->generateCertificate();
         $this->pdf->Output();
+    }
+}
+
+class FPDF_Protection extends FPDF{
+    function basicTable($header, $data, $widths = '', $height = 6, $left = false){
+        $first = true;
+        $this->SetFont('Arial', 'B');
+        foreach($header as $col){
+            if($first == true){$first = false; $currentwidth = intval(current($widths));}else{$currentwidth = intval(next($widths));}
+            $this->Cell($currentwidth,7,$col,1,0,'C');
+        }
+        $this->Ln();
+
+        $this->SetFont('Arial', '');
+        foreach($data as $row){
+            reset($widths);
+            $first = true;
+            $i = 1;
+            foreach($row as $col){
+                if($first == true){$first = false; $currentwidth = intval(current($widths));}else{$currentwidth = intval(next($widths));}
+                if($left != false){if($i == $left){$align = 'L';}else{$align = 'C';}}else{$align = 'C';}
+                $this->Cell($currentwidth,$height,$col,1,0,$align);
+                $i++;
+            }
+            $this->Ln();
+        }
     }
 }

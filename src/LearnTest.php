@@ -164,9 +164,10 @@ class LearnTest extends TheoryTest{
      * @param string $option The option text
      * @param string $letter The letter of the current option
      * @param boolean $image If is a image question should be set to true else if it is multiple choice set to false (default)
+     * @param boolean $new Added for compatibility with parent class
      * @return string Returns the HTML code for a given question option
      */
-    protected function getOptions($prim, $option, $letter, $image = false) {
+    protected function getOptions($prim, $option, $letter, $image = false, $new = false) {
         if($this->answerSelected($prim, $letter)){
             $selected = ($image === false ? ' selected' : ' imgselected');
             if($this->questionStatus() !== 'unattempted'){$selected.= ' selected'.$this->questionStatus();}
@@ -360,9 +361,10 @@ class LearnTest extends TheoryTest{
 
     /**
      * Returns the correct button for the learning test section
+     * @param int $prim Added for compatibility with parent class
      * @return string Returns the button HTML
      */
-    protected function flagHintButton(){
+    protected function flagHintButton($prim = false){
         $settings = $this->checkSettings();
         $class = ($settings['hint'] === 'on' ? ' studyon' : '');
         return '<div class="hint btn btn-theory'.$class.'"><span class="fa fa-book fa-fw"></span><span class="hidden-xs"> Study</span></div>';
@@ -370,9 +372,10 @@ class LearnTest extends TheoryTest{
     
     /**
      * Returns the script for the learning section
+     * @param boolean $review Added for compatibility on parent class
      * @return string Returns the script HTML information
      */
-    protected function getScript(){
+    protected function getScript($review = false){
         return '<script async type="text/javascript" src="'.$this->getJavascriptLocation().'learning-learn.js"></script>';
     }
     

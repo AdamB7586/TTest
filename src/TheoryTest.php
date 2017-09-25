@@ -354,9 +354,10 @@ class TheoryTest implements TTInterface{
     /**
      * Choose the questions for the test
      * @param int $testNo This should be the test number you which to get the questions for
+     * @param boolean Added for compatibility of extended classes
      * @return boolean If the test questions are inserted into the database will return true else returns false
      */
-    protected function chooseQuestions($testNo) {
+    protected function chooseQuestions($testNo, $type = false) {
         $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
         self::$db->delete($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()));
         unset($_SESSION['test'.$this->getTest()]);

@@ -55,7 +55,7 @@ class LearnTest extends TheoryTest{
      * @param int $sectionNo This should be the section number for the test
      * @param string $type This should be the section you wish to create a test for currently 4 sections: dsa, hc, l2d & casestudy
      */
-    protected function chooseQuestions($sectionNo, $type) {
+    protected function chooseQuestions($sectionNo, $type = 'dsa') {
         $this->testInfo['casestudy'] = array('IS', 'NULL');
         $this->testInfo['category'] = $this->categories[strtolower($type)];
         $this->testInfo['sort'] = $this->sortBy[strtolower($type)];

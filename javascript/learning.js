@@ -272,7 +272,7 @@ function questionData(question){
 }
 
 function moveToNext(){
-    if(nextq != false && process == false){
+    if(process == false){
         $.get('/modules/<?php echo($page); ?>?question=' + $(".nextquestion").attr('id'), function(data){
             $("#question").html(data.html);
             $("#qnum").html(data.questionnum);
@@ -287,7 +287,7 @@ function moveToNext(){
 }
 
 function moveToPrevious(){
-    if(prevq != false && process == false){
+    if(process == false){
         $.get('/modules/<?php echo($page); ?>?question=' + $(".prevquestion").attr('id'), function(data){
             $("#question").html(data.html);
             $("#qnum").html(data.questionnum);

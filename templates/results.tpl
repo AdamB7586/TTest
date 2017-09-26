@@ -44,9 +44,9 @@
 <div class="panel panel-default">
     <table class="table">
         <tr>
-            <td class="text-center"><span class="fa fa-check fa-2x fa-fw text-success"></span><strong class="hidden-xs">Correct</strong></td>
+            <td class="text-center col-md-3"><span class="fa fa-check fa-2x fa-fw text-success"></span><strong class="hidden-xs">Correct</strong></td>
             <td class="text-center valign-center">{$results.correct} / {$results.numquestions}</td>
-            <td class="valign-center"><div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.correct}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.correct}%">{$results.percent.correct}%</div></div></td>
+            <td class="valign-center col-md-6"><div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.correct}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.correct}%">{$results.percent.correct}%</div></div></td>
         </tr>
         <tr>
             <td class="text-center"><span class="fa fa-times fa-2x fa-fw text-danger"></span><strong class="hidden-xs">Incorrect</strong></td>

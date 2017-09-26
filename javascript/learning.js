@@ -165,7 +165,7 @@ $(".prevquestion").click(function(){
         }
         else{
             if(correctcheck == true || numchecked != max){
-                moveToPrevious();
+                moveQuestion($(".prevquestion").attr('id'));
             }
             else{
                 checkCorrect(questionid);
@@ -186,7 +186,7 @@ $(".nextquestion").click(function(){
         }
         else{
             if(correctcheck == true || numchecked != max){
-                moveToNext();
+                moveQuestion($(".nextquestion").attr('id'));
             }
             else{
                 checkCorrect(questionid);
@@ -268,35 +268,17 @@ function questionData(question){
     $.get("/modules/<?php echo($page); ?>?question=" + question, function(data){
         $("#question").html(data.html);
         $("#qnum").html(data.questionnum);
-   }, "json");
+        //$('html, body').animate({ scrollTop: 0 }, 0);
+    }, "json");
 }
 
-function moveToNext(){
+function moveQuestion(question){
     if(process == false){
-        $.get('/modules/<?php echo($page); ?>?question=' + $(".nextquestion").attr('id'), function(data){
-            $("#question").html(data.html);
-            $("#qnum").html(data.questionnum);
-            //$('html, body').animate({ scrollTop: 0 }, 0);
-        }, 'json');
+        questionData(question);
     }
     else{
         setTimeout(function(){
-            moveToNext();
-        }, 100);
-    }
-}
-
-function moveToPrevious(){
-    if(process == false){
-        $.get('/modules/<?php echo($page); ?>?question=' + $(".prevquestion").attr('id'), function(data){
-            $("#question").html(data.html);
-            $("#qnum").html(data.questionnum);
-            //$('html, body').animate({ scrollTop: 0 }, 0);
-        }, 'json');
-    }
-    else{
-        setTimeout(function(){
-            moveToPrevious();
+            moveQuestion(question);
         }, 100);
     }
 }

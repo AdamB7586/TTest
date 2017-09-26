@@ -161,7 +161,7 @@ class TheoryTest implements TTInterface{
     /**
      * @var string The current test type used for extended classes and test storage
      */
-    protected static $testType = 'car';
+    protected $testType = 'car';
     
     /**
      * Connects to the database sets the current user and gets any user answers
@@ -215,7 +215,7 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setTestType($type) {
-        self::$testType = strtoupper($type);
+        $this->testType = strtoupper($type);
         return $this;
     }
     
@@ -224,7 +224,7 @@ class TheoryTest implements TTInterface{
      * @return string Will return the current test type
      */
     public function getTestType() {
-        return strtoupper(self::$testType);
+        return strtoupper($this->testType);
     }
     
     /**

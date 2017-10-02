@@ -54,7 +54,7 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate{
         $this->pdf->Ln(8);
         $this->pdf->SetFont('Arial','', 12);
         if($this->theory->testresults['status'] == 'pass'){
-            $this->pdf->Cell(184, 10, "Congratulations ".$userInfo['first_name']); $this->pdf->Ln(4);
+            $this->pdf->Cell(184, 10, "Congratulations"); $this->pdf->Ln(4);
             $this->pdf->Cell(184, 10, "You have passed this test with ".$this->theory->testresults['percent']['correct']."%."); $this->pdf->Ln(4);
             $this->pdf->Cell(184, 10, "You answered ".$this->theory->testresults['correct']." out of ".$this->theory->testresults['numquestions']." questions correctly");
         }

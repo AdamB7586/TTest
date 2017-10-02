@@ -15,11 +15,11 @@ class TheoryTestCertificate implements CertificateInterface{
     protected $questions;
     protected $testType = 'CAR';
 
-    public function __construct(Database $db, Smarty $layout, $user, $testID) {
+    public function __construct(Database $db, Smarty $layout, $user, $testID, $userID = false) {
         self::$db = $db;
         self::$user = $user;
         $this->pdf = new FPDF_Protection();
-        $this->theory = new TheoryTest(self::$db, $layout, self::$user);
+        $this->theory = new TheoryTest(self::$db, $layout, self::$user, $userID);
         $this->theory->setTest($testID);
     }
     

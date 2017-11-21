@@ -434,6 +434,7 @@ class LearnTest extends TheoryTest{
             $this->setAudioLocation('/audio/highway-code');
             $highwaycode.= $this->addAudio($ruleno, 'HC').$rule;
         }
+        $this->setAudioLocation('/audio');
         return $highwaycode;
     }
     

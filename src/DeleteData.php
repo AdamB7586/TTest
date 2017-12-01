@@ -6,8 +6,8 @@ use DBAL\Database;
 
 class DeleteData {
     
-    protected static $db;
-    protected static $user;
+    protected $db;
+    protected $user;
 
     public $learningProgressTable = 'users_progress';
     public $progressTable = 'users_test_progress';
@@ -18,8 +18,8 @@ class DeleteData {
      * @param type $user This should be an instance of the user class
      */
     public function __construct(Database $db, $user) {
-        self::$db = $db;
-        self::$user = $user;
+        $this->db = $db;
+        $this->user = $user;
     }
     
     /**
@@ -28,7 +28,7 @@ class DeleteData {
      * @return boolean If the information is deleted will return true else returns false
      */
     public function deleteData($userID = false) {
-        if($userID === false){$userID = self::$user->getUserID();}
+        if($userID === false){$userID = $this->user->getUserID();}
         if(is_numeric($userID)){
             $this->db->delete($this->learningProgressTable, array('user_id' => $userID));
             $this->db->delete($this->progressTable, array('user_id' => $userID, 'type' => 'car'));

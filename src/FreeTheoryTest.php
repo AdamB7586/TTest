@@ -120,9 +120,10 @@ class FreeTheoryTest extends TheoryTest{
     /**
      * Chooses the test questions an inserts them into the session
      * @param int $testNo The current test number
+     * @param boolean $type Added for compatibility
      * @return boolean Returns true
      */
-    protected function chooseQuestions($testNo){
+    protected function chooseQuestions($testNo, $type = false){
         $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
         $q = 1;
         foreach($questions as $question){

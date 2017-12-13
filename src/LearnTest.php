@@ -38,7 +38,7 @@ class LearnTest extends TheoryTest{
     public function createNewTest($sectionNo = '1', $type = 'dsa'){
         $this->clearSettings();
         if($type == 'casestudy'){$sectionNo = $this->getRealCaseID($sectionNo);}
-        $this->chooseQuestions($sectionNo, $type);
+        $this->chooseStudyQuestions($sectionNo, $type);
         $this->setTest($type.$sectionNo);
         if($type != 'casestudy'){
             $learnName = self::$db->select('theory_'.strtolower($type).'_sections', array('section' => $sectionNo), array('name', 'free'));
@@ -55,7 +55,7 @@ class LearnTest extends TheoryTest{
      * @param int $sectionNo This should be the section number for the test
      * @param string $type This should be the section you wish to create a test for currently 4 sections: dsa, hc, l2d & casestudy
      */
-    protected function chooseQuestions($sectionNo, $type = 'dsa') {
+    protected function chooseStudyQuestions($sectionNo, $type = 'dsa') {
         $this->testInfo['casestudy'] = array('IS', 'NULL');
         $this->testInfo['category'] = $this->categories[strtolower($type)];
         $this->testInfo['sort'] = $this->sortBy[strtolower($type)];

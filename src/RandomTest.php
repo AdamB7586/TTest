@@ -28,10 +28,9 @@ class RandomTest extends TheoryTest{
     /**
      * Chooses the random questions for the test and inserts them into the database
      * @param int $testNo This should be the test number you which to get the questions for
-     * @param boolean $type Added for compatibility
      * @return boolean If the questions are inserted into the database will return true else returns false
      */
-    protected function chooseQuestions($testNo, $type = false) {
+    protected function chooseQuestions($testNo) {
         self::$db->delete($this->progressTable, array('user_id' => self::$user->getUserID(), 'test_id' => $testNo));
         $questions = self::$db->query("SELECT * FROM ((SELECT `prim` FROM `".$this->questionsTable."` WHERE `dsacat` = '1' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 2)
 UNION (SELECT `prim` FROM `".$this->questionsTable."` WHERE `dsacat` = '2' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 3)

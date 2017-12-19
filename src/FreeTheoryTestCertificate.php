@@ -16,7 +16,6 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate{
         $this->theory->getQuestions();
         $this->theory->getTestResults();
         $this->theory->getUserAnswers();
-        $userInfo = self::$user->getUserInfo();
         if(!$this->theory->testresults['status']){redirect('/');}
         
         $this->PDFInfo();

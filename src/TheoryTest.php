@@ -201,7 +201,7 @@ class TheoryTest implements TTInterface{
     public function createNewTest($theorytest = 1) {
         $this->clearSettings();
         $this->setTest($theorytest);
-        self::$user->checkUserAccess($theorytest);
+        if(method_exists(self::$user, 'checkUserAccess')){self::$user->checkUserAccess($theorytest);}
         $this->setTestName();
         if($this->anyExisting() === false) {
             $this->chooseQuestions($theorytest);
@@ -1367,7 +1367,8 @@ class TheoryTest implements TTInterface{
         $report = array();
         $this->getTestResults();
         $report['testname'] = ucwords($this->getTestName());
-        $report['user'] = self::$user->getFirstname().' '.self::$user->getLastname();
+        if(method_exists(self::$user, 'getFirstname') && method_exists(self::$user, 'getLastname')){$report['user'] = self::$user->getFirstname().' '.self::$user->getLastname();}
+        elseif(method_exists(self::$user, 'getUsername')){$report['user'] = self::$user->getUsername();}
         $report['status'] = $this->testStatus();
         $report['time'] = $this->getTime();
         $report['passmark'] = $this->getPassmark();

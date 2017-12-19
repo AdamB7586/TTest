@@ -43,7 +43,7 @@ class LearnTest extends TheoryTest{
         if($type != 'casestudy'){
             $learnName = self::$db->select('theory_'.strtolower($type).'_sections', array('section' => $sectionNo), array('name', 'free'));
             $name = $sectionNo.'. '.$learnName['name'];
-            if($learnName['free'] == 0){self::$user->checkUserAccess();}
+            if($learnName['free'] == 0 && method_exists(self::$user, 'checkUserAccess')){self::$user->checkUserAccess();}
         }
         else{$name = 'Case Study '.$sectionNo;}
         $this->setTestName($name);

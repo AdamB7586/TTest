@@ -11,7 +11,7 @@ class Review{
     protected static $user;
     protected $userClone;
     
-    public $where = array('carquestion' => 'Y', 'alertcasestudy' => array('IS', 'NULL'));
+    public $where = array('carquestion' => 'Y', 'alertcasestudy' => 'IS NULL');
     
     public $noOfTests = 15;
     

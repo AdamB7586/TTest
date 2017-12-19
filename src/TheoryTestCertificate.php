@@ -3,7 +3,6 @@ namespace TheoryTest\Car;
 
 use TheoryTest\Car\Essential\CertificateInterface;
 use DBAL\Database;
-use Smarty;
 use FPDF;
 
 class TheoryTestCertificate implements CertificateInterface{
@@ -17,12 +16,11 @@ class TheoryTestCertificate implements CertificateInterface{
     
     public $certUsername;
 
-    public function __construct(Database $db, Smarty $layout, $user, $testID, $userID = false) {
+    public function __construct(Database $db, $user, $theoryTest) {
         self::$db = $db;
         self::$user = $user;
         $this->pdf = new FPDF_Protection();
-        $this->theory = new TheoryTest(self::$db, $layout, self::$user, $userID);
-        $this->theory->setTest($testID);
+        $this->theory = $theoryTest;
         if(method_exists(self::$user, 'getFirstname') && method_exists(self::$user, 'getLastname')){$this->certUsername = self::$user->getFirstname().' '.self::$user->getLastname();}
         elseif(method_exists(self::$user, 'getUsername')){$this->certUsername = self::$user->getUsername();}
     }
@@ -53,7 +51,6 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->theory->getQuestions();
         $this->theory->getTestResults();
         $this->theory->getUserAnswers();
-        $userInfo = self::$user->getUserInfo();
         if(!$this->theory->testresults['status']){redirect('/');}
         
         $this->PDFInfo();

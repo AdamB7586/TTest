@@ -3,7 +3,7 @@ namespace TheoryTest\Tests;
 
 use DBAL\Database;
 use Smarty;
-use UserAuth\User;
+use TheoryTest\Car\User;
 use TheoryTest\Car\TheoryTest;
 use PHPUnit\Framework\TestCase;
 

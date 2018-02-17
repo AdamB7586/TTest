@@ -14,7 +14,7 @@ class FreeTheoryTestTest extends TestCase{
     protected static $template;
     protected static $freeTest;
     
-    public function setUp() {
+    public static function setUpBeforeClass() {
         self::$db = new Database($GLOBALS['DB_HOST'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'], $GLOBALS['DB_DBNAME']);
         if(!self::$db->isConnected()){
              $this->markTestSkipped(
@@ -23,14 +23,10 @@ class FreeTheoryTestTest extends TestCase{
         }
         self::$template = new Smarty();
         self::$user = new User(self::$db);
+        session_start();
+        $_SESSION['current_test'] = 1;
+        $_SESSION['test'.$_SESSION['current_test']] = false;
         self::$freeTest = new FreeTheoryTest(self::$db, self::$template, self::$user);
-    }
-    
-    public function tearDown() {
-        unset(self::$db);
-        unset(self::$template);
-        unset(self::$user);
-        unset(self::$freeTest);
     }
     
     public function testConnection() {

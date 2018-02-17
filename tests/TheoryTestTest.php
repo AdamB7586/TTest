@@ -14,7 +14,7 @@ class TheoryTestTest extends TestCase{
     protected static $template;
     protected static $theoryTest;
     
-    public function setUp() {
+    public static function setUpBeforeClass() {
         self::$db = new Database($GLOBALS['DB_HOST'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'], $GLOBALS['DB_DBNAME']);
         if(!self::$db->isConnected()){
              $this->markTestSkipped(
@@ -24,13 +24,6 @@ class TheoryTestTest extends TestCase{
         self::$template = new Smarty();
         self::$user = new User(self::$db);
         self::$theoryTest = new TheoryTest(self::$db, self::$template, self::$user);
-    }
-    
-    public function tearDown() {
-        unset(self::$db);
-        unset(self::$template);
-        unset(self::$user);
-        unset(self::$theoryTest);
     }
     
     public function testConnection() {

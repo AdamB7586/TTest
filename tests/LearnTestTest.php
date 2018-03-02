@@ -21,11 +21,17 @@ class LearnTestTest extends TestCase{
                 'No local database connection is available'
             );
         }
-        self::$db->query(dirname(dirname(__FILE__)).'/database/database_mysql.sql');
-        self::$db->query(dirname(dirname(__FILE__)).'/vendor/adamb/user/database/database_mysql.sql');
-        self::$db->query(dirname(__FILE__).'/sample_data/data.sql');
+        if(self::$db->count('users') < 1){
+            self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/user/database/database_mysql.sql'));
+            self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/hcldc/database/mysql_database.sql'));
+            self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/hcldc/tests/sample_data/mysql_data.sql'));
+            self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/database/database_mysql.sql'));
+            self::$db->query(file_get_contents(dirname(__FILE__).'/sample_data/data.sql'));
+        }
         self::$template = new Smarty();
+        self::$template->setCacheDir('/cache/')->setCompileDir('/cache/');
         self::$user = new User(self::$db);
+        self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
         self::$learnTest = new LearnTest(self::$db, self::$template, self::$user);
     }
     

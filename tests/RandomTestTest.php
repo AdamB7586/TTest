@@ -12,7 +12,7 @@ class RandomTestTest extends TestCase{
     protected static $db;
     protected static $user;
     protected static $template;
-    protected static $randomTest;
+    protected static $theoryTest;
     
     public static function setUpBeforeClass() {
         self::$db = new Database($GLOBALS['DB_HOST'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'], $GLOBALS['DB_DBNAME']);

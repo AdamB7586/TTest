@@ -215,7 +215,9 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setTestType($type) {
-        $this->testType = strtoupper($type);
+        if(is_string($type)){
+            $this->testType = strtoupper($type);
+        }
         return $this;
     }
     
@@ -233,7 +235,7 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setPassmark($mark) {
-        if(is_int($mark)) {
+        if(is_numeric($mark) && $mark >= 1) {
             $this->passmark = intval($mark);
         }
         return $this;
@@ -273,7 +275,9 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setAudioLocation($location) {
-        $this->audioLocation = $location;
+        if(is_string($location)){
+            $this->audioLocation = $location;
+        }
         return $this;
     }
     
@@ -291,7 +295,9 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setJavascriptLocation($location) {
-        $this->javascriptLocation = $location;
+        if(is_string($location)){
+            $this->javascriptLocation = $location;
+        }
         return $this;
     }
     
@@ -360,10 +366,13 @@ class TheoryTest implements TTInterface{
         $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
         self::$db->delete($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()));
         unset($_SESSION['test'.$this->getTest()]);
-        foreach($questions as $i => $question) {
-            $this->questions[($i + 1)] = $question['prim'];
+        if(is_array($questions)){
+            foreach($questions as $i => $question) {
+                $this->questions[($i + 1)] = $question['prim'];
+            }
+            return self::$db->insert($this->progressTable, array('user_id' => $this->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => $this->getTestType()));
         }
-        return self::$db->insert($this->progressTable, array('user_id' => $this->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => $this->getTestType()));
+        return false;
     }
     
     /**

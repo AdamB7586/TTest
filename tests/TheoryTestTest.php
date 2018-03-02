@@ -12,7 +12,7 @@ class TheoryTestTest extends TestCase{
     protected static $db;
     protected static $user;
     protected static $template;
-    protected static $theoryTest;
+    protected $theoryTest;
     
     /**
      * 
@@ -35,10 +35,16 @@ class TheoryTestTest extends TestCase{
         self::$template->setCacheDir(dirname(__FILE__).'/cache/')->setCompileDir(dirname(__FILE__).'/cache/');
         self::$user = new User(self::$db);
         self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
-        self::$theoryTest = new TheoryTest(self::$db, self::$template, self::$user);
+        
+    }
+    
+    public function setUp() {
+        $this->theoryTest = new TheoryTest(self::$db, self::$template, self::$user);
     }
     
     /**
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
      * @covers TheoryTest\Car\TheoryTest::createNewTest
      * @covers TheoryTest\Car\TheoryTest::clearSettings
      * @covers TheoryTest\Car\TheoryTest::setTest
@@ -65,7 +71,7 @@ class TheoryTestTest extends TestCase{
      * @covers TheoryTest\Car\User::getUserSettings
      */
     public function testCreateNewTest() {
-        $newTest = self::$theoryTest->createNewTest();
+        $newTest = $this->theoryTest->createNewTest();
         $this->assertStringStartsWith('<div class="row">', $newTest);
         $this->assertNotContains('<span id="qnum">1</span> of <span id="totalq">0</span>', $newTest);
     }

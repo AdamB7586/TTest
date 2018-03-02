@@ -4,6 +4,9 @@ namespace TheoryTest\Car;
 use DBAL\Database;
 use Smarty;
 
+/**
+ * @codeCoverageIgnore
+ */
 class FreeTheoryTestCertificate extends TheoryTestCertificate{
     protected $testType = 'FREE';
 

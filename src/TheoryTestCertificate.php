@@ -5,6 +5,9 @@ use TheoryTest\Car\Essential\CertificateInterface;
 use DBAL\Database;
 use FPDF;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TheoryTestCertificate implements CertificateInterface{
     protected static $db;
     protected static $user;

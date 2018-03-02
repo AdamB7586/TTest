@@ -29,7 +29,7 @@ class LearnTestTest extends TestCase{
             self::$db->query(file_get_contents(dirname(__FILE__).'/sample_data/data.sql'));
         }
         self::$template = new Smarty();
-        self::$template->setCacheDir('/cache/')->setCompileDir('/cache/');
+        self::$template->setCacheDir(dirname(__FILE__).'/cache/')->setCompileDir(dirname(__FILE__).'/cache/');
         self::$user = new User(self::$db);
         self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
         self::$learnTest = new LearnTest(self::$db, self::$template, self::$user);

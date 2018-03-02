@@ -958,6 +958,7 @@ class TheoryTest implements TTInterface{
         self::$layout->assign('no_questions', $this->numQuestions(), true);
         self::$layout->assign('question_data', $this->questiondata, true);
         self::$layout->assign('js_script_location', $this->getJavascriptLocation());
+        self::$layout->assign('report', false);
         return self::$layout->fetch($this->section.'test.tpl');
     }
     
@@ -1011,7 +1012,7 @@ class TheoryTest implements TTInterface{
             return json_encode(array('html' => utf8_encode($this->questiondata), 'questionnum' => $this->questionNo($prim)));
         }
         else{
-            $this->questiondata = '<div id="question-content"><p>There are currently no questions for this learning section.</p><p>Please choose an alternative learning section from the main menu.</p></div>';
+            $this->questiondata = '<div id="question-content"></div>';
             return json_encode(array('html' => $this->questiondata, 'questionnum' => 0));
         }
     }

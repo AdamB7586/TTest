@@ -166,6 +166,9 @@ class TheoryTestCertificate implements CertificateInterface{
     }
 }
 
+/**
+ * @codeCoverageIgnore
+ */
 class FPDF_Protection extends FPDF{
     function basicTable($header, $data, $widths = '', $height = 6, $left = false){
         $first = true;

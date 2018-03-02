@@ -75,4 +75,29 @@ class TheoryTestTest extends TestCase{
         $this->assertStringStartsWith('<div class="row">', $newTest);
         $this->assertNotContains('<span id="qnum">1</span> of <span id="totalq">0</span>', $newTest);
     }
+    
+    /**
+     * @covers TheoryTest\Car\TheoryTest::setPassmark
+     * @covers TheoryTest\Car\TheoryTest::getPassmark
+     */
+    public function testSetPassmark(){
+        $this->assertEquals(43, $this->theoryTest->getPassmark());
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setPassmark('hello'));
+        $this->assertEquals(43, $this->theoryTest->getPassmark());
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setPassmark(45));
+        $this->assertEquals(45, $this->theoryTest->getPassmark());
+    }
+    
+
+    /**
+     * @covers TheoryTest\Car\TheoryTest::setTestType
+     * @covers TheoryTest\Car\TheoryTest::getTestType
+     */
+    public function testSetTestType(){
+        $this->assertEquals('CAR', $this->theoryTest->getTestType());
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType(45));
+        $this->assertEquals('CAR', $this->theoryTest->getTestType());
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType('bike'));
+        $this->assertEquals('BIKE', $this->theoryTest->getTestType());
+    }
 }

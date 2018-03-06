@@ -3,7 +3,7 @@ namespace TheoryTest\Car;
 
 use DBAL\Database;
 use Smarty;
-use HighwayCode;
+use DVSA\HighwayCode;
 
 class LearnTest extends TheoryTest{
     protected $section = 'learn';

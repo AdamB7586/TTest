@@ -1,19 +1,19 @@
 <?php
 namespace TheoryTest\Tests;
 
-use TheoryTest\Car\RandomTest;
+Use TheoryTest\Car\Review;
 
-class RandomTestTest extends SetUp {
+class ReviewTest extends SetUp {
     
-    protected static $theoryTest;
+    protected static $review;
     
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
-        self::$theoryTest = new RandomTest(self::$db, self::$template, self::$user);
+        self::$review = new Review(self::$db, self::$template, self::$user);
     }
     
-    public function testConnection() {
+    public function testExample() {
         $this->markTestIncomplete();
     }
 }

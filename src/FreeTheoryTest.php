@@ -189,6 +189,7 @@ class FreeTheoryTest extends TheoryTest{
      */
     protected function startTest(){        
         $text = '<p>Please click the start test button below when you are ready to start. Please make sure you do not navigate away from the page as you will not be able to pick up from where you left the test.</p>';
+        self::$layout->assign('continue_test', '');
         self::$layout->assign('existing_text', $text);
         self::$layout->assign('start_new_test', '<div class="newtest btn btn-theory"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Start Test</span></div>');
         self::$layout->assign('script', $this->existingScript());
@@ -226,6 +227,7 @@ class FreeTheoryTest extends TheoryTest{
         self::$layout->assign('no_questions', $this->numQuestions(), true);
         self::$layout->assign('question_data', $this->questiondata, true);
         self::$layout->assign('js_script_location', $this->getJavascriptLocation());
+        self::$layout->assign('report', false);
         return self::$layout->fetch($this->section.'test.tpl');
     }
     

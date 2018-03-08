@@ -96,7 +96,7 @@ class LearnTest extends TheoryTest{
      * @return void Nothing is returned
      */
     protected function getTestInfo(){
-        if(!isset($this->testInfo)){
+        if(!isset($this->testInfo) && isset($_COOKIE['testinfo'])){
             $this->testInfo = unserialize($_COOKIE['testinfo']);
         }
     }

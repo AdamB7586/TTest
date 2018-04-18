@@ -63,7 +63,7 @@ class LearnTest extends TheoryTest{
             $this->testInfo['casestudy'] = '1';
         }
         $this->testInfo['section'] = $sectionNo;
-        setcookie('testinfo', serialize($this->testInfo), time() + 31536000, '/');
+        setcookie('testinfo', serialize($this->testInfo), time() + 31536000, '/', '', (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false), true);
     }
     
     /**

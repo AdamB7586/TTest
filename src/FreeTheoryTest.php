@@ -212,7 +212,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return void Nothing is returned
      */
     public function startNewTest(){
-        setcookie('started', 1, time() + 3600, '/');
+        setcookie('started', 1, time() + 3600, '/', '', (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false), true);
     }
     
     /**

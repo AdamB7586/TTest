@@ -6,6 +6,7 @@
          beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
+         convertNoticesToExceptions="false"
          verbose="true"
          stderr="true">
     <testsuite>

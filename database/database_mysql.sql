@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `theory_case_studies` (
   PRIMARY KEY (`casestudyno`),
   UNIQUE KEY `casestudyno` (`casestudyno`),
   KEY `dsacat` (`dsacat`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `theory_dsa_sections` (
   `section` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `theory_dsa_sections` (
   `free` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`section`),
   UNIQUE KEY `dsacat` (`section`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `theory_hc_sections` (
   `section` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -24,14 +24,14 @@ CREATE TABLE IF NOT EXISTS `theory_hc_sections` (
   `free` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`section`),
   UNIQUE KEY `hcsection` (`section`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `theory_l2d_sections` (
   `section` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `free` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`section`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `theory_questions_2016` (
   `prim` smallint(6) UNSIGNED NOT NULL DEFAULT '0',

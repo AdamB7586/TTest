@@ -23,10 +23,17 @@ class DeleteData {
         $this->db = $db;
         $this->config = $config;
         $this->user = $user;
+        $this->setTables();
+    }
+    
+    /**
+     * Sets the tables
+     */
+    protected function setTables(){
         $this->learningProgressTable = $this->config->table_users_progress;
         $this->progressTable = $this->config->table_users_test_progress;
     }
-    
+
     /**
      * Deletes all of the theory test data for a given user, if the user is not assigned will delete data for the current user
      * @param int|false $userID This should be the users ID if not deleting data for the current user else set to false

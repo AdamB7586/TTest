@@ -8,6 +8,7 @@ use Smarty;
 
 class Review{
     protected $db;
+    protected $config;
     protected $layout;
     protected $user;
     protected $userClone;

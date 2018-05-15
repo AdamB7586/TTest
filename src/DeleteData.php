@@ -3,23 +3,28 @@
 namespace TheoryTest\Car;
 
 use DBAL\Database;
+use Configuration\Config;
 
 class DeleteData {
     
     protected $db;
+    protected $config;
     protected $user;
 
-    public $learningProgressTable = 'users_progress';
-    public $progressTable = 'users_test_progress';
+    public $learningProgressTable;
+    public $progressTable;
     
     /**
      * Connects to the database and passes the user class
      * @param Database $db This should e an instance of the Database class
      * @param type $user This should be an instance of the user class
      */
-    public function __construct(Database $db, $user) {
+    public function __construct(Database $db, Config $config, $user) {
         $this->db = $db;
+        $this->config = $config;
         $this->user = $user;
+        $this->learningProgressTable = $this->config->table_users_progress;
+        $this->progressTable = $this->config->table_users_test_progress;
     }
     
     /**

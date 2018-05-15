@@ -2,15 +2,13 @@
 namespace TheoryTest\Car;
 
 use TheoryTest\Car\Essential\CertificateInterface;
-use DBAL\Database;
 use FPDF;
 
 /**
  * @codeCoverageIgnore
  */
 class TheoryTestCertificate implements CertificateInterface{
-    protected static $db;
-    protected static $user;
+    protected $user;
     protected $pdf;
     protected $theory;
     
@@ -19,13 +17,12 @@ class TheoryTestCertificate implements CertificateInterface{
     
     public $certUsername;
 
-    public function __construct(Database $db, $user, $theoryTest) {
-        self::$db = $db;
-        self::$user = $user;
-        $this->pdf = new FPDF_Protection();
+    public function __construct($user, $theoryTest) {
+        $this->user = $user;
         $this->theory = $theoryTest;
-        if(method_exists(self::$user, 'getFirstname') && method_exists(self::$user, 'getLastname')){$this->certUsername = self::$user->getFirstname().' '.self::$user->getLastname();}
-        elseif(method_exists(self::$user, 'getUsername')){$this->certUsername = self::$user->getUsername();}
+        $this->pdf = new FPDF_Protection();
+        if(method_exists($this->user, 'getFirstname') && method_exists($this->user, 'getLastname')){$this->certUsername = $this->user->getFirstname().' '.$this->user->getLastname();}
+        elseif(method_exists($this->user, 'getUsername')){$this->certUsername = $this->user->getUsername();}
     }
     
     public function PDFInfo(){
@@ -123,7 +120,7 @@ class TheoryTestCertificate implements CertificateInterface{
     protected function overallResults(){
         $header = array('Group', 'Topics in group', 'Correct', 'Incorrect', 'Total', 'Percentage', 'Status');
         $groupdata = array();
-        foreach(self::$db->selectAll($this->theory->dsaCategoriesTable) as $data){
+        foreach($this->theory->getCategories() as $data){
             $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
             $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
             $total = $correct + $incorrect;

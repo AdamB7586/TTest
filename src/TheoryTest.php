@@ -2,6 +2,7 @@
 namespace TheoryTest\Car;
 
 use TheoryTest\Car\Essential\TTInterface;
+use Configuration\Config;
 use Smarty;
 use DBAL\Database;
 
@@ -16,17 +17,22 @@ class TheoryTest implements TTInterface{
     /**
      * @var object Should be an instance of the Database object
      */
-    protected static $db;
+    protected $db;
+    
+    /**
+     * @var object Should be an instance of config class
+     */
+    protected $config;
     
     /**
      * @var object Should be an instance of the Smarty Template object
      */
-    protected static $layout;
+    protected $layout;
     
     /**
      * @var object Should be an instance of the User object
      */
-    protected static $user;
+    protected $user;
     
     /**
      * @var int|false If you want to emulate a user to see their test details set this to their User ID else set to false 
@@ -49,29 +55,29 @@ class TheoryTest implements TTInterface{
     public $passmark = 43;
     
     /**
-     * @var string The name of the user progress for the learning section database table
+     * @var string The name of the user tests database table
      */
-    public $learningProgressTable = 'users_progress';
-    
-    /**
-     * @var string The name of the questions database table
-     */
-    public $questionsTable = 'theory_questions_2016';
+    public $questionsTable;
     
     /**
      * @var string The name of the user tests database table
      */
-    public $progressTable = 'users_test_progress';
+    public $learningProgressTable;
+    
+    /**
+     * @var string The name of the user tests database table
+     */
+    public $progressTable;
     
     /**
      * @var string The name of the case studies database table
      */
-    public $caseTable = 'theory_case_studies';
+    public $caseTable;
     
     /**
      * @var string The name of the DVSA sections database table
      */
-    public $dsaCategoriesTable = 'theory_dsa_sections';
+    public $dvsaCatTable;
     
     /**
      * @var string The location where any audio can be found relative to where the Theory Test is located
@@ -171,19 +177,32 @@ class TheoryTest implements TTInterface{
      * @param int|false $userID If you want to emulate a user set the user ID here
      * @param string|false $templateDir If you want to change the template location set this location here else set to false
      */
-    public function __construct(Database $db, Smarty $layout, $user, $userID = false, $templateDir = false) {
-        self::$db = $db;
-        self::$user = $user;
-        self::$layout = $layout;
-        self::$layout->addTemplateDir($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir);
+    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false) {
+        $this->db = $db;
+        $this->config = $config;
+        $this->user = $user;
+        $this->layout = $layout;
+        $this->layout->addTemplateDir($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir);
         if(is_numeric($userID)){$this->userClone = $userID;}
         if(!session_id()){
             if(defined(SESSION_NAME)){session_name(SESSION_NAME);}
             session_set_cookie_params(0, '/', '.'.DOMAIN, (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false),  (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false));
             session_start();
         }
+        $this->setTables();
         $this->getUserAnswers();
         $this->setImagePath();
+    }
+    
+    /**
+     * Sets the tables
+     */
+    protected function setTables() {
+        $this->questionsTable = $this->config->table_theory_questions;
+        $this->learningProgressTable = $this->config->table_users_progress;
+        $this->progressTable = $this->config->table_users_test_progress;
+        $this->caseTable = $this->config->table_theory_case_studies;
+        $this->dvsaCatTable = $this->config->table_theory_dvsa_sections;
     }
     
     /**
@@ -194,7 +213,7 @@ class TheoryTest implements TTInterface{
         if(is_numeric($this->userClone)){
             return $this->userClone;
         }
-        return self::$user->getUserID();
+        return $this->user->getUserID();
     }
     
     /**
@@ -205,7 +224,7 @@ class TheoryTest implements TTInterface{
     public function createNewTest($theorytest = 1) {
         $this->clearSettings();
         $this->setTest($theorytest);
-        if(method_exists(self::$user, 'checkUserAccess')){self::$user->checkUserAccess($theorytest);}
+        if(method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess($theorytest);}
         $this->setTestName();
         if($this->anyExisting() === false) {
             $this->chooseQuestions($theorytest);
@@ -358,7 +377,7 @@ class TheoryTest implements TTInterface{
             $this->setTestName($this->testName);
             return $this->buildReport(false);
         }
-        return self::$layout->fetch('report'.DIRECTORY_SEPARATOR.'report-unavail.tpl');
+        return $this->layout->fetch('report'.DIRECTORY_SEPARATOR.'report-unavail.tpl');
     }
 
     /**
@@ -367,14 +386,14 @@ class TheoryTest implements TTInterface{
      * @return boolean If the test questions are inserted into the database will return true else returns false
      */
     protected function chooseQuestions($testNo) {
-        $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
-        self::$db->delete($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()));
+        $questions = $this->db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
+        $this->db->delete($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()));
         unset($_SESSION['test'.$this->getTest()]);
         if(is_array($questions)){
             foreach($questions as $i => $question) {
                 $this->questions[($i + 1)] = $question['prim'];
             }
-            return self::$db->insert($this->progressTable, array('user_id' => $this->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => $this->getTestType()));
+            return $this->db->insert($this->progressTable, array('user_id' => $this->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => $this->getTestType()));
         }
         return false;
     }
@@ -384,7 +403,7 @@ class TheoryTest implements TTInterface{
      * @return string|false
      */
     protected function anyExisting() {
-        $existing = self::$db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'status' => array('<=', 1)));
+        $existing = $this->db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'status' => array('<=', 1)));
         if(!empty($existing)) {
             $this->exists = true;
             if($existing['status'] == 1) {return 'passed';}
@@ -415,11 +434,11 @@ class TheoryTest implements TTInterface{
             $continue = '<div class="continue btn btn-theory" id="'.$this->questionPrim($this->currentQuestion()).'"><span class="fa fa-long-arrow-right fa-fw"></span><span class="hidden-xs"> Continue Test</span></div>';
         }
         
-        self::$layout->assign('existing_text', $text);
-        self::$layout->assign('start_new_test', '<div class="newtest btn btn-theory"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Start New Test</span></div>');
-        self::$layout->assign('continue_test', $continue);
-        self::$layout->assign('script', $this->existingScript());
-        $this->questiondata = self::$layout->fetch('existing.tpl');
+        $this->layout->assign('existing_text', $text);
+        $this->layout->assign('start_new_test', '<div class="newtest btn btn-theory"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Start New Test</span></div>');
+        $this->layout->assign('continue_test', $continue);
+        $this->layout->assign('script', $this->existingScript());
+        $this->questiondata = $this->layout->fetch('existing.tpl');
     }
         
     /**
@@ -428,7 +447,7 @@ class TheoryTest implements TTInterface{
      */
     public function getQuestions() {
         if(!isset($this->questions)) {
-            $questions = self::$db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('questions'), array('started' => 'DESC'));
+            $questions = $this->db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('questions'), array('started' => 'DESC'));
             if(!empty($questions)) {
                 $this->questions = unserialize($questions['questions']);
                 return $this->questions;
@@ -443,7 +462,7 @@ class TheoryTest implements TTInterface{
      */
     public function getUserAnswers() {
         if(!isset($this->useranswers)) {
-            $answers = self::$db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
+            $answers = $this->db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('id', 'answers', 'question_no'), array('started' => 'DESC'));
             if(!empty($answers)) {
                 $this->useranswers = unserialize($answers['answers']);
                 if(!is_array($this->getUserTestInfo())) {$_SESSION['test'.$this->getTest()] = $this->useranswers;}
@@ -579,7 +598,7 @@ class TheoryTest implements TTInterface{
         if($status == 'on') {$this->audioEnabled = true;}else{$this->audioEnabled = false;}
         $settings = $this->checkSettings();
         $settings['audio'] = $status;
-        return self::$user->setUserSettings($settings);
+        return $this->user->setUserSettings($settings);
     }
     
     /**
@@ -610,7 +629,7 @@ class TheoryTest implements TTInterface{
     public function hintEnable() {
         $settings = $this->checkSettings();
         $settings['hint'] = ($settings['hint'] === 'on' ? 'off' : 'on');
-        return self::$user->setUserSettings($settings);
+        return $this->user->setUserSettings($settings);
     }
     
     /**
@@ -693,7 +712,7 @@ class TheoryTest implements TTInterface{
      * @return array Returns the current test settings
      */
     protected function checkSettings($new = false) {
-        $settings = self::$user->getUserSettings();
+        $settings = $this->user->getUserSettings();
         if($new !== true) {
             if($settings['review'] == 'all') {$this->review = 'all';}
             elseif($settings['review'] == 'flagged') {$this->review = 'flagged';}
@@ -713,7 +732,7 @@ class TheoryTest implements TTInterface{
     public function reviewOnly($type = 'all') {
         $settings = $this->checkSettings();
         $settings['review'] = $type;
-        return self::$user->setUserSettings($settings);
+        return $this->user->setUserSettings($settings);
     }
     
     /**
@@ -797,7 +816,7 @@ class TheoryTest implements TTInterface{
      * @return boolean
      */
     protected function updateAnswers() {
-        return self::$db->update($this->progressTable, array('answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()), array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
+        return $this->db->update($this->progressTable, array('answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()), array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
     }
     
     /**
@@ -882,7 +901,7 @@ class TheoryTest implements TTInterface{
      * @return string|false Returns string if correct and not selected, selected and correct, or selected and incorrect else returns false
      */
     protected function answerSelectedCorrect($prim, $letter) {
-        $isCorrect = self::$db->select($this->questionsTable, array('prim' => $prim, 'answerletters' => array('LIKE', '%'.strtoupper($letter).'%')), array('answerletters'));
+        $isCorrect = $this->db->select($this->questionsTable, array('prim' => $prim, 'answerletters' => array('LIKE', '%'.strtoupper($letter).'%')), array('answerletters'));
         
         if($this->answerSelected($prim, $letter) && !empty($isCorrect)) {return 'CORRECT';}
         elseif($this->answerSelected($prim, $letter) && $isCorrect === false) {return 'INCORRECT';}
@@ -916,7 +935,7 @@ class TheoryTest implements TTInterface{
      * @return array|boolean Returns question data as array if data exists else returns false
      */
     protected function getQuestionData($prim) {
-        return self::$db->select($this->questionsTable, array('prim' => $prim), array('prim', 'question', 'mark', 'option1', 'option2', 'option3', 'option4', 'option5', 'option6', 'answerletters', 'dsaimageid', 'format', 'dsaexplanation', 'casestudyno'));
+        return $this->db->select($this->questionsTable, array('prim' => $prim), array('prim', 'question', 'mark', 'option1', 'option2', 'option3', 'option4', 'option5', 'option6', 'answerletters', 'dsaimageid', 'format', 'dsaexplanation', 'casestudyno'));
     }
     
     /**
@@ -947,16 +966,16 @@ class TheoryTest implements TTInterface{
      */
     public function reviewSection() {
         $this->updateAnswers();
-        self::$layout->assign('test_questions', $this->numQuestions(), true);
-        self::$layout->assign('complete_questions', $this->numComplete(), true);
-        self::$layout->assign('incomplete_questions', $this->numIncomplete(), true);
-        self::$layout->assign('flagged_questions', $this->numFlagged(), true);
-        self::$layout->assign('review_all', '<div class="reviewall btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Review All</span></div>', true);
-        self::$layout->assign('review_incomplete', '<div class="reviewincomplete btn btn-theory" id="'.$this->getIncompleteQuestion().'"><span class="fa fa-tasks fa-fw"></span><span class="hidden-xs"> Review Incomplete</span></div>', true);
-        self::$layout->assign('review_flagged', '<div class="reviewflagged btn btn-theory" id="'.$this->getFlaggedQuestion().'"><span class="fa fa-flag fa-fw"></span><span class="hidden-xs"> Review Flagged</span></div>', true);
-        self::$layout->assign('end_test', '<div class="endtest btn btn-theory"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> End Test</span></div>', true);
-        self::$layout->assign('script', $this->getScript(false), true);
-        self::$layout->display('review.tpl');
+        $this->layout->assign('test_questions', $this->numQuestions(), true);
+        $this->layout->assign('complete_questions', $this->numComplete(), true);
+        $this->layout->assign('incomplete_questions', $this->numIncomplete(), true);
+        $this->layout->assign('flagged_questions', $this->numFlagged(), true);
+        $this->layout->assign('review_all', '<div class="reviewall btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Review All</span></div>', true);
+        $this->layout->assign('review_incomplete', '<div class="reviewincomplete btn btn-theory" id="'.$this->getIncompleteQuestion().'"><span class="fa fa-tasks fa-fw"></span><span class="hidden-xs"> Review Incomplete</span></div>', true);
+        $this->layout->assign('review_flagged', '<div class="reviewflagged btn btn-theory" id="'.$this->getFlaggedQuestion().'"><span class="fa fa-flag fa-fw"></span><span class="hidden-xs"> Review Flagged</span></div>', true);
+        $this->layout->assign('end_test', '<div class="endtest btn btn-theory"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> End Test</span></div>', true);
+        $this->layout->assign('script', $this->getScript(false), true);
+        $this->layout->display('review.tpl');
     }
     
     /**
@@ -966,13 +985,13 @@ class TheoryTest implements TTInterface{
     public function buildTest() {
         if($this->exists) {$this->existingLayout();}
         else{$this->createQuestionHTML($this->getFirstQuestion(), true);}
-        self::$layout->assign('test_name', $this->getTestName(), true);
-        self::$layout->assign('question_no', '1', true);
-        self::$layout->assign('no_questions', $this->numQuestions(), true);
-        self::$layout->assign('question_data', $this->questiondata, true);
-        self::$layout->assign('js_script_location', $this->getJavascriptLocation());
-        self::$layout->assign('report', false);
-        return self::$layout->fetch($this->section.'test.tpl');
+        $this->layout->assign('test_name', $this->getTestName(), true);
+        $this->layout->assign('question_no', '1', true);
+        $this->layout->assign('no_questions', $this->numQuestions(), true);
+        $this->layout->assign('question_data', $this->questiondata, true);
+        $this->layout->assign('js_script_location', $this->getJavascriptLocation());
+        $this->layout->assign('report', false);
+        return $this->layout->fetch($this->section.'test.tpl');
     }
     
     /**
@@ -982,10 +1001,10 @@ class TheoryTest implements TTInterface{
      */
     public function buildReport($mark = true) {
         $this->endTest($this->getTime(), $mark);
-        self::$layout->assign('test_name', $this->getTestName(), true);
-        self::$layout->assign('question_data', $this->questiondata, true);
-        self::$layout->assign('report', true);
-        return self::$layout->fetch($this->section.'test.tpl');
+        $this->layout->assign('test_name', $this->getTestName(), true);
+        $this->layout->assign('question_data', $this->questiondata, true);
+        $this->layout->assign('report', true);
+        return $this->layout->fetch($this->section.'test.tpl');
     }
     
     /**
@@ -1001,27 +1020,27 @@ class TheoryTest implements TTInterface{
         if(!empty($question)) {
             if(is_numeric($question['casestudyno'])) {$this->setCaseStudy($question['casestudyno']);}
             $image = (($question['format'] == '0' || $question['format'] == '2') ? false : true);
-            self::$layout->assign('mark', $this->getMarkText($question['mark']));
-            self::$layout->assign('question', '<div class="questiontext" id="'.$prim.'">'.$this->addAudio($prim, 'Q').$question['question'].'</div>');
-            self::$layout->assign('answer_1', $this->getOptions($question['prim'], $question['option1'], 'A', $image, $new));
-            self::$layout->assign('answer_2', $this->getOptions($question['prim'], $question['option2'], 'B', $image, $new));
-            self::$layout->assign('answer_3', $this->getOptions($question['prim'], $question['option3'], 'C', $image, $new));
-            self::$layout->assign('answer_4', $this->getOptions($question['prim'], $question['option4'], 'D', $image, $new));
-            self::$layout->assign('answer_5', ($question['option5'] ? $this->getOptions($question['prim'], $question['option5'], 'E', $image, $new) : false));
-            self::$layout->assign('answer_6', ($question['option6'] ? $this->getOptions($question['prim'], $question['option6'], 'F', $image, $new) : false));
-            self::$layout->assign('image', ($question['dsaimageid'] ? $this->createImage($question['prim'].'.jpg', true) : ''));
-            self::$layout->assign('case_study', $this->casestudy);
-            self::$layout->assign('dsa_explanation', $this->dsaExplanation($question['dsaexplanation'], $prim));
-            self::$layout->assign('previous_question', $this->prevQuestion());
-            self::$layout->assign('flag_question', $this->flagHintButton($question['prim']));
-            self::$layout->assign('review', $this->reviewButton());
-            self::$layout->assign('next_question', $this->nextQuestion());
-            self::$layout->assign('script', $this->getScript());
-            self::$layout->assign('alert', $this->alert());
-            self::$layout->assign('review_questions', $this->reviewAnswers());
-            self::$layout->assign('extra', $this->extraContent());
-            self::$layout->assign('audio', $this->audioButton());
-            $this->questiondata = self::$layout->fetch('layout'.$question['format'].'.tpl');
+            $this->layout->assign('mark', $this->getMarkText($question['mark']));
+            $this->layout->assign('question', '<div class="questiontext" id="'.$prim.'">'.$this->addAudio($prim, 'Q').$question['question'].'</div>');
+            $this->layout->assign('answer_1', $this->getOptions($question['prim'], $question['option1'], 'A', $image, $new));
+            $this->layout->assign('answer_2', $this->getOptions($question['prim'], $question['option2'], 'B', $image, $new));
+            $this->layout->assign('answer_3', $this->getOptions($question['prim'], $question['option3'], 'C', $image, $new));
+            $this->layout->assign('answer_4', $this->getOptions($question['prim'], $question['option4'], 'D', $image, $new));
+            $this->layout->assign('answer_5', ($question['option5'] ? $this->getOptions($question['prim'], $question['option5'], 'E', $image, $new) : false));
+            $this->layout->assign('answer_6', ($question['option6'] ? $this->getOptions($question['prim'], $question['option6'], 'F', $image, $new) : false));
+            $this->layout->assign('image', ($question['dsaimageid'] ? $this->createImage($question['prim'].'.jpg', true) : ''));
+            $this->layout->assign('case_study', $this->casestudy);
+            $this->layout->assign('dsa_explanation', $this->dsaExplanation($question['dsaexplanation'], $prim));
+            $this->layout->assign('previous_question', $this->prevQuestion());
+            $this->layout->assign('flag_question', $this->flagHintButton($question['prim']));
+            $this->layout->assign('review', $this->reviewButton());
+            $this->layout->assign('next_question', $this->nextQuestion());
+            $this->layout->assign('script', $this->getScript());
+            $this->layout->assign('alert', $this->alert());
+            $this->layout->assign('review_questions', $this->reviewAnswers());
+            $this->layout->assign('extra', $this->extraContent());
+            $this->layout->assign('audio', $this->audioButton());
+            $this->questiondata = $this->layout->fetch('layout'.$question['format'].'.tpl');
             return json_encode(array('html' => utf8_encode($this->questiondata), 'questionnum' => $this->questionNo($prim)));
         }
         else{
@@ -1037,8 +1056,8 @@ class TheoryTest implements TTInterface{
      */
     public function questionInfo($prim) {    
         $info = array();
-        $questioninfo = self::$db->select($this->questionsTable, array('prim' => $prim), array('prim', 'dsacat', 'dsaqposition'));
-        $catinfo = self::$db->select($this->dsaCategoriesTable, array('section' => $questioninfo['dsacat']));
+        $questioninfo = $this->db->select($this->questionsTable, array('prim' => $prim), array('prim', 'dsacat', 'dsaqposition'));
+        $catinfo = $this->db->select($this->dsaCategoriesTable, array('section' => $questioninfo['dsacat']));
         $info['prim'] = $questioninfo['prim'];
         $info['cat'] = $questioninfo['dsacat'].'. '.$catinfo['name'];
         $info['topic'] = ($questioninfo['dsaqposition'] ? $questioninfo['dsaqposition'] : 'Case Study');
@@ -1102,7 +1121,7 @@ class TheoryTest implements TTInterface{
      * @param int $casestudy This should be the case study number for the set of questions
      */
     protected function setCaseStudy($casestudy) {
-        $case = self::$db->fetchColumn($this->caseTable, array('casestudyno' => $casestudy), array('cssituation'));
+        $case = $this->db->fetchColumn($this->caseTable, array('casestudyno' => $casestudy), array('cssituation'));
         $this->casestudy = $this->addAudio($casestudy, 'CS').$case;
     }
     
@@ -1113,7 +1132,7 @@ class TheoryTest implements TTInterface{
     protected function clearSettings() {
         $settings = $this->checkSettings();
         unset($settings['review']);
-        return self::$user->setUserSettings($settings);
+        return $this->user->setUserSettings($settings);
     }
     
     /**
@@ -1124,7 +1143,7 @@ class TheoryTest implements TTInterface{
         if(is_numeric($testNo) && !is_numeric($this->testNo)){
             $this->testNo = $testNo;
         }
-        if(self::$user->setUserSettings(array('current_test' => $testNo))) {
+        if($this->user->setUserSettings(array('current_test' => $testNo))) {
             unset($this->questions);
             unset($this->useranswers);
             $this->getQuestions();
@@ -1141,7 +1160,7 @@ class TheoryTest implements TTInterface{
             return $this->testNo;
         }
         else{
-            $testNo = self::$user->getUserSettings();
+            $testNo = $this->user->getUserSettings();
             $this->testNo = $testNo['current_test'];
             return $this->testNo;
         }
@@ -1182,7 +1201,7 @@ class TheoryTest implements TTInterface{
             if($type == 'taken') {
                 list($mins, $secs) = explode(':', $time);
                 $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
-                self::$db->update($this->progressTable, array('time_'.$type => $newtime), array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
+                $this->db->update($this->progressTable, array('time_'.$type => $newtime), array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
             }
             else{
                 $_SESSION['time_'.$type]['test'.$this->getTest()] = $time;
@@ -1196,7 +1215,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the time from the database
      */
     public function getTime($type = 'taken') {
-        return self::$db->fetchColumn($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('time_'.$type), 0, array('started' => 'DESC'));
+        return $this->db->fetchColumn($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()), array('time_'.$type), 0, array('started' => 'DESC'));
     }
     
     /**
@@ -1248,7 +1267,7 @@ class TheoryTest implements TTInterface{
      * @return int Returns the DSA Category number of the current question
      */
     protected function getDSACat($prim) {
-        return self::$db->fetchColumn($this->questionsTable, array('prim' => $prim), array('dsacat'));
+        return $this->db->fetchColumn($this->questionsTable, array('prim' => $prim), array('dsacat'));
     }
     
     /**
@@ -1256,7 +1275,7 @@ class TheoryTest implements TTInterface{
      * @return boolean If existing tests are deleted will return true else will return false
      */
     public function startNewTest() {
-        return self::$db->delete($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
+        return $this->db->delete($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
     }
     
     /**
@@ -1273,15 +1292,15 @@ class TheoryTest implements TTInterface{
         else{
             $this->getTestResults();
         }
-        self::$layout->assign('report', $this->testReport());
-        self::$layout->assign('results', $this->testresults);
-        self::$layout->assign('percentages', $this->testPercentages());
-        self::$layout->assign('dsa_cat_results', $this->createOverviewResults());
-        self::$layout->assign('review_test', '<div class="reviewtest btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-question fa-fw"></span><span class="hidden-xs"> Review Test</span></div>');
-        self::$layout->assign('print_certificate', $this->printCertif());
-        self::$layout->assign('exit_test', '<div class="blank"></div><div class="exittest btn btn-theory"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> Exit Test</span></div>');
-        self::$layout->assign('script', $this->getScript(true));
-        $this->questiondata = self::$layout->fetch('results.tpl');
+        $this->layout->assign('report', $this->testReport());
+        $this->layout->assign('results', $this->testresults);
+        $this->layout->assign('percentages', $this->testPercentages());
+        $this->layout->assign('dsa_cat_results', $this->createOverviewResults());
+        $this->layout->assign('review_test', '<div class="reviewtest btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-question fa-fw"></span><span class="hidden-xs"> Review Test</span></div>');
+        $this->layout->assign('print_certificate', $this->printCertif());
+        $this->layout->assign('exit_test', '<div class="blank"></div><div class="exittest btn btn-theory"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> Exit Test</span></div>');
+        $this->layout->assign('script', $this->getScript(true));
+        $this->questiondata = $this->layout->fetch('results.tpl');
         return $this->questiondata;
     }
     
@@ -1317,7 +1336,7 @@ class TheoryTest implements TTInterface{
             $this->testresults['status'] = 'fail';
             $status = 2;
         }
-        self::$db->update($this->progressTable, array('status' => $status, 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect()), array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
+        $this->db->update($this->progressTable, array('status' => $status, 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect()), array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID));
     }
     
     /**
@@ -1325,7 +1344,7 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if the learning progress has been updated
      */
     public function updateLearningSection() {
-        $info = self::$db->select($this->learningProgressTable, array('user_id' => $this->getUserID()), array('progress'));
+        $info = $this->db->select($this->learningProgressTable, array('user_id' => $this->getUserID()), array('progress'));
         $userprogress = unserialize($info['progress']);
         $this->getQuestions();
         foreach($this->questions as $prim) {
@@ -1334,7 +1353,7 @@ class TheoryTest implements TTInterface{
             elseif($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == '3') {$userprogress[$prim]['status'] = 1;}
             else{$userprogress[$prim]['status'] = 0;}
         }
-        return self::$db->update($this->learningProgressTable, array('progress' => serialize(array_filter($userprogress))), array('user_id' => $this->getUserID()));
+        return $this->db->update($this->learningProgressTable, array('progress' => serialize(array_filter($userprogress))), array('user_id' => $this->getUserID()));
     }
     
     /**
@@ -1353,7 +1372,7 @@ class TheoryTest implements TTInterface{
      * @return boolean|array If the test has been completed the test results will be returned as an array else will return false
      */
     public function getTestResults() {
-        $results = self::$db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'status' => array('>', 0)), array('id', 'test_id', 'results', 'started', 'complete', 'time_taken', 'status'), array('started' => 'DESC'));
+        $results = $this->db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'status' => array('>', 0)), array('id', 'test_id', 'results', 'started', 'complete', 'time_taken', 'status'), array('started' => 'DESC'));
         if(!empty($results)) {
             $this->testresults = unserialize($results['results']);
             $this->testresults['id'] = $results['id'];
@@ -1381,8 +1400,8 @@ class TheoryTest implements TTInterface{
         $report = array();
         $this->getTestResults();
         $report['testname'] = ucwords($this->getTestName());
-        if(method_exists(self::$user, 'getFirstname') && method_exists(self::$user, 'getLastname')){$report['user'] = self::$user->getFirstname().' '.self::$user->getLastname();}
-        elseif(method_exists(self::$user, 'getUsername')){$report['user'] = self::$user->getUsername();}
+        if(method_exists($this->user, 'getFirstname') && method_exists($this->user, 'getLastname')){$report['user'] = $this->user->getFirstname().' '.$this->user->getLastname();}
+        elseif(method_exists($this->user, 'getUsername')){$report['user'] = $this->user->getUsername();}
         $report['status'] = $this->testStatus();
         $report['time'] = $this->getTime();
         $report['passmark'] = $this->getPassmark();
@@ -1403,7 +1422,7 @@ class TheoryTest implements TTInterface{
      * @return array Returns an array of all of the categories
      */
     protected function getCategories(){
-        return self::$db->selectAll($this->dsaCategoriesTable);
+        return $this->db->selectAll($this->dsaCategoriesTable);
     }
     
     /**

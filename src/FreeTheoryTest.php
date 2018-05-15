@@ -123,7 +123,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return boolean Returns true
      */
     protected function chooseQuestions($testNo){
-        $questions = self::$db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
+        $questions = $this->db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
         $q = 1;
         foreach($questions as $question){
             $this->questions[$q] = $question['prim'];
@@ -189,11 +189,11 @@ class FreeTheoryTest extends TheoryTest{
      */
     protected function startTest(){        
         $text = '<p>Please click the start test button below when you are ready to start. Please make sure you do not navigate away from the page as you will not be able to pick up from where you left the test.</p>';
-        self::$layout->assign('continue_test', '');
-        self::$layout->assign('existing_text', $text);
-        self::$layout->assign('start_new_test', '<div class="newtest btn btn-theory"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Start Test</span></div>');
-        self::$layout->assign('script', $this->existingScript());
-        $this->questiondata = self::$layout->fetch('existing.tpl');
+        $this->layout->assign('continue_test', '');
+        $this->layout->assign('existing_text', $text);
+        $this->layout->assign('start_new_test', '<div class="newtest btn btn-theory"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Start Test</span></div>');
+        $this->layout->assign('script', $this->existingScript());
+        $this->questiondata = $this->layout->fetch('existing.tpl');
     }
     
     /**
@@ -222,13 +222,13 @@ class FreeTheoryTest extends TheoryTest{
     public function buildTest(){
         if(!$this->testStarted()){$this->startTest();}
         else{$this->createQuestionHTML($this->getFirstQuestion(), true); setcookie('started', 0, time() - 3600);}
-        self::$layout->assign('test_name', $this->getTestName(), true);
-        self::$layout->assign('question_no', '1', true);
-        self::$layout->assign('no_questions', $this->numQuestions(), true);
-        self::$layout->assign('question_data', $this->questiondata, true);
-        self::$layout->assign('js_script_location', $this->getJavascriptLocation());
-        self::$layout->assign('report', false);
-        return self::$layout->fetch($this->section.'test.tpl');
+        $this->layout->assign('test_name', $this->getTestName(), true);
+        $this->layout->assign('question_no', '1', true);
+        $this->layout->assign('no_questions', $this->numQuestions(), true);
+        $this->layout->assign('question_data', $this->questiondata, true);
+        $this->layout->assign('js_script_location', $this->getJavascriptLocation());
+        $this->layout->assign('report', false);
+        return $this->layout->fetch($this->section.'test.tpl');
     }
     
     /**
@@ -313,7 +313,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return string Returns the test report table to be displayed
      */
     protected function testReport(){
-        self::$layout->assign('free_test', 'Yes', true);
+        $this->layout->assign('free_test', 'Yes', true);
         $this->getTestResults();
         $report = array();
         $report['testname'] = ucwords($this->getTestName());

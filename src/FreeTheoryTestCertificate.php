@@ -1,19 +1,11 @@
 <?php
 namespace TheoryTest\Car;
 
-use DBAL\Database;
-use Smarty;
-
 /**
  * @codeCoverageIgnore
  */
 class FreeTheoryTestCertificate extends TheoryTestCertificate{
     protected $testType = 'FREE';
-
-    public function __construct(Database $db, Smarty $layout, $user, $testID) {
-        parent::__construct($db, $layout, $user, $testID);
-        $this->theory = new FreeTheoryTest(self::$db, $layout, self::$user);
-    }
     
     public function generateCertificate(){
         $this->theory->getQuestions();

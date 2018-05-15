@@ -3,22 +3,23 @@
 namespace TheoryTest\Car;
 
 use DBAL\Database;
+use Configuration\Config;
 use Smarty;
 
 class Review{
-    protected static $db;
-    protected static $layout;
-    protected static $user;
+    protected $db;
+    protected $layout;
+    protected $user;
     protected $userClone;
     
     public $where = array('carquestion' => 'Y', 'alertcasestudy' => 'IS NULL');
     
     public $noOfTests = 15;
     
-    protected $questionsTable = 'theory_questions_2016';
-    protected $DSACatTable = 'theory_dsa_sections';
-    protected $progressTable = 'user_progress';
-    protected $testProgressTable = 'user_test_progress';
+    protected $questionsTable;
+    protected $dvsaCatTable;
+    protected $learningProgressTable;
+    protected $progressTable;
     
     protected $useranswers;
     
@@ -33,12 +34,14 @@ class Review{
      * @param int|false $userID If you want to emulate a user set the user ID here
      * @param string|false $templateDir If you want to change the template location set this location here else set to false
      */
-    public function __construct(Database $db, Smarty $layout, $user, $userID = false, $templateDir = false){
-        self::$db = $db;
-        self::$layout = $layout;
-        self::$user = $user;
-        self::$layout->addTemplateDir($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir);
+    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false){
+        $this->db = $db;
+        $this->config = $config;
+        $this->user = $user;
+        $this->layout = $layout;
+        $this->layout->addTemplateDir($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir);
         if(is_numeric($userID)){$this->userClone = $userID;}
+        $this->setTables();
     }
     
     /*
@@ -49,6 +52,16 @@ class Review{
     }
     
     /**
+     * Sets the tables
+     */
+    protected function setTables() {
+        $this->questionsTable = $this->config->table_theory_questions;
+        $this->learningProgressTable = $this->config->table_users_progress;
+        $this->progressTable = $this->config->table_users_test_progress;
+        $this->dvsaCatTable = $this->config->table_theory_dvsa_sections;
+    }
+    
+    /**
      * Returns the userID or the mock userID if you wish to look at users progress
      * @return int Returns the UserID or mocked up userID if valid
      */
@@ -56,7 +69,7 @@ class Review{
         if(is_numeric($this->userClone)){
             return $this->userClone;
         }
-        return self::$user->getUserID();
+        return $this->user->getUserID();
     }
     
     public function getSectionTables(){
@@ -74,7 +87,7 @@ class Review{
      */
     public function getUserAnswers(){
         if(!isset($this->useranswers)){
-            $answers = self::$db->select($this->progressTable, array('user_id' => $this->getUserID()), array('progress'));
+            $answers = $this->db->select($this->learningProgressTable, array('user_id' => $this->getUserID()), array('progress'));
             $this->useranswers = unserialize(stripslashes($answers['progress']));
         }
         return $this->useranswers;
@@ -86,8 +99,8 @@ class Review{
      */
     public function numberOfTests(){
         if(!is_numeric($this->noOfTests)){
-            self::$db->query('SELECT DISTINCT `mocktestcarno` FROM `theory_questions` WHERE `mocktestcarno` IS NOT NULL LIMIT 50;');
-            $this->noOfTests = self::$db->numRows();
+            $this->db->query("SELECT DISTINCT `mocktestcarno` FROM `{$this->questionsTable}` WHERE `mocktestcarno` IS NOT NULL LIMIT 50;");
+            $this->noOfTests = $this->db->numRows();
         }
         return $this->noOfTests;
     }
@@ -97,7 +110,7 @@ class Review{
      * @return int Returns The number of tests the user has passed
      */
     public function testsPassed(){
-        return self::$db->count($this->testProgressTable, array('status' => 1, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)));
+        return $this->db->count($this->progressTable, array('status' => 1, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)));
     }
     
     /**
@@ -105,7 +118,7 @@ class Review{
      * @return int Returns The number of tests the user has failed
      */
     public function testsFailed(){
-        return self::$db->count($this->testProgressTable, array('status' => 2, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)));
+        return $this->db->count($this->progressTable, array('status' => 2, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)));
     }
     
     /**
@@ -116,7 +129,7 @@ class Review{
      * @return string|boolean Returns the table as a HTML string if the information exists else will return false
      */
     protected function buildReviewTable($table, $tableSecNo, $title, $section){
-        $categories = self::$db->selectAll($table, array(), '*', array('section' => 'ASC'));
+        $categories = $this->db->selectAll($table, array(), '*', array('section' => 'ASC'));
         $review = array();
         $review['title'] = $title;
         $review['section'] = $section;
@@ -126,8 +139,8 @@ class Review{
             $review['ans'][$cat['section']]['incorrect'] = 0;
             $review['ans'][$cat['section']]['correct'] = 0;
 
-            $questions = self::$db->selectAll($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where), array('prim'));
-            $review['ans'][$cat['section']]['numquestions'] = self::$db->count($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where));
+            $questions = $this->db->selectAll($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where), array('prim'));
+            $review['ans'][$cat['section']]['numquestions'] = $this->db->count($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where));
             foreach($questions as $question){
                 if($this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}
                 elseif($this->useranswers[$question['prim']]['status'] == 1){$review['ans'][$cat['section']]['incorrect']++;}
@@ -149,16 +162,16 @@ class Review{
         $this->getUserAnswers();
         foreach ($this->getSectionTables() as $i => $tables){
             if(is_array($tables)){
-                self::$layout->assign('table', $this->buildReviewTable($tables['table'], $tables['sectionNo'], $tables['name'], $tables['section']), true);
-                self::$layout->assign('table'.($i + 1).'name', $tables['name'], true);
-                self::$layout->assign($tables['section'].'section', self::$layout->fetch('table-learning.tpl'), true);
+                $this->layout->assign('table', $this->buildReviewTable($tables['table'], $tables['sectionNo'], $tables['name'], $tables['section']), true);
+                $this->layout->assign('table'.($i + 1).'name', $tables['name'], true);
+                $this->layout->assign($tables['section'].'section', $this->layout->fetch('table-learning.tpl'), true);
             }
             elseif($tables === true){
-                self::$layout->assign('cases', $this->reviewCaseStudy(), true);
-                self::$layout->assign('reviewsection', self::$layout->fetch('table-case.tpl'), true);
+                $this->layout->assign('cases', $this->reviewCaseStudy(), true);
+                $this->layout->assign('reviewsection', $this->layout->fetch('table-case.tpl'), true);
             }
         }
-        return self::$layout->fetch('study.tpl');
+        return $this->layout->fetch('study.tpl');
     }
     
     /**
@@ -168,9 +181,9 @@ class Review{
     public function reviewCaseStudy(){
         $this->getUserAnswers();
         $case = array();
-        foreach(self::$db->selectAll($this->DSACatTable, array(), '*', array('section' => 'ASC')) as $cat){
+        foreach($this->db->selectAll($this->dvsaCatTable, array(), '*', array('section' => 'ASC')) as $cat){
             $case[$cat['section']] = $cat;
-            foreach(self::$db->selectAll($this->questionsTable, array('casestudyno' => $cat['section']), '*', array('caseqposition' => 'ASC')) as $num => $question){
+            foreach($this->db->selectAll($this->questionsTable, array('casestudyno' => $cat['section']), '*', array('caseqposition' => 'ASC')) as $num => $question){
                 $case[$cat['section']]['q'][$num]['status'] = $this->useranswers[$question['prim']]['status'];
                 $case[$cat['section']]['q'][$num]['num'] = ($num + 1);
             }
@@ -187,7 +200,7 @@ class Review{
         for($i = 1; $i <= $this->numberOfTests(); $i++){
             if($i == $this->numberOfTests()){$testID = 'random';}else{$testID = $i;}
             unset($_SESSION['test'.$i]);
-            $answers[$testID] = self::$db->select($this->testProgressTable, array('user_id' => $this->getUserID(), 'test_id' => $i, 'status' => array('>=', 1), 'type' => strtoupper($this->testType)), array('status', 'totalscore', 'complete'));
+            $answers[$testID] = $this->db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $i, 'status' => array('>=', 1), 'type' => strtoupper($this->testType)), array('status', 'totalscore', 'complete'));
         }
         return $answers;
     }
@@ -203,8 +216,8 @@ class Review{
         $correct = 0;
         $info = array();
         
-        $questions = self::$db->selectAll($this->questionsTable, $this->where, array('prim'));
-        $info['noQuestions'] = self::$db->rowCount();
+        $questions = $this->db->selectAll($this->questionsTable, $this->where, array('prim'));
+        $info['noQuestions'] = $this->db->rowCount();
         foreach($questions as $question){
             if($this->useranswers[$question['prim']]['status'] == 0){$notattempted++;}
             elseif($this->useranswers[$question['prim']]['status'] == 1){$incorrect++;}

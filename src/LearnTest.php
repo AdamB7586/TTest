@@ -24,8 +24,8 @@ class LearnTest extends TheoryTest{
      * @param false|int $userID If you wish to emulate a user set this value to the users ID else set to false
      * @param string|false $templateDir If you want to change the template location set this location here else set to false
      */
-    public function __construct(Database $db, Smarty $layout, $user, $userID = false, $templateDir = false) {
-        parent::__construct($db, $layout, $user, $userID, $templateDir);
+    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false) {
+        parent::__construct($db, $config, $layout, $user, $userID, $templateDir);
         $this->getTestInfo();
     }
     

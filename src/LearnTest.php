@@ -13,6 +13,9 @@ class LearnTest extends TheoryTest{
     protected $current;
     protected $currentPrim;
     
+    protected $hcCatTable;
+    protected $l2dCatTable;
+    
     protected $categories = array('dsa' => 'dsacat', 'hc' => 'hcsection', 'l2d' => 'ldclessonno', 'casestudy' => 'casestudyno');
     protected $sortBy = array('dsa' => 'dsaqposition', 'hc' => 'hcqposition', 'l2d' => 'ldcqno', 'casestudy' => 'caseqposition');
 
@@ -30,17 +33,27 @@ class LearnTest extends TheoryTest{
     }
     
     /**
+     * Sets the tables
+     */
+    public function setTables() {
+        parent::setTables();
+        $this->hcCatTable = $this->config->table_theory_hc_sections;
+        $this->l2dCatTable = $this->config->table_theory_l2d_sections;
+    }
+    
+    /**
      * Creates a new test for the 
      * @param int $sectionNo This should be the section number for the test
-     * @param string $type This should be the section you wish to create a test for currently 4 sections: dsa, hc, l2d & casestudy
+     * @param string $type This should be the section you wish to create a test for currently 4 sections: dvsa, hc, l2d & casestudy
      */
-    public function createNewTest($sectionNo = '1', $type = 'dsa'){
+    public function createNewTest($sectionNo = '1', $type = 'dvsa'){
         $this->clearSettings();
         if($type == 'casestudy'){$sectionNo = $this->getRealCaseID($sectionNo);}
         $this->chooseStudyQuestions($sectionNo, $type);
         $this->setTest($type.$sectionNo);
         if($type != 'casestudy'){
-            $learnName = $this->db->select('theory_'.strtolower($type).'_sections', array('section' => $sectionNo), array('name', 'free'));
+            $table = strtolower($type).'CatTable';
+            $learnName = $this->db->select($this->$table, array('section' => $sectionNo), array('name', 'free'));
             $name = $sectionNo.'. '.$learnName['name'];
             if($learnName['free'] == 0 && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}
         }
@@ -52,9 +65,9 @@ class LearnTest extends TheoryTest{
     /**
      * Gets the questions for the current section test
      * @param int $sectionNo This should be the section number for the test
-     * @param string $type This should be the section you wish to create a test for currently 4 sections: dsa, hc, l2d & casestudy
+     * @param string $type This should be the section you wish to create a test for currently 4 sections: dvsa, hc, l2d & casestudy
      */
-    protected function chooseStudyQuestions($sectionNo, $type = 'dsa') {
+    protected function chooseStudyQuestions($sectionNo, $type = 'dvsa') {
         $this->testInfo['casestudy'] = 'IS NULL';
         $this->testInfo['category'] = $this->categories[strtolower($type)];
         $this->testInfo['sort'] = $this->sortBy[strtolower($type)];
@@ -468,7 +481,7 @@ class LearnTest extends TheoryTest{
      */
     private function getRealCaseID($sectionNo){
         if($this->getTestType() == 'CAR'){$type = 'car';}else{$type = 'M/C';}
-        $caseInfo = $this->db->select('theory_case_studies', array('type' => $type, 'lp' => 1, 'dsacat' => $sectionNo), array('casestudyno'));
+        $caseInfo = $this->db->select($this->caseTable, array('type' => $type, 'lp' => 1, 'dsacat' => $sectionNo), array('casestudyno'));
         if(!empty($caseInfo)){
             return $caseInfo['casestudyno'];
         }

@@ -95,6 +95,11 @@ class TheoryTest implements TTInterface{
     protected $scriptVar = 'questions';
     
     /**
+     * @var string The server root path before the image directory 
+     */
+    protected $imageRootPath;
+
+    /**
      * @var string The location relative to the theory test where any images can be found
      */
     protected $imagePath;
@@ -191,7 +196,7 @@ class TheoryTest implements TTInterface{
         }
         $this->setTables();
         $this->getUserAnswers();
-        $this->setImagePath();
+        $this->setImageRootPath($_SERVER['DOCUMENT_ROOT'])->setImagePath();
     }
     
     /**
@@ -342,7 +347,7 @@ class TheoryTest implements TTInterface{
             $this->imagePath = $path;
         }
         else{
-            $this->imagePath = $_SERVER["DOCUMENT_ROOT"].DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'prim'.DIRECTORY_SEPARATOR;
+            $this->imagePath = DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'prim'.DIRECTORY_SEPARATOR;
         }
         return $this;
     }
@@ -353,6 +358,26 @@ class TheoryTest implements TTInterface{
      */
     public function getImagePath(){
         return $this->imagePath;
+    }
+    
+    /**
+     * Sets the root path to the images directory
+     * @param string $path The image root path
+     * @return $this
+     */
+    public function setImageRootPath($path){
+        if(is_string($path)) {
+            $this->imageRootPath = $path;
+        }
+        return $this;
+    }
+    
+    /**
+     * The image root path
+     * @return string
+     */
+    public function getImageRootPath(){
+        return $this->imageRootPath;
     }
     
     /**
@@ -639,9 +664,9 @@ class TheoryTest implements TTInterface{
      * @return string|false Returns HTML image string if exists else returns false
      */
     public function createImage($file, $main = false) {
-        if($file != NULL && $file != '' && file_exists($this->getImagePath().$file)) {
-            list($width, $height) = getimagesize($this->getImagePath().$file);
-            return '<img src="/images/prim/'.$file.'" alt="" width="'.$width.'" height="'.$height.'" class="'.($main === true ? 'imageright questionimage ' : '').'img-responsive" />';
+        if($file != NULL && $file != '' && file_exists($this->getImageRootPath().$this->getImagePath().$file)) {
+            list($width, $height) = getimagesize($this->getImageRootPath().$this->getImagePath().$file);
+            return '<img src="'.$this->getImagePath().$file.'" alt="" width="'.$width.'" height="'.$height.'" class="'.($main === true ? 'imageright questionimage ' : '').'img-responsive" />';
         }
         return false;
     }

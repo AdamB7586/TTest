@@ -260,10 +260,6 @@ function checkCorrect(question){
     }
 }
 
-/*function loading(){
-    $("#question").html('<img src="/images/loading.gif" alt="Loading" width="100" height="100" class="loading" />');
-}*/
-
 function questionData(question){
     $.get("/modules/<?php echo($page); ?>?question=" + question, function(data){
         $("#question").html(data.html);

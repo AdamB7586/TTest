@@ -86,12 +86,10 @@ $("#gohome").click(function(){
 });
 
 $(".prevquestion").click(function(){
-    //loading();
     questionData($(".prevquestion").attr('id'));
 });
 
 $(".nextquestion").click(function(){
-    //loading();
     questionData($(".nextquestion").attr('id'));
 });
 
@@ -100,7 +98,6 @@ $(".questionreview").click(function(event){
     //    alert('You did not attempt this question, therefore it cannot be reviewed');
     //}
     //else{
-        //loading();
         qid = event.target.id;
         questionData(qid);
     //}
@@ -123,10 +120,6 @@ $(".endreview").click(function(){
     });
 });
 
-function loading(){
-    $("#question").html('<img src="/images/loading.gif" alt="Loading" width="100" height="100" class="loading" />');
-}
-
 function questionData(question){
     $.get("/modules/<?php echo($page); ?>?question=" + question, function(data){
         $("#question").html(data.html);
@@ -137,7 +130,6 @@ function questionData(question){
 function endTest(time){
     testended = true;
     clearInterval(countdown);
-    //loading();
     $("#questiondata").html('');
     $("#countdown").html('');
     $.get("/modules/<?php echo($page); ?>?endtest=true&time=" + time, function(data){

@@ -83,7 +83,7 @@
     <td class="text-center">{$cat_results.correct}</td>
     <td class="text-center">{$cat_results.incorrect}</td>
     <td class="text-center">{$cat_results.total}</td>
-    <td class="text-center"><img src="/images/s.gif" alt="{$cat_results.name}" width="0" height="20" />{$percent} %</td>
+    <td class="text-center"><img src="data:image/gif;base64,R0lGODlhAQABAJH/AP///wAAAP///wAAACH/C0FET0JFOklSMS4wAt7tACH5BAEAAAIALAAAAAABAAEAAAICVAEAOw==" alt="{$cat_results.name}" width="0" height="20" />{$percent} %</td>
 </tr>
 {/foreach}
 </table>

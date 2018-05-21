@@ -1082,7 +1082,7 @@ class TheoryTest implements TTInterface{
     public function questionInfo($prim) {    
         $info = array();
         $questioninfo = $this->db->select($this->questionsTable, array('prim' => $prim), array('prim', 'dsacat', 'dsaqposition'));
-        $catinfo = $this->db->select($this->dsaCategoriesTable, array('section' => $questioninfo['dsacat']));
+        $catinfo = $this->db->select($this->dvsaCatTable, array('section' => $questioninfo['dsacat']));
         $info['prim'] = $questioninfo['prim'];
         $info['cat'] = $questioninfo['dsacat'].'. '.$catinfo['name'];
         $info['topic'] = ($questioninfo['dsaqposition'] ? $questioninfo['dsaqposition'] : 'Case Study');
@@ -1446,8 +1446,8 @@ class TheoryTest implements TTInterface{
      * Creates an array of all of the categories
      * @return array Returns an array of all of the categories
      */
-    protected function getCategories(){
-        return $this->db->selectAll($this->dsaCategoriesTable);
+    public function getCategories(){
+        return $this->db->selectAll($this->dvsaCatTable);
     }
     
     /**

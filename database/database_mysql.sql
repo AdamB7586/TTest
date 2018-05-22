@@ -1,3 +1,19 @@
+CREATE TABLE IF NOT EXISTS `config` (
+  `setting` varchar(100) NOT NULL,
+  `value` text NOT NULL,
+  PRIMARY KEY (`setting`),
+  UNIQUE KEY `setting` (`setting`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `config` (`setting`, `value`) VALUES
+('table_users_progress', 'users_progress'),
+('table_users_test_progress', 'users_test_progress'),
+('table_theory_hc_sections', 'theory_hc_sections'),
+('table_theory_l2d_sections', 'theory_l2d_sections'),
+('table_theory_dvsa_sections', 'theory_dsa_sections'),
+('table_theory_case_studies', 'theory_case_studies'),
+('table_theory_questions', 'theory_questions_2016');
+
 CREATE TABLE IF NOT EXISTS `theory_case_studies` (
   `casestudyno` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
   `cssituation` longtext,

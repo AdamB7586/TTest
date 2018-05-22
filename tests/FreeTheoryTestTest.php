@@ -11,7 +11,7 @@ class FreeTheoryTestTest extends TheoryTestTest {
         if(!session_id()){session_start();}
         $_SESSION['current_test'] = 1;
         $_SESSION['test'.$_SESSION['current_test']] = false;
-        $this->theoryTest = new FreeTheoryTest(self::$db, self::$template, self::$user);
+        $this->theoryTest = new FreeTheoryTest(self::$db, self::$config, self::$template, self::$user);
         
     }
     
@@ -41,6 +41,8 @@ class FreeTheoryTestTest extends TheoryTestTest {
      * @covers TheoryTest\Car\User::checkUserAccess
      * @covers TheoryTest\Car\User::setUserSettings
      * @covers TheoryTest\Car\User::getUserSettings
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
      */
     public function testCreateNewTest() {
         parent::testCreateNewTest();
@@ -53,6 +55,8 @@ class FreeTheoryTestTest extends TheoryTestTest {
      * @covers TheoryTest\Car\TheoryTest::setImagePath
      * @covers TheoryTest\Car\TheoryTest::setPassmark
      * @covers TheoryTest\Car\TheoryTest::getPassmark
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
      */
     public function testSetPassmark() {
         parent::testSetPassmark();
@@ -65,6 +69,8 @@ class FreeTheoryTestTest extends TheoryTestTest {
      * @covers TheoryTest\Car\TheoryTest::setImagePath
      * @covers TheoryTest\Car\TheoryTest::setTestType
      * @covers TheoryTest\Car\TheoryTest::getTestType
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
      */
     public function testSetTestType(){
         parent::testSetTestType();

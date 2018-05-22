@@ -4,12 +4,14 @@ namespace TheoryTest\Tests;
 
 use PHPUnit\Framework\TestCase;
 use DBAL\Database;
+use Configuration\Config;
 use Smarty;
 use TheoryTest\Car\User;
 
 abstract class SetUp extends TestCase{
     
     protected static $db;
+    protected static $config;
     protected static $user;
     protected static $template;
     
@@ -27,6 +29,7 @@ abstract class SetUp extends TestCase{
             self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/database/database_mysql.sql'));
             self::$db->query(file_get_contents(dirname(__FILE__).'/sample_data/data.sql'));
         }
+        self::$config = new Config(self::$db);
         self::$template = new Smarty();
         self::$template->setCacheDir(dirname(__FILE__).'/cache/')->setCompileDir(dirname(__FILE__).'/cache/');
         self::$user = new User(self::$db);

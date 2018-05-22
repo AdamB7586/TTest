@@ -10,7 +10,7 @@ class RandomTestTest extends SetUp {
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
-        self::$theoryTest = new RandomTest(self::$db, self::$template, self::$user);
+        self::$theoryTest = new RandomTest(self::$db, self::$config, self::$template, self::$user);
     }
     
     public function testConnection() {

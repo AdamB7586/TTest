@@ -10,7 +10,7 @@ class ReviewTest extends SetUp {
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
-        self::$review = new Review(self::$db, self::$template, self::$user);
+        self::$review = new Review(self::$db, self::$config, self::$template, self::$user);
     }
     
     public function testExample() {

@@ -16,8 +16,8 @@ class LearnTest extends TheoryTest{
     protected $hcCatTable;
     protected $l2dCatTable;
     
-    protected $categories = array('dsa' => 'dsacat', 'hc' => 'hcsection', 'l2d' => 'ldclessonno', 'casestudy' => 'casestudyno');
-    protected $sortBy = array('dsa' => 'dsaqposition', 'hc' => 'hcqposition', 'l2d' => 'ldcqno', 'casestudy' => 'caseqposition');
+    protected $categories = array('dvsa' => 'dsacat', 'hc' => 'hcsection', 'l2d' => 'ldclessonno', 'casestudy' => 'casestudyno');
+    protected $sortBy = array('dvsa' => 'dsaqposition', 'hc' => 'hcqposition', 'l2d' => 'ldcqno', 'casestudy' => 'caseqposition');
 
     /**
      * Set up all of the components needed to create a Theory Test
@@ -53,6 +53,7 @@ class LearnTest extends TheoryTest{
         $this->setTest($type.$sectionNo);
         if($type != 'casestudy'){
             $table = strtolower($type).'CatTable';
+            if(empty($this->$table)){return false;}
             $learnName = $this->db->select($this->$table, array('section' => $sectionNo), array('name', 'free'));
             $name = $sectionNo.'. '.$learnName['name'];
             if($learnName['free'] == 0 && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}
@@ -406,7 +407,7 @@ class LearnTest extends TheoryTest{
     
     /**
      * Returns any related information about the current question
-     * @param string $explanation This should be the DSA explanation for the database as it has already been retrieved
+     * @param string $explanation This should be the DVSA explanation for the database as it has already been retrieved
      * @param int $prim This should be the questions unique prim number
      * @return string Should return any related question information in a tabbed format
      */

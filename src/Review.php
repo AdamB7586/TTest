@@ -75,9 +75,9 @@ class Review{
     
     public function getSectionTables(){
         return array(
-            array('table' => 'theory_hc_sections', 'name' => 'Highway Code Section', 'section' => 'hc', 'sectionNo' => 'hcsection'),
-            array('table' => 'theory_dsa_sections', 'name' => 'DVSA Category', 'section' => 'dsa', 'sectionNo' => 'dsacat'),
-            array('table' => 'theory_l2d_sections', 'name' => 'Learn to Drive Lesson', 'section' => 'l2d', 'sectionNo' => 'ldclessonno'),
+            array('table' => $this->config->table_theory_hc_sections, 'name' => 'Highway Code Section', 'section' => 'hc', 'sectionNo' => 'hcsection'),
+            array('table' => $this->config->table_theory_dvsa_sections, 'name' => 'DVSA Category', 'section' => 'dvsa', 'sectionNo' => 'dsacat'),
+            array('table' => $this->config->table_theory_l2d_sections, 'name' => 'Learn to Drive Lesson', 'section' => 'l2d', 'sectionNo' => 'ldclessonno'),
             'case' => true
         );
     }

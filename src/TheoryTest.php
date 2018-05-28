@@ -1287,9 +1287,9 @@ class TheoryTest implements TTInterface{
     }
     
     /**
-     * Returns the questions DSA category number
+     * Returns the questions DVSA category number
      * @param int $prim This should be the prim number of the current question
-     * @return int Returns the DSA Category number of the current question
+     * @return int Returns the DVSA Category number of the current question
      */
     protected function getDSACat($prim) {
         return $this->db->fetchColumn($this->questionsTable, array('prim' => $prim), array('dsacat'));

@@ -9,7 +9,7 @@
             {if $reviewsection}<li role="tab"><a href="#cases" data-toggle="tab" title="Case Study">Case Study</a></li>{/if}
         </ul>{/if}
         {if $dvsasection}<div class="tab-content">
-            <div class="tab-pane active" id="hc">{/if}{$hcsection}{if $dsasection}</div>
+            <div class="tab-pane active" id="hc">{/if}{$hcsection}{if $dvsasection}</div>
             <div class="tab-pane" id="dvsa">{$dvsasection}</div>
             {if $l2dsection}<div class="tab-pane" id="l2d">{$l2dsection}</div>{/if}
             {if $reviewsection}<div class="tab-pane" id="cases">{$reviewsection}</div>{/if}

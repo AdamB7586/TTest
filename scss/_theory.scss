@@ -202,8 +202,8 @@ $btn-background: #CCCC99 !default;
     background:#E5E5C6;
     padding:10px;
     height:369px;
-    @media (max-width:$screen-xs-max){
-        height:auto;
+    @media (max-width:$screen-sm-max){
+        height:auto !important;
         margin-bottom:($grid-gutter-width / 2);
     }
     .sound{

@@ -243,9 +243,7 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setTestType($type) {
-        if(is_string($type)){
-            $this->testType = strtoupper($type);
-        }
+        $this->testType = strtoupper($type);
         return $this;
     }
     
@@ -303,9 +301,7 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setAudioLocation($location) {
-        if(is_string($location)){
-            $this->audioLocation = $location;
-        }
+        $this->audioLocation = $location;
         return $this;
     }
     
@@ -323,9 +319,7 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setJavascriptLocation($location) {
-        if(is_string($location)){
-            $this->javascriptLocation = $location;
-        }
+        $this->javascriptLocation = $location;
         return $this;
     }
     
@@ -366,9 +360,7 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setImageRootPath($path){
-        if(is_string($path)) {
-            $this->imageRootPath = $path;
-        }
+        $this->imageRootPath = $path;
         return $this;
     }
     

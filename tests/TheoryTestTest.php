@@ -3,6 +3,8 @@ namespace TheoryTest\Tests;
 
 use TheoryTest\Car\TheoryTest;
 
+error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+
 class TheoryTestTest extends SetUp {
     
     protected $theoryTest;

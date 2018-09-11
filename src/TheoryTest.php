@@ -243,7 +243,9 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setTestType($type) {
-        $this->testType = strtoupper($type);
+        if(is_string($type)) {
+            $this->testType = strtoupper($type);
+        }
         return $this;
     }
     
@@ -301,7 +303,9 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setAudioLocation($location) {
-        $this->audioLocation = $location;
+        if(is_string($location)) {
+            $this->audioLocation = $location;
+        }
         return $this;
     }
     
@@ -319,7 +323,9 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setJavascriptLocation($location) {
-        $this->javascriptLocation = $location;
+        if(is_string($location)) {
+            $this->javascriptLocation = $location;
+        }
         return $this;
     }
     
@@ -360,7 +366,9 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     public function setImageRootPath($path){
-        $this->imageRootPath = $path;
+        if(is_string($path)) {
+            $this->imageRootPath = $path;
+        }
         return $this;
     }
     
@@ -837,9 +845,10 @@ class TheoryTest implements TTInterface{
     
     /**
      * Public function to save the users information before the page is exited
+     * @return boolean
      */
     public function saveProgress() {
-        $this->updateAnswers();
+        return $this->updateAnswers();
     }
     
     /**
@@ -1169,14 +1178,11 @@ class TheoryTest implements TTInterface{
      * @return int Returns the current test number
      */
     public function getTest() {
-        if($this->testNo) {
-            return $this->testNo;
-        }
-        else{
+        if(!is_numeric($this->testNo)) {
             $testNo = $this->user->getUserSettings();
             $this->testNo = $testNo['current_test'];
-            return $this->testNo;
         }
+        return $this->testNo;
     }
     
     /**

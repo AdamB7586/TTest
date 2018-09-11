@@ -45,6 +45,7 @@ class LearnTest extends TheoryTest{
      * Creates a new test for the 
      * @param int $sectionNo This should be the section number for the test
      * @param string $type This should be the section you wish to create a test for currently 4 sections: dvsa, hc, l2d & casestudy
+     * @return string|false Returns a new test if questions exists else will return false
      */
     public function createNewTest($sectionNo = '1', $type = 'dvsa'){
         $this->clearSettings();

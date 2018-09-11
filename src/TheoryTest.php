@@ -224,7 +224,7 @@ class TheoryTest implements TTInterface{
     /**
      * Create a new Theory Test for the test number given
      * @param int $theorytest Should be the test number
-     * @return string Returns the HTML for a test
+     * @return string|false Returns the HTML for a test if valid else returns false
      */
     public function createNewTest($theorytest = 1) {
         $this->clearSettings();

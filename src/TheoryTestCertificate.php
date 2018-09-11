@@ -167,6 +167,14 @@ class TheoryTestCertificate implements CertificateInterface{
  * @codeCoverageIgnore
  */
 class FPDF_Protection extends FPDF{
+    /**
+     * Create a PDF table
+     * @param array $header This should be the table headers as an array
+     * @param array $data This should be that table data as a multi-dimensional array
+     * @param array|string $widths The widths of the table columns as aran array if required
+     * @param int $height The hight given to the table fields
+     * @param boolean $left If left aligned columns set to true for center aligned set to false
+     */
     function basicTable($header, $data, $widths = '', $height = 6, $left = false){
         $first = true;
         $this->SetFont('Arial', 'B');

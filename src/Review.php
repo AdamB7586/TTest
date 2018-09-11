@@ -13,7 +13,7 @@ class Review{
     protected $user;
     protected $userClone;
     
-    public $where = array('carquestion' => 'Y', 'alertcasestudy' => 'IS NULL');
+    public $where = ['carquestion' => 'Y', 'alertcasestudy' => 'IS NULL'];
     
     public $noOfTests = 15;
     
@@ -74,12 +74,12 @@ class Review{
     }
     
     public function getSectionTables(){
-        return array(
-            array('table' => $this->config->table_theory_hc_sections, 'name' => 'Highway Code Section', 'section' => 'hc', 'sectionNo' => 'hcsection'),
-            array('table' => $this->config->table_theory_dvsa_sections, 'name' => 'DVSA Category', 'section' => 'dvsa', 'sectionNo' => 'dsacat'),
-            array('table' => $this->config->table_theory_l2d_sections, 'name' => 'Learn to Drive Lesson', 'section' => 'l2d', 'sectionNo' => 'ldclessonno'),
+        return [
+            ['table' => $this->config->table_theory_hc_sections, 'name' => 'Highway Code Section', 'section' => 'hc', 'sectionNo' => 'hcsection'],
+            ['table' => $this->config->table_theory_dvsa_sections, 'name' => 'DVSA Category', 'section' => 'dvsa', 'sectionNo' => 'dsacat'],
+            ['table' => $this->config->table_theory_l2d_sections, 'name' => 'Learn to Drive Lesson', 'section' => 'l2d', 'sectionNo' => 'ldclessonno'],
             'case' => true
-        );
+        ];
     }
     
     /**
@@ -88,7 +88,7 @@ class Review{
      */
     public function getUserAnswers(){
         if(!isset($this->useranswers)){
-            $answers = $this->db->select($this->learningProgressTable, array('user_id' => $this->getUserID()), array('progress'));
+            $answers = $this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress']);
             $this->useranswers = unserialize(stripslashes($answers['progress']));
         }
         return $this->useranswers;
@@ -111,7 +111,7 @@ class Review{
      * @return int Returns The number of tests the user has passed
      */
     public function testsPassed(){
-        return $this->db->count($this->progressTable, array('status' => 1, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)));
+        return $this->db->count($this->progressTable, ['status' => 1, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)]);
     }
     
     /**
@@ -119,7 +119,7 @@ class Review{
      * @return int Returns The number of tests the user has failed
      */
     public function testsFailed(){
-        return $this->db->count($this->progressTable, array('status' => 2, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)));
+        return $this->db->count($this->progressTable, ['status' => 2, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)]);
     }
     
     /**
@@ -130,8 +130,8 @@ class Review{
      * @return string|boolean Returns the table as a HTML string if the information exists else will return false
      */
     protected function buildReviewTable($table, $tableSecNo, $title, $section){
-        $categories = $this->db->selectAll($table, array(), '*', array('section' => 'ASC'));
-        $review = array();
+        $categories = $this->db->selectAll($table, [], '*', ['section' => 'ASC']);
+        $review = [];
         $review['title'] = $title;
         $review['section'] = $section;
         foreach($categories as $cat){
@@ -140,8 +140,8 @@ class Review{
             $review['ans'][$cat['section']]['incorrect'] = 0;
             $review['ans'][$cat['section']]['correct'] = 0;
 
-            $questions = $this->db->selectAll($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where), array('prim'));
-            $review['ans'][$cat['section']]['numquestions'] = $this->db->count($this->questionsTable, array_merge(array($tableSecNo => $cat['section']), $this->where));
+            $questions = $this->db->selectAll($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where), ['prim']);
+            $review['ans'][$cat['section']]['numquestions'] = $this->db->count($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where));
             foreach($questions as $question){
                 if($this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}
                 elseif($this->useranswers[$question['prim']]['status'] == 1){$review['ans'][$cat['section']]['incorrect']++;}
@@ -181,10 +181,10 @@ class Review{
      */
     public function reviewCaseStudy(){
         $this->getUserAnswers();
-        $case = array();
-        foreach($this->db->selectAll($this->dvsaCatTable, array(), '*', array('section' => 'ASC')) as $cat){
+        $case = [];
+        foreach($this->db->selectAll($this->dvsaCatTable, [], '*', ['section' => 'ASC']) as $cat){
             $case[$cat['section']] = $cat;
-            foreach($this->db->selectAll($this->questionsTable, array('casestudyno' => $cat['section']), '*', array('caseqposition' => 'ASC')) as $num => $question){
+            foreach($this->db->selectAll($this->questionsTable, ['casestudyno' => $cat['section']], '*', ['caseqposition' => 'ASC']) as $num => $question){
                 $case[$cat['section']]['q'][$num]['status'] = $this->useranswers[$question['prim']]['status'];
                 $case[$cat['section']]['q'][$num]['num'] = ($num + 1);
             }
@@ -197,11 +197,11 @@ class Review{
      * @return type Returns the answers for each of the tests ready to review
      */
     public function reviewTests(){
-        $answers = array();
+        $answers = [];
         for($i = 1; $i <= $this->numberOfTests(); $i++){
             if($i == $this->numberOfTests()){$testID = 'random';}else{$testID = $i;}
             unset($_SESSION['test'.$i]);
-            $answers[$testID] = $this->db->select($this->progressTable, array('user_id' => $this->getUserID(), 'test_id' => $i, 'status' => array('>=', 1), 'type' => strtoupper($this->testType)), array('status', 'totalscore', 'complete'));
+            $answers[$testID] = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $i, 'status' => ['>=', 1], 'type' => strtoupper($this->testType)], ['status', 'totalscore', 'complete']);
         }
         return $answers;
     }
@@ -215,9 +215,9 @@ class Review{
         $notattempted = 0;
         $incorrect = 0;
         $correct = 0;
-        $info = array();
+        $info = [];
         
-        $questions = $this->db->selectAll($this->questionsTable, $this->where, array('prim'));
+        $questions = $this->db->selectAll($this->questionsTable, $this->where, ['prim']);
         $info['noQuestions'] = $this->db->rowCount();
         foreach($questions as $question){
             if($this->useranswers[$question['prim']]['status'] == 0){$notattempted++;}

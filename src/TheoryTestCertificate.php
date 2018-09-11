@@ -17,6 +17,11 @@ class TheoryTestCertificate implements CertificateInterface{
     
     public $certUsername;
 
+    /**
+     * Constructor
+     * @param object $user This should be an instance of the User object
+     * @param object $theoryTest This should be an instance of the Theory Test object
+     */
     public function __construct($user, $theoryTest) {
         $this->user = $user;
         $this->theory = $theoryTest;
@@ -25,6 +30,9 @@ class TheoryTestCertificate implements CertificateInterface{
         elseif(method_exists($this->user, 'getUsername')){$this->certUsername = $this->user->getUsername();}
     }
     
+    /**
+     * Sets the PDF headers
+     */
     public function PDFInfo(){
         $this->pdf->SetTitle('LDC Theory Test');
         $this->pdf->SetSubject('LDC Theory Test Results');
@@ -32,6 +40,11 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->pdf->SetCreator('Teaching Driving Ltd');
     }
     
+    /**
+     * Creates a new row in the PDF 
+     * @param mixed $text This should be the bold info in the first half
+     * @param mixed $text2 This should be the info in the second half of the page
+     */
     protected function certLine($text, $text2){
         $this->pdf->SetFont('Arial','B', 14);
         $this->pdf->Cell(10, 10, '', 0); $this->pdf->Cell(72, 10, $text, 0);
@@ -40,6 +53,11 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->pdf->Ln(8);
     }
     
+    /**
+     * Creates a new row in the PDF (without line break after)
+     * @param mixed $text This should be the bold info in the first half
+     * @param mixed $text2 This should be the info in the second half of the page
+     */
     protected function infoLine($text, $text2){
         $this->pdf->SetFont('Arial','B', 12);
         $this->pdf->Cell(46, 10, $text);
@@ -47,6 +65,9 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->pdf->Cell(46, 10, $text2);
     }
     
+    /**
+     * Create the certificate page base on if they have passed of failed
+     */
     public function generateCertificate(){
         $this->theory->getQuestions();
         $this->theory->getTestResults();
@@ -84,9 +105,9 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->pdf->AddPage('P', 'A4');
         $this->pdf->SetFont('Arial','B', 8);
         $this->pdf->basicTable(
-            array('Name', 'Test Name', 'Unique Test ID', 'Taken on Date/Time'),
-            array(array($this->certUsername, strip_tags($this->theory->getTestName()), $this->theory->testresults['id'], date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])))),
-            array(52,52,39,47)
+            ['Name', 'Test Name', 'Unique Test ID', 'Taken on Date/Time'],
+            [array($this->certUsername, strip_tags($this->theory->getTestName()), $this->theory->testresults['id'], date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])))],
+            [52,52,39,47]
         );
         $this->pdf->Ln();
         $this->pdf->SetFont('Arial','B', 16);
@@ -117,20 +138,23 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->overallResults();
     }
     
+    /**
+     * Build the results table
+     */
     protected function overallResults(){
-        $header = array('Group', 'Topics in group', 'Correct', 'Incorrect', 'Total', 'Percentage', 'Status');
-        $groupdata = array();
+        $header = ['Group', 'Topics in group', 'Correct', 'Incorrect', 'Total', 'Percentage', 'Status'];
+        $groupdata = [];
         foreach($this->theory->getCategories() as $data){
             $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
             $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
             $total = $correct + $incorrect;
-            $groupdata[] = array($data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format(intval(($correct / $total) * 100), 0).'%', '');
+            $groupdata[] = [$data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format(intval(($correct / $total) * 100), 0).'%', ''];
             
             $totalcorrect = $totalcorrect + $correct;
             $totalincorrect = $totalincorrect + $incorrect;
             $totalq = $totalq + $total;
         }
-        $widths = array(14,78,19,19,19,20,21);
+        $widths = [14,78,19,19,19,20,21];
         $this->pdf->basicTable($header, $groupdata, $widths, 6, 2);
         $first = true;
         $grouppercent = round(($totalcorrect / $totalq) * 100);
@@ -138,7 +162,7 @@ class TheoryTestCertificate implements CertificateInterface{
         if($this->theory->testresults['status'] == 'pass'){$status = 'Passed';}
         else{$status = 'Failed';}
         
-        $overall = array('', 'Overall Status', $totalcorrect, $totalincorrect, $totalq, $grouppercent.'%', $status);
+        $overall = ['', 'Overall Status', $totalcorrect, $totalincorrect, $totalq, $grouppercent.'%', $status];
         $this->pdf->SetFont('Arial','B', 9);
         foreach($widths as $col){
             if($first === true){$first = false; $currentvalue = current($overall);}else{$currentvalue = next($overall);}
@@ -147,16 +171,19 @@ class TheoryTestCertificate implements CertificateInterface{
         
         $this->pdf->AddPage('P', 'A4');
         $this->pdf->SetFont('Arial','B', 9);
-        $testheader = array('Question', 'Learning Section', 'Question No.', 'Status');
-        $testdata = array();
+        $testheader = ['Question', 'Learning Section', 'Question No.', 'Status'];
+        $testdata = [];
         foreach($this->theory->questions as $question => $prim){
             if($this->theory->useranswers[$question]['status'] == '4'){$correct = 'Correct';}else{$correct = 'Incorrect';}
             $questioninfo = $this->theory->questionInfo($prim);
-            $testdata[] = array($question, $questioninfo['cat'], $questioninfo['topic'], $correct);
+            $testdata[] = [$question, $questioninfo['cat'], $questioninfo['topic'], $correct];
         }
-        $this->pdf->basicTable($testheader, $testdata, array(22,98,30,40), 5, 2);
+        $this->pdf->basicTable($testheader, $testdata, [22,98,30,40], 5, 2);
     }
     
+    /**
+     * Output the PDF to the screen
+     */
     public function createPDF(){
         $this->generateCertificate();
         $this->pdf->Output();

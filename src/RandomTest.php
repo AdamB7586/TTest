@@ -28,7 +28,7 @@ class RandomTest extends TheoryTest{
      * @return boolean If the questions are inserted into the database will return true else returns false
      */
     protected function chooseQuestions($testNo) {
-        $this->db->delete($this->progressTable, array('user_id' => $this->user->getUserID(), 'test_id' => $testNo));
+        $this->db->delete($this->progressTable, ['user_id' => $this->user->getUserID(), 'test_id' => $testNo]);
         $questions = $this->db->query("SELECT * FROM ((SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '1' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 2)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '2' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 3)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '3' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 4)
@@ -50,6 +50,6 @@ UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `casestudyno` = '".ran
             $this->questions[$q] = $question['prim'];
             $q++;
         }
-        return $this->db->insert($this->progressTable, array('user_id' => $this->user->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => strtolower($this->getTestType())));
+        return $this->db->insert($this->progressTable, ['user_id' => $this->user->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => strtolower($this->getTestType())]);
     }
 }

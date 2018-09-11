@@ -44,13 +44,10 @@ class FreeTheoryTest extends TheoryTest{
      * @return int Returns the current test number
      */
     public function getTest(){
-        if($this->testNo){
-            return $this->testNo;
-        }
-        else{
+        if(!is_numeric($this->testNo)){
             $this->testNo = $_SESSION['current_test'];
-            return $this->testNo;
         }
+        return $this->testNo;
     }
     
     /**
@@ -123,7 +120,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return boolean Returns true
      */
     protected function chooseQuestions($testNo){
-        $questions = $this->db->selectAll($this->questionsTable, array('mocktestcarno' => $testNo), array('prim'), array('mocktestcarqposition' => 'ASC'));
+        $questions = $this->db->selectAll($this->questionsTable, ['mocktestcarno' => $testNo], ['prim'], ['mocktestcarqposition' => 'ASC']);
         $q = 1;
         foreach($questions as $question){
             $this->questions[$q] = $question['prim'];
@@ -315,7 +312,7 @@ class FreeTheoryTest extends TheoryTest{
     protected function testReport(){
         $this->layout->assign('free_test', 'Yes', true);
         $this->getTestResults();
-        $report = array();
+        $report = [];
         $report['testname'] = ucwords($this->getTestName());
         $report['status'] = $this->testStatus();
         $report['time'] = $this->getTime();

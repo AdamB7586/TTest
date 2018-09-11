@@ -380,8 +380,7 @@ class LearnTest extends TheoryTest{
      */
     protected function flagHintButton($prim = false){
         $settings = $this->checkSettings();
-        $class = ($settings['hint'] === 'on' ? ' studyon' : '');
-        return '<div class="hint btn btn-theory'.$class.'"><span class="fa fa-book fa-fw"></span><span class="hidden-xs"> Study</span></div>';
+        return '<div class="hint btn btn-theory'.($settings['hint'] === 'on' ? ' studyon' : '').'"><span class="fa fa-book fa-fw"></span><span class="hidden-xs"> Study</span></div>';
     }
     
     /**
@@ -413,9 +412,7 @@ class LearnTest extends TheoryTest{
      * @return string Should return any related question information in a tabbed format
      */
     public function dsaExplanation($explanation, $prim){
-        $settings = $this->checkSettings();
-        $class = ($settings['hint'] === 'on' ? ' visible' : '');
-        return '<div class="col-xs-12 showhint'.$class.'">
+        return '<div class="col-xs-12 showhint'.($this->checkSettings()['hint'] === 'on' ? ' visible' : '').'">
 <ul class="nav nav-tabs">
 <li class="active"><a href="#tab-1" aria-controls="profile" role="tab" data-toggle="tab">Highway Code +</a></li>
 <li><a href="#tab-2" aria-controls="profile" role="tab" data-toggle="tab">DVSA Advice</a></li>'.
@@ -437,8 +434,7 @@ class LearnTest extends TheoryTest{
     protected function highwayCodePlus($prim){
         $highwaycode = '';
         $hcClass = new HighwayCode($this->db);
-        $hcRules = $hcClass->getRule($this->db->select($this->questionsTable, array('prim' => $prim), array('hcrule1', 'hcrule2', 'hcrule3')));
-        foreach($hcRules as $ruleno){
+        foreach($hcClass->getRule($this->db->select($this->questionsTable, array('prim' => $prim), array('hcrule1', 'hcrule2', 'hcrule3'))) as $ruleno){
             if(!$ruleno['hcrule']){
                 $rule = '<p class="center">'.$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']).$this->hcImage($ruleno['imagetitle2'], $ruleno['hctitle']).'</p><p class="center">'.$ruleno['hctitle'].'</p>';
             }

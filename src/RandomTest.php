@@ -46,9 +46,12 @@ UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '14' AND `c
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `casestudyno` = '".rand(1, 28)."');");
          
         $q = 1;
-        foreach($questions as $question){
-            $this->questions[$q] = $question['prim'];
-            $q++;
+        unset($_SESSION['test'.$this->getTest()]);
+        if(is_array($questions)){
+            foreach($questions as $question){
+                $this->questions[$q] = $question['prim'];
+                $q++;
+            }
         }
         return $this->db->insert($this->progressTable, ['user_id' => $this->user->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => strtolower($this->getTestType())]);
     }

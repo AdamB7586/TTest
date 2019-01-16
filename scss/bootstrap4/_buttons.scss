@@ -1,3 +1,5 @@
+@import "variables";
+
 .btn-theory{
     @extend .btn-success;
     @extend .btn-block;
@@ -35,13 +37,14 @@
 .sound{
     width:24px;
     height:24px;
-    font-family: "FontAwesome";
+    font-family: $tt-icon-font;
+    font-weight: $tt-icon-font-weight !important;
     font-size:24px;
     float:right;
     display:block;
     cursor:pointer;
     margin-left:4px;
-    &:before{content: $fa-var-volume-up;}
+    &:before{content: $tt-icon-volume-up;}
 }
 .audioswitch{
     clear:both;

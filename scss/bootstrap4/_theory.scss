@@ -1,4 +1,4 @@
-$btn-background: #CCCC99 !default;
+@import "variables";
 
 #theoryTest, #learningTest{
     font-size:1.15em;
@@ -166,13 +166,14 @@ $btn-background: #CCCC99 !default;
         background-color: #FF6600 !important;
     }
     .nscorrect &{
-        font-family:"FontAwesome";
+        font-family: $tt-icon-font;
+        font-weight: $tt-icon-font-weight !important;
         font-size:56px;
         line-height:56px;
         text-shadow: rgba(0,0,0, 0.85) 0 2px 1px;
         color:#7DAE3C;
         &:before{
-            content: $fa-var-check;
+            content: $tt-icon-check;
         }
     }
 }
@@ -262,10 +263,10 @@ $btn-background: #CCCC99 !default;
     color:#000 !important;
     position:relative;
     &:before{
-        content: $fa-var-check;
-        font-family: FontAwesome;
+        content: $tt-icon-check;
+        font-family: $tt-icon-font;
         font-style: normal;
-        font-weight: normal;
+        font-weight: $tt-icon-font-weight !important;
         text-decoration: inherit;
         position: absolute;
         font-size: 56px;

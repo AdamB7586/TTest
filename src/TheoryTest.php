@@ -187,7 +187,7 @@ class TheoryTest implements TTInterface{
         $this->config = $config;
         $this->user = $user;
         $this->layout = $layout;
-        $this->layout->addTemplateDir($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir);
+        $this->layout->addTemplateDir(($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir), 'theory');
         if(is_numeric($userID)){$this->userClone = $userID;}
         if(!session_id()){
             if(defined(SESSION_NAME)){session_name(SESSION_NAME);}

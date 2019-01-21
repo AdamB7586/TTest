@@ -4,7 +4,7 @@ $("#qnum").html('0');
 
 $(".continue").click(function(){
     var number = parseInt($(".timeremaining").attr('id'));
-    $.get('/modules/<?php echo($page); ?>?question=' + $(".continue").attr('id'), function(data){
+    $.get('<?php echo($page); ?>?question=' + $(".continue").attr('id'), function(data){
         data = $.parseJSON(data);
         $("#qnum").html(data.questionnum);
         $("#question").html(data.html);
@@ -13,7 +13,7 @@ $(".continue").click(function(){
 });
 
 $(".newtest").click(function(){
-    $.get('/modules/<?php echo($page); ?>?startnew=true', function(){
+    $.get('<?php echo($page); ?>?startnew=true', function(){
         location.reload();
     });
 });

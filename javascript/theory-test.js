@@ -77,14 +77,14 @@ function markAnswer(answer, question, remove, replace){
     if(process == false){
         process = true;
         if(remove == true){
-            $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&remove=" + answer + "&prim=" + question, function(){process = false;});
+            $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&remove=" + answer + "&prim=" + question, function(){process = false;});
         }
         else{
             if(replace == false){
-                $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&add=" + answer + "&prim=" + question, function(){process = false;});
+                $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&add=" + answer + "&prim=" + question, function(){process = false;});
             }
             else{
-                $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&replace=" + answer + "&prim=" + question, function(){process = false;});
+                $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&replace=" + answer + "&prim=" + question, function(){process = false;});
             }
         }
     }
@@ -139,11 +139,11 @@ function initAudio(){
 $(".audioswitch").click(function(){
     if($(".audioswitch").hasClass('audioon')){
         $(".audioswitch").addClass('audiooff').removeClass('audioon');
-        $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&audio=on", function(){questionData(questionid);});
+        $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&audio=on", function(){questionData(questionid);});
     }
     else{
         $(".audioswitch").addClass('audioon').removeClass('audiooff');
-        $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&audio=off", function(){questionData(questionid);});
+        $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&audio=off", function(){questionData(questionid);});
     }
 });
 
@@ -168,25 +168,25 @@ $(".nextquestion").click(function(){
 });
 
 $(".flag").click(function(){
-    $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&flag=" + questionid);
+    $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&flag=" + questionid);
     $(this).toggleClass("flagged");
 });
 
 $(".review").click(function(){
-    $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&review=" + questionid, function(data){
+    $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&review=" + questionid, function(data){
         $("#question").html(data);
     });
 });
 
 $(".reviewall").click(function(){
     var firstquestion = $(".reviewall").attr('id');
-    $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&reviewonly=all", function(){questionData(firstquestion);});
+    $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&reviewonly=all", function(){questionData(firstquestion);});
 });
 
 $(".reviewincomplete").click(function(){
     var firstincomplete = $(".reviewincomplete").attr('id');
     if(firstincomplete != 'none'){
-        $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&reviewonly=incomplete", function(){questionData(firstincomplete);});
+        $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&reviewonly=incomplete", function(){questionData(firstincomplete);});
     }
     else{
         alert('No incomplete questions');
@@ -196,7 +196,7 @@ $(".reviewincomplete").click(function(){
 $(".reviewflagged").click(function(){
     var firstflagged = $(".reviewflagged").attr('id');
     if(firstflagged != 'none'){
-        $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&reviewonly=flagged", function(){questionData(firstflagged);});
+        $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&reviewonly=flagged", function(){questionData(firstflagged);});
     }
     else{
         alert('No flagged questions');
@@ -212,7 +212,7 @@ $("#gohome").click(function(){
 });
 
 function questionData(question){
-    $.get("/modules/<?php echo($page); ?>?time=" + $("#time").html() + "&question=" + question, function(data){
+    $.get("<?php echo($page); ?>?time=" + $("#time").html() + "&question=" + question, function(data){
         $("#question").html(data.html);
         $("#qnum").html(data.questionnum);
         //$('html, body').animate({ scrollTop: 0 }, 0);
@@ -283,14 +283,14 @@ function endTest(time){
     clearInterval(countdown);
     $("#questiondata").html('');
     $("#countdown").html('');
-    $.get("/modules/<?php echo($page); ?>?endtest=true&time=" + time, function(data){
+    $.get("<?php echo($page); ?>?endtest=true&time=" + time, function(data){
         $("#question").html(data);
-	$.get("/modules/<?php echo($page); ?>?linkdata=true");
+	$.get("<?php echo($page); ?>?linkdata=true");
     });
 }
 
 window.onbeforeunload = function(){
-    $.get("/modules/<?php echo($page); ?>?saveinfo=true");
+    $.get("<?php echo($page); ?>?saveinfo=true");
     $('a').click(function(){testended = true;});
     if(testended === false){
         return "The results data for the questions you have answered will be lost!";

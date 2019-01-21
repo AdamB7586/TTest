@@ -27,8 +27,8 @@ class LearnTest extends TheoryTest{
      * @param false|int $userID If you wish to emulate a user set this value to the users ID else set to false
      * @param string|false $templateDir If you want to change the template location set this location here else set to false
      */
-    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false) {
-        parent::__construct($db, $config, $layout, $user, $userID, $templateDir);
+    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false, $theme = 'bootstrap') {
+        parent::__construct($db, $config, $layout, $user, $userID, $templateDir, $theme);
         $this->getTestInfo();
     }
     
@@ -389,7 +389,7 @@ class LearnTest extends TheoryTest{
      * @return string Returns the script HTML information
      */
     protected function getScript($review = false){
-        return '<script async type="text/javascript" src="'.$this->getJavascriptLocation().'learning-learn.js"></script>';
+        return $this->getJavascriptLocation().'learning-learn.js';
     }
     
     /**

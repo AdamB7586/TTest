@@ -182,12 +182,12 @@ class TheoryTest implements TTInterface{
      * @param int|false $userID If you want to emulate a user set the user ID here
      * @param string|false $templateDir If you want to change the template location set this location here else set to false
      */
-    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false) {
+    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false, $theme = 'bootstrap') {
         $this->db = $db;
         $this->config = $config;
         $this->user = $user;
         $this->layout = $layout;
-        $this->layout->addTemplateDir(($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir), 'theory');
+        $this->layout->addTemplateDir(($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates'.DS.$theme : $templateDir), 'theory');
         if(is_numeric($userID)){$this->userClone = $userID;}
         if(!session_id()){
             if(defined(SESSION_NAME)){session_name(SESSION_NAME);}
@@ -442,7 +442,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the JavaScript script to be displayed on the page
      */
     protected function existingScript() {
-        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'existing-'.$this->scriptVar.'.js"></script>';
+        return $this->getJavascriptLocation().'existing-'.$this->scriptVar.'.js';
     }
 
     /**
@@ -450,18 +450,9 @@ class TheoryTest implements TTInterface{
      * @return void Nothing is returned
      */
     protected function existingLayout() {        
-        if($this->anyExisting() === 'passed') {
-            $text = '<p>You have already passed this test! Are you sure you want to start a new test?</p><div class="timeremaining" id=""></div>';
-            $continue = '';
-        }
-        else{
-            $text = '<p>You have already started this test! Would you like to continue this test or start a new one?</p><div class="timeremaining" id="'.$this->getSeconds().'"></div>';
-            $continue = '<div class="continue btn btn-theory" id="'.$this->questionPrim($this->currentQuestion()).'"><span class="fa fa-long-arrow-right fa-fw"></span><span class="hidden-xs"> Continue Test</span></div>';
-        }
-        
-        $this->layout->assign('existing_text', $text);
-        $this->layout->assign('start_new_test', '<div class="newtest btn btn-theory"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Start New Test</span></div>');
-        $this->layout->assign('continue_test', $continue);
+        $this->layout->assign('existing_text', $this->anyExisting());
+        $this->layout->assign('seconds', ($this->anyExisting() !== 'passed' ? $this->getSeconds() : false));        
+        $this->layout->assign('continue_test', ($this->anyExisting() !== 'passed' ? $this->questionPrim($this->currentQuestion()) : false));
         $this->layout->assign('script', $this->existingScript());
         $this->questiondata = $this->layout->fetch('existing.tpl');
     }
@@ -640,11 +631,10 @@ class TheoryTest implements TTInterface{
     
     /**
      * Returns the audio switch button
-     * @return string|boolean If the user can play audio the button will be returned else returns false
+     * @return boolean If the user can play audio the button will be returned else returns false
      */
     protected function audioButton() {
-        if($this->audioEnabled === true) {return '<div class="audioswitch audiooff"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span><span class="fa fa-ban fa-stack-2x text-danger"></span></span><span class="sr-only">Turn Sound OFF</span></div>';}
-        else{return '<div class="audioswitch audioon"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span></span><span class="sr-only">Turn Sound ON</span></div>';}
+        return boolval($this->audioEnabled);
     }
     
     /**
@@ -678,9 +668,9 @@ class TheoryTest implements TTInterface{
      */
     protected function getScript($review = false) {
         if($this->review !== 'answers' && $review === false) {
-            return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'theory-test-'.$this->scriptVar.'.js"></script>';
+            return $this->getJavascriptLocation().'theory-test-'.$this->scriptVar.'.js';
         }
-        return '<script type="text/javascript" src="'.$this->getJavascriptLocation().'review-'.$this->scriptVar.'.js"></script>';
+        return $this->getJavascriptLocation().'review-'.$this->scriptVar.'.js';
     }
     
     /**
@@ -995,10 +985,9 @@ class TheoryTest implements TTInterface{
         $this->layout->assign('complete_questions', $this->numComplete(), true);
         $this->layout->assign('incomplete_questions', $this->numIncomplete(), true);
         $this->layout->assign('flagged_questions', $this->numFlagged(), true);
-        $this->layout->assign('review_all', '<div class="reviewall btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Review All</span></div>', true);
-        $this->layout->assign('review_incomplete', '<div class="reviewincomplete btn btn-theory" id="'.$this->getIncompleteQuestion().'"><span class="fa fa-tasks fa-fw"></span><span class="hidden-xs"> Review Incomplete</span></div>', true);
-        $this->layout->assign('review_flagged', '<div class="reviewflagged btn btn-theory" id="'.$this->getFlaggedQuestion().'"><span class="fa fa-flag fa-fw"></span><span class="hidden-xs"> Review Flagged</span></div>', true);
-        $this->layout->assign('end_test', '<div class="endtest btn btn-theory"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> End Test</span></div>', true);
+        $this->layout->assign('review_all', $this->getFirstQuestion(), true);
+        $this->layout->assign('review_incomplete', $this->getIncompleteQuestion(), true);
+        $this->layout->assign('review_flagged', $this->getFlaggedQuestion(), true);
         $this->layout->assign('script', $this->getScript(false), true);
         $this->layout->display('review.tpl');
     }
@@ -1046,7 +1035,8 @@ class TheoryTest implements TTInterface{
             if(is_numeric($question['casestudyno'])) {$this->setCaseStudy($question['casestudyno']);}
             $image = (($question['format'] == '0' || $question['format'] == '2') ? false : true);
             $this->layout->assign('mark', $this->getMarkText($question['mark']));
-            $this->layout->assign('question', '<div class="questiontext" id="'.$prim.'">'.$this->addAudio($prim, 'Q').$question['question'].'</div>');
+            $this->layout->assign('prim', $prim);
+            $this->layout->assign('question', $this->addAudio($prim, 'Q').$question['question']);
             $this->layout->assign('answer_1', $this->getOptions($question['prim'], $question['option1'], 'A', $image, $new));
             $this->layout->assign('answer_2', $this->getOptions($question['prim'], $question['option2'], 'B', $image, $new));
             $this->layout->assign('answer_3', $this->getOptions($question['prim'], $question['option3'], 'C', $image, $new));
@@ -1315,9 +1305,8 @@ class TheoryTest implements TTInterface{
         $this->layout->assign('results', $this->testresults);
         $this->layout->assign('percentages', $this->testPercentages());
         $this->layout->assign('dsa_cat_results', $this->createOverviewResults());
-        $this->layout->assign('review_test', '<div class="reviewtest btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-question fa-fw"></span><span class="hidden-xs"> Review Test</span></div>');
+        $this->layout->assign('review_test', $this->getFirstQuestion());
         $this->layout->assign('print_certificate', $this->printCertif());
-        $this->layout->assign('exit_test', '<div class="blank"></div><div class="exittest btn btn-theory"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> Exit Test</span></div>');
         $this->layout->assign('script', $this->getScript(true));
         $this->questiondata = $this->layout->fetch('results.tpl');
         return $this->questiondata;
@@ -1377,13 +1366,13 @@ class TheoryTest implements TTInterface{
     
     /**
      * Returns the print certificate button
-     * @return string Returns the print certificate/report button depending on how the user has done on the test
+     * @return array Returns the print certificate/report variables
      */
     protected function printCertif() {
-        if($this->testresults['status'] === 'pass') {
-            return '<a href="/certificate.pdf?testID='.$this->getTest().'" title="Print Certificate" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Certificate</span></a>';
-        }
-        return '<a href="/certificate.pdf?testID='.$this->getTest().'" title="Print Results" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Results</span></a>';
+        $certificate = [];
+        $certificate['status'] = $this->testresults['status'];
+        $certificate['location'] = '/certificate.pdf?testID='.$this->getTest();
+        return $certificate;
     }
     
     /**
@@ -1467,15 +1456,13 @@ class TheoryTest implements TTInterface{
      */
     protected function reviewAnswers() {
         if($this->review == 'answers') {
-            $questions = '<div class="numreviewq">';
-            for($r = 1; $r <= $this->numQuestions(); $r++) {                
-                if($this->getUserTestInfo()[$r]['status'] == '4') {$class = ' correct';}
-                elseif($this->getUserTestInfo()[$r]['status'] == '3') {$class = ' incorrect';}
-                else{$class = ' incomplete';}
-                
-                $questions.= '<div class="questionreview'.$class.($this->currentQuestion() == $r ? ' currentreview' : '').'" id="'.$this->questionPrim($r).'">'.$r.'</div>';
+            $questions = [];
+            for($r = 1; $r <= $this->numQuestions(); $r++) {
+                $questions[$r]['status'] = $this->getUserTestInfo()[$r]['status'];
+                $questions[$r]['current'] = ($this->currentQuestion() == $r ? true : false);
+                $questions[$r]['prim'] = $this->questionPrim($r);
             }
-            return $questions.'</div>';
+            return $questions;
         }
         return false;
     }

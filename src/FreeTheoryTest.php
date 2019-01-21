@@ -184,11 +184,7 @@ class FreeTheoryTest extends TheoryTest{
     /**
      * This should be called at the very start of the free test to that no information is added unnecessarily. This function assigns values to the tamples to start the test
      */
-    protected function startTest(){        
-        $text = '<p>Please click the start test button below when you are ready to start. Please make sure you do not navigate away from the page as you will not be able to pick up from where you left the test.</p>';
-        $this->layout->assign('continue_test', '');
-        $this->layout->assign('existing_text', $text);
-        $this->layout->assign('start_new_test', '<div class="newtest btn btn-theory"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Start Test</span></div>');
+    protected function startTest(){
         $this->layout->assign('script', $this->existingScript());
         $this->questiondata = $this->layout->fetch('existing.tpl');
     }
@@ -296,13 +292,12 @@ class FreeTheoryTest extends TheoryTest{
     
     /**
      * Returns the print certificate/report button
-     * @return string Returns the print certificate/report button depending on how the user has done in the test
+     * @return array Returns the print certificate/report variables
      */
     protected function printCertif(){
-        if($this->testresults['status'] == 'pass'){
-            return '<a href="/certificate.pdf?type=free&amp;testID='.$this->getTest().'" title="Print Certificate" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Certificate</span></a>';
-        }
-        return '<a href="/certificate.pdf?type=free&amp;testID='.$this->getTest().'" title="Print Results" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print Results</span></a>';
+        $certificate = parent::printCertif();
+        $certificate['location'] = $certificate['location'].'&amp;type=free';
+        return $certificate;
     }
     
     /**

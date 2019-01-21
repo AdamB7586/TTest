@@ -94,16 +94,22 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="row-eq-height">
-                    <div class="col-xs-3">{$review_test}</div>
-                    <div class="col-xs-3">{$print_certificate}</div>
+                    <div class="col-xs-3"><div class="reviewtest btn btn-theory" id="{$review_test}"><span class="fa fa-question fa-fw"></span><span class="hidden-xs"> Review Test</span></div></div>
+                    <div class="col-xs-3"><a href="{$print_certificate.location}" title="Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}</span></a></div>
                     <div class="col-xs-3"></div>
-                    <div class="col-xs-3">{$exit_test}</div>
+                    <div class="col-xs-3">
+                        <div class="blank"></div>
+                        <div class="exittest btn btn-theory">
+                            <span class="fa fa-sign-out fa-fw"></span>
+                            <span class="hidden-xs"> Exit Test</span>
+                        </div>
+                    </div>
                     {$extra}
                 </div>
             </div>
         </div>
     </div>
 </div>
-{$script}
+<script type="text/javascript" src="{$script}"></script>
 {/nocache}
 {/strip}

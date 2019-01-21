@@ -35,12 +35,12 @@ class Review{
      * @param int|false $userID If you want to emulate a user set the user ID here
      * @param string|false $templateDir If you want to change the template location set this location here else set to false
      */
-    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false){
+    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false, $theme = 'bootstrap'){
         $this->db = $db;
         $this->config = $config;
         $this->user = $user;
         $this->layout = $layout;
-        $this->layout->addTemplateDir(($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates' : $templateDir), 'theory');
+        $this->layout->addTemplateDir(($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates'.DS.$theme : $templateDir), 'theory');
         if(is_numeric($userID)){$this->userClone = $userID;}
         $this->setTables();
     }

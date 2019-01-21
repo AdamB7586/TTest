@@ -82,18 +82,18 @@ function markAnswer(answer, question, remove, replace){
             $(".check").removeClass("recheck checkcorrect checkincorrect");
             $(".check").html('<span class="fa fa-fw fa-question"></span><span class="hidden-xs"> Check Answer</span>');
             $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
-            $.get("/modules/<?php echo($page); ?>?remove=" + answer + "&prim=" + question, function(data){process = false;});
+            $.get("<?php echo($page); ?>?remove=" + answer + "&prim=" + question, function(data){process = false;});
         }
         else{
             if(replace == false){
-                $.get("/modules/<?php echo($page); ?>?add=" + answer + "&prim=" + question, function(data){
+                $.get("<?php echo($page); ?>?add=" + answer + "&prim=" + question, function(data){
                     if(numchecked == max){$(".check").addClass("recheck"); $(".check").html('<span class="fa fa-fw fa-question"></span><span class="hidden-xs"> Check Answer</span>');}
                     $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
                     process = false;
                 });
             }
             else{
-                $.get("/modules/<?php echo($page); ?>?replace=" + answer + "&prim=" + question, function(data){
+                $.get("<?php echo($page); ?>?replace=" + answer + "&prim=" + question, function(data){
                     $(".check").addClass("recheck");
                     $(".check").html('<span class="fa fa-fw fa-question"></span><span class="hidden-xs"> Check Answer</span>');
                     $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
@@ -150,11 +150,11 @@ function initAudio(){
 $(".audioswitch").click(function(){
     if($(".audioswitch").hasClass('audioon')){
         $(".audioswitch").addClass('audiooff').removeClass('audioon');
-        $.get("/modules/<?php echo($page); ?>?audio=on", function(){questionData(questionid);});
+        $.get("<?php echo($page); ?>?audio=on", function(){questionData(questionid);});
     }
     else{
         $(".audioswitch").addClass('audioon').removeClass('audiooff');
-        $.get("/modules/<?php echo($page); ?>?audio=off", function(){questionData(questionid);});
+        $.get("<?php echo($page); ?>?audio=off", function(){questionData(questionid);});
     }
 });
 
@@ -207,7 +207,7 @@ $(".hint").click(function(){
             $(document).scrollTop(500);
         }
     });
-    $.get("/modules/<?php echo($page); ?>?hint=true");
+    $.get("<?php echo($page); ?>?hint=true");
 });
 
 $(".check").click(function(){
@@ -228,7 +228,7 @@ function checkCorrect(question){
     $(".check").removeClass("recheck");
     if(process == false){
         if(numchecked == max){
-            $.get("/modules/<?php echo($page); ?>?check=" + question, function(data){
+            $.get("<?php echo($page); ?>?check=" + question, function(data){
                 if(data === 'CORRECT'){
                     $(".selected").removeClass("selectedincorrect").addClass("selectedcorrect");
                     $(".signal").removeClass("signalunattempted signalincorrect").addClass("signalcorrect");
@@ -261,7 +261,7 @@ function checkCorrect(question){
 }
 
 function questionData(question){
-    $.get("/modules/<?php echo($page); ?>?question=" + question, function(data){
+    $.get("<?php echo($page); ?>?question=" + question, function(data){
         $("#question").html(data.html);
         $("#qnum").html(data.questionnum);
         //$('html, body').animate({ scrollTop: 0 }, 0);
@@ -314,6 +314,6 @@ function removeCookie(cookie_name){
 }
 
 window.onbeforeunload = function(){
-    $.get("/modules/<?php echo($page); ?>?update=true");
+    $.get("<?php echo($page); ?>?update=true");
     return "Are you sure you want to leave the learning section?";
 };*/

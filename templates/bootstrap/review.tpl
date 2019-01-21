@@ -31,15 +31,15 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="row-eq-height">
-                    <div class="col-xs-3">{$review_all}</div>
-                    <div class="col-xs-3">{$review_incomplete}</div>
-                    <div class="col-xs-3">{$review_flagged}</div>
-                    <div class="col-xs-3">{$end_test}</div>
+                    <div class="col-xs-3"><div class="reviewall btn btn-theory" id="{$review_all}"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Review All</span></div></div>
+                    <div class="col-xs-3"><div class="reviewincomplete btn btn-theory" id="{$review_incomplete}"><span class="fa fa-tasks fa-fw"></span><span class="hidden-xs"> Review Incomplete</span></div></div>
+                    <div class="col-xs-3"><div class="reviewflagged btn btn-theory" id="{$review_flagged}"><span class="fa fa-flag fa-fw"></span><span class="hidden-xs"> Review Flagged</span></div></div>
+                    <div class="col-xs-3"><div class="endtest btn btn-theory"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> End Test</span></div></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{$script}
+<script type="text/javascript" src="{$script}"></script>
 {/nocache}
 {/strip}

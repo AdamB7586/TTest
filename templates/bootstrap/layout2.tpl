@@ -5,7 +5,13 @@
     <div class="row">
         <div class="col-md-12">
             {$alert}
-            {$review_questions}
+            {if $review_questions}
+                <div class="numreviewq">
+                    {foreach $review_questions as $r => $review_question}
+                        <div class="questionreview {if $review_question.status == 4}correct{elseif $review_question.status == 3}incorrect{else}incomplete{/if}{if $review_question.current == 4} currentreview{/if}" id="{$review_question.prim}">{$r}</div>
+                    {/foreach}
+                </div>
+            {/if}
         </div>
     </div>
     {/if}
@@ -17,7 +23,9 @@
     <div class="row{if $review_questions} isreview{/if}">
         <div class="col-sm-6"><div id="case"><h4 class="no-margin-t">Case Study</h4>{$case_study}</div></div>
         <div class="col-sm-6">
-            {$question}
+            <div class="questiontext" id="{$prim}">
+                {$question}
+            </div>
             {$answer_1}
             {$answer_2}
             {$answer_3}
@@ -28,7 +36,8 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-        {$audio}{$mark}
+            <div class="audioswitch audio{if $audio}off{else}on{/if}"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span>{if $audio}<span class="fa fa-ban fa-stack-2x text-danger"></span>{/if}</span><span class="sr-only">Turn Sound {if $audio}OFF{else}ON{/if}</span></div>
+            {$mark}
         </div>
     </div>
 </div>
@@ -48,6 +57,6 @@
     </div>
 </div>
 <div class="col-md-12" id="explan"><div class="row">{$dsa_explanation}</div></div>
-{$script}
+<script type="text/javascript" src="{$script}"></script>
 {/nocache}
 {/strip}

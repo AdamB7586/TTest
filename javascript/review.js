@@ -57,17 +57,17 @@ $(".audioswitch").click(function(){
     if($(".audioswitch").text() == 'Turn Sound ON'){
         $(".audioswitch").addClass('audiooff').removeClass('audioon');
         $(".audioswitch").text('Turn Sound OFF');
-        $.get("/modules/<?php echo($page); ?>?audio=on", function(){questionData(questionid);});
+        $.get("<?php echo($page); ?>?audio=on", function(){questionData(questionid);});
     }
     else{
         $(".audioswitch").addClass('audioon').removeClass('audiooff');
         $(".audioswitch").text('Turn Sound ON');
-        $.get("/modules/<?php echo($page); ?>?audio=off", function(){questionData(questionid);});
+        $.get("<?php echo($page); ?>?audio=off", function(){questionData(questionid);});
     }
 });
 
 $(".reviewtest").click(function(){
-    $.get("/modules/<?php echo($page); ?>?reviewonly=answers", function(){
+    $.get("<?php echo($page); ?>?reviewonly=answers", function(){
         setTimeout(function(){
             $("#questiondata").html('Question <span id="qnum">1</span> of <span id="totalq">' + $('.numquestions').attr('id') + '</span>');
             $("#questiondata").addClass('questionright');
@@ -110,18 +110,18 @@ $(".viewfeedback").click(function(){
             $(document).scrollTop(500);
         }
     });
-    $.get("/modules/<?php echo($page); ?>?hint=true");
+    $.get("<?php echo($page); ?>?hint=true");
 });
 
 $(".endreview").click(function(){
-    $.get("/modules/<?php echo($page); ?>?endtest=true", function(data){
+    $.get("<?php echo($page); ?>?endtest=true", function(data){
         $("#questiondata").html('');
         $("#question").html(data);
     });
 });
 
 function questionData(question){
-    $.get("/modules/<?php echo($page); ?>?question=" + question, function(data){
+    $.get("<?php echo($page); ?>?question=" + question, function(data){
         $("#question").html(data.html);
         $("#qnum").html(data.questionnum);
    }, "json");
@@ -132,7 +132,7 @@ function endTest(time){
     clearInterval(countdown);
     $("#questiondata").html('');
     $("#countdown").html('');
-    $.get("/modules/<?php echo($page); ?>?endtest=true&time=" + time, function(data){
+    $.get("<?php echo($page); ?>?endtest=true&time=" + time, function(data){
         $("#question").html(data);
     });
 }

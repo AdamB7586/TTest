@@ -54,6 +54,11 @@ class TheoryTest implements TTInterface{
      */
     public $passmark = 43;
     
+    /*
+     * @var in This is the maximum number of answers each question has within the test
+     */
+    public $noAnswers = 6;
+    
     /**
      * @var string The name of the user tests database table
      */
@@ -621,12 +626,13 @@ class TheoryTest implements TTInterface{
      * Returns the HTML5 audio HTML information as a string
      * @param int $prim This should be the question prim number
      * @param string $letter This should be the letter of the question or answer
-     * @return string Returns the HTML needed for the audio
+     * @return array Returns the array information needed for the audio
      */
     protected function addAudio($prim, $letter) {
         if($this->audioEnabled && is_numeric($prim)) {
-            return '<div class="sound fa fa-fw fa-volume-up" id="audioanswer'.$letter.$prim.'"><audio id="audio'.$letter.$prim.'" preload="auto"><source src="'.$this->getAudioLocation().'/mp3/'.strtoupper($letter).$prim.'.mp3" type="audio/mpeg"><source src="'.$this->getAudioLocation().'/ogg/'.strtoupper($letter).$prim.'.ogg" type="audio/ogg"></audio></div>';
+            return ['enabled' => true, 'location' => $this->getAudioLocation(), 'file' => strtoupper($letter).$prim];
         }
+        return false;
     }
     
     /**
@@ -651,14 +657,18 @@ class TheoryTest implements TTInterface{
      * Returns the image HTML if the image exists else returns false
      * @param string $file Should be the image name and extension
      * @param boolean $main If the image is from the question should be set to true
-     * @return string|false Returns HTML image string if exists else returns false
+     * @return array|false Returns image array information if it exists
      */
     public function createImage($file, $main = false) {
         if($file != NULL && $file != '' && file_exists($this->getImageRootPath().$this->getImagePath().$file)) {
             list($width, $height) = getimagesize($this->getImageRootPath().$this->getImagePath().$file);
-            return '<img src="'.$this->getImagePath().$file.'" alt="" width="'.$width.'" height="'.$height.'" class="'.($main === true ? 'imageright questionimage ' : '').'img-responsive" />';
+            $image = [];
+            $image['width'] = $width;
+            $image['height'] = $height;
+            $image['src'] = $this->getImagePath().$file;
+            $image['main'] = $main;
+            return $image;
         }
-        return false;
     }
     
     /**
@@ -674,13 +684,13 @@ class TheoryTest implements TTInterface{
     }
     
     /**
-     * Returns the number of answers which need to be marked HTML
+     * Returns the number of answers which need to be marked
      * @param int $num This should be the number of answers to select
-     * @return string Returns the HTML with the number of questions to mark
+     * @return array Returns the array with the number of questions to mark
      */
-    protected function getMarkText($num) {
+    protected function getMark($num) {
         $number = [1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five', 6 => 'six'];
-        return '<span class="mark" title="'.$num.'">Mark '.$number[intval($num)].' answer'.($num > 1 ? 's' : '').'</span>';
+        return ['num' => intval($num), 'text' => $number[intval($num)], 'plural' => ($num > 1 ? true : false)];
     }
     
     /**
@@ -689,10 +699,10 @@ class TheoryTest implements TTInterface{
      */
     protected function alert() {
         if($this->review === 'flagged' || $this->review === 'incomplete') {
-            return '<div class="alert alert-danger">Reviewing '.$this->review.' questions only</div>';
+            return $this->review;
         }
         elseif($this->review === false && $this->numComplete() == $this->numQuestions()) {
-            return '<div class="msg">You have now completed all of the questions, you can mark the test by clicking the "<span class="fa fa-binoculars fa-fw"></span><span class="hidden-xs"> Review</span>" and then "<span class="endtest"><span class="fa fa-sign-out fa-fw"></span><span class="hidden-xs"> End Test</span></span>" buttons or click on the following button <div class="endtest btn btn-default">Mark my test</div></div>';
+            return 'allmarked';
         }
         return false;
     }
@@ -704,20 +714,20 @@ class TheoryTest implements TTInterface{
      */
     protected function flagHintButton($prim) {
         if($this->review !== 'answers') {
-            return '<div class="flag'.($this->questionFlagged($prim) ? ' flagged' : '').' btn btn-theory"><span class="fa fa-flag fa-fw"></span><span class="hidden-xs"> Flag Question</span></div>';
+            return ['text' => 'Flag Question', 'class' => 'flag'.($this->questionFlagged($prim) ? ' flagged' : ''), 'icon' => 'flag'];
         }
-        return '<div class="viewfeedback'.($this->checkSettings()['hint'] === 'on' ? ' flagged' : '').' btn btn-theory"><span class="fa fa-book fa-fw"></span><span class="hidden-xs"> Explain</span></div>';
+        return ['text' => 'Explain', 'class' => 'viewfeedback'.($this->checkSettings()['hint'] === 'on' ? ' flagged' : ''), 'icon' => 'book'];
     }
     
     /**
      * Returns the review button HTML code
-     * @return string Returns the button HTML code
+     * @return array Returns the button array information
      */
     protected function reviewButton() {
         if($this->review !== 'answers') {
-            return '<div class="review btn btn-theory"><span class="fa fa-binoculars fa-fw"></span><span class="hidden-xs"> Review</span></div>';
+            return ['text' => 'Review', 'class' => 'review', 'icon' => 'binoculars'];
         }
-        return '<div class="endreview btn btn-theory"><span class="fa fa-reply fa-fw"></span><span class="hidden-xs"> End Review</span></div>';
+        return ['text' => 'End Review', 'class' => 'endreview', 'icon' => 'reply'];
     }
     
     /**
@@ -938,10 +948,10 @@ class TheoryTest implements TTInterface{
     
     /**
      * This is to add extra content if required (Used on extention classes)
-     * @return string
+     * @return false
      */
     protected function extraContent() {
-        return '';
+        return false;
     }
     
     /**
@@ -957,23 +967,31 @@ class TheoryTest implements TTInterface{
      * Returns the option HTML for a selected option of a question
      * @param int $question This should be the unique question prim number
      * @param string $option This should be the option text
-     * @param string $letter This should be the option letter
+     * @param int $answer_num This should be the option number
      * @param boolean $image If is a image question should be set to true else if it is multiple choice set to false (default)
      * @param boolean $new If the test is new this should be set to true else set to false
-     * @return string Should return the option HTML for the given option
+     * @return array Should return the option array for the given answer
      */
-    protected function getOptions($question, $option, $letter, $image = false, $new = false) {
-        $selected = '';
-        if($new === false && $this->review !== 'answers') {
-            if($this->answerSelected($question, $letter)) {$selected = ($image === false ? ' selected' : ' imgselected');}
+    protected function getOptions($question, $option, $answer_num, $image = false, $new = false) {
+        if($option){
+            $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            $options = [];
+            if($new === false && $this->review !== 'answers') {
+                if($this->answerSelected($question, $letters[$answer_num])) {$options['selected'] = true;}
+            }
+            elseif($new === false) {
+                $options['selected'] = strtolower($this->answerSelectedCorrect($question, $letters[$answer_num]));
+            }
+            if($image !== false){
+                $options['image'] = $this->createImage($question.strtolower($letters[$answer_num]).'.png');
+            }
+            $options['audio'] = $this->addAudio($question, $letters[$answer_num]);
+            $options['id'] = strtolower($letters[$answer_num].$question);
+            $options['prim'] = $question;
+            $options['letter'] = $letters[$answer_num];
+            $options['option'] = $option;
+            return $options;
         }
-        elseif($new === false) {
-            $iscorrect = $this->answerSelectedCorrect($question, $letter);
-            if($iscorrect == 'CORRECT') {$selected = ($image === false ? ' selectedcorrect' : ' imgcorrect');}
-            elseif($iscorrect == 'INCORRECT') {$selected = ($image === false ? ' selectedincorrect' : ' imgincorrect');}
-            elseif($iscorrect == 'NSCORRECT') {$selected = ($image === false ? ' nscorrect' : ' imgnscorrect');}
-        }
-        return '<div class="answer'.$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($question, $letter).$option : $option.$this->createImage($question.strtolower($letter).'.png')).'</div>';
     }
     
     /**
@@ -1034,16 +1052,14 @@ class TheoryTest implements TTInterface{
         if(!empty($question)) {
             if(is_numeric($question['casestudyno'])) {$this->setCaseStudy($question['casestudyno']);}
             $image = (($question['format'] == '0' || $question['format'] == '2') ? false : true);
-            $this->layout->assign('mark', $this->getMarkText($question['mark']));
+            $this->layout->assign('mark', $this->getMark($question['mark']));
             $this->layout->assign('prim', $prim);
             $this->layout->assign('question', $this->addAudio($prim, 'Q').$question['question']);
-            $this->layout->assign('answer_1', $this->getOptions($question['prim'], $question['option1'], 'A', $image, $new));
-            $this->layout->assign('answer_2', $this->getOptions($question['prim'], $question['option2'], 'B', $image, $new));
-            $this->layout->assign('answer_3', $this->getOptions($question['prim'], $question['option3'], 'C', $image, $new));
-            $this->layout->assign('answer_4', $this->getOptions($question['prim'], $question['option4'], 'D', $image, $new));
-            $this->layout->assign('answer_5', ($question['option5'] ? $this->getOptions($question['prim'], $question['option5'], 'E', $image, $new) : false));
-            $this->layout->assign('answer_6', ($question['option6'] ? $this->getOptions($question['prim'], $question['option6'], 'F', $image, $new) : false));
-            $this->layout->assign('image', ($question['dsaimageid'] ? $this->createImage($question['prim'].'.jpg', true) : ''));
+            for($a = 1; $a <= $this->noAnswers; $a++){
+                $answers[$a] = $this->getOptions($question['prim'], $question['option'.$a], $a, $image, $new);
+            }
+            $this->layout->assign('answers', array_filter($answers));
+            $this->layout->assign('image', ($question['dsaimageid'] ? $this->createImage($question['prim'].'.jpg', true) : false));
             $this->layout->assign('case_study', $this->casestudy);
             $this->layout->assign('dsa_explanation', $this->dsaExplanation($question['dsaexplanation'], $prim));
             $this->layout->assign('previous_question', $this->prevQuestion());
@@ -1055,11 +1071,9 @@ class TheoryTest implements TTInterface{
             $this->layout->assign('review_questions', $this->reviewAnswers());
             $this->layout->assign('extra', $this->extraContent());
             $this->layout->assign('audio', $this->audioButton());
-            $this->questiondata = $this->layout->fetch('layout'.$question['format'].'.tpl');
-            return json_encode(['html' => utf8_encode($this->questiondata), 'questionnum' => $this->questionNo($prim)]);
         }
-        $this->questiondata = '<div id="question-content"></div>';
-        return json_encode(['html' => $this->questiondata, 'questionnum' => 0]);
+        $this->questiondata = $this->layout->fetch((!empty($question) ? 'layout'.$question['format'] : 'empty').'.tpl');
+        return json_encode(['html' => utf8_encode($this->questiondata), 'questionnum' => $this->questionNo($prim)]);
     }
     
     /**
@@ -1123,7 +1137,11 @@ class TheoryTest implements TTInterface{
      */
     public function dsaExplanation($explanation, $prim) {
         if($this->review == 'answers') {
-            return '<div class="col-md-12"><div class="explanation'.($this->checkSettings()['hint'] === 'on' ? ' visable' : '').'">'.$this->addAudio($prim, 'DSA').'<strong>Official DVSA answer explanation:</strong> '.$explanation.'</div></div>';
+            $explain = [];
+            $explain['visable'] = ($this->checkSettings()['hint'] === 'on' ? ' visable' : '');
+            $explain['audio'] = $this->addAudio($prim, 'DSA');
+            $explain['explanation'] = $explanation;
+            return $explain;
         }
         return false;
     }
@@ -1184,7 +1202,7 @@ class TheoryTest implements TTInterface{
             $this->testName = $name;
         }
         else{
-            $this->testName = '<span class="hidden-xs">Theory </span>Test '.$this->getTest();
+            $this->testName = 'Theory Test '.$this->getTest();
         }
     }
     
@@ -1245,12 +1263,12 @@ class TheoryTest implements TTInterface{
             if($this->review == 'flagged' && $this->numFlagged() > 1) {$prev = $this->questionPrim($this->getNextFlagged('prev'));}
             elseif($this->review == 'incomplete' && $this->numIncomplete() > 1) {$prev = $this->questionPrim($this->getNextIncomplete('prev'));}
             else{$prev = $this->questionPrim(($this->currentQuestion() - 1));}
-            return '<div class="prevquestion btn btn-theory" id="'.$prev.'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
+            return ['id' => $prev, 'test' => 'Previous', 'icon' => 'angle-left'];
         }
         if($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
-            return '<div class="prevquestion btn btn-theory" id="'.$this->getLastQuestion().'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
+            return ['id' => $this->getLastQuestion(), 'test' => 'Previous', 'icon' => 'angle-left'];
         }
-        return '<div class="noprev"></div>';
+        return false;
     }
     
     /**
@@ -1262,12 +1280,13 @@ class TheoryTest implements TTInterface{
             if($this->review == 'flagged' && $this->numFlagged() > 1) {$next = $this->questionPrim($this->getNextFlagged());}
             elseif($this->review == 'incomplete' && $this->numIncomplete() > 1) {$next = $this->questionPrim($this->getNextIncomplete());}
             else{$next = $this->questionPrim(($this->currentQuestion() + 1));}
-            return '<div class="nextquestion btn btn-theory" id="'.$next.'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
+            return ['id' => $next, 'test' => 'Next', 'icon' => 'angle-right'];
         }
         if($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
-            return '<div class="nextquestion btn btn-theory" id="'.$this->getFirstQuestion().'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
+            return ['id' => $this->getFirstQuestion(), 'test' => 'Next', 'icon' => 'angle-right'];
+            
         }
-        return '';
+        return false;
     }
     
     /**
@@ -1396,8 +1415,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the test status HTML code either pass or failed
      */
     public function testStatus() {
-        if($this->testresults['status'] === 'pass') {return '<strong class="pass">Passed</strong>';}
-        else{return '<strong class="fail">Failed</strong>';}
+        return $this->testresults['status'];
     }
     
     /**

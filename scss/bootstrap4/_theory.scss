@@ -165,7 +165,7 @@
     .selected &, .selectedcorrect &, .selectedincorrect &{
         background-color: #FF6600 !important;
     }
-    .nscorrect &{
+    .selectednscorrect &{
         font-family: $tt-icon-font;
         font-weight: $tt-icon-font-weight !important;
         font-size:56px;
@@ -248,12 +248,12 @@
     color:#fff !important;
     border-color:darken(#D9534F, 5%) !important;
 }
-.nscorrect, .imgnscorrect, .incomplete{
+.selectednscorrect, .imgnscorrect, .incomplete{
     background-color:#998 !important;
     color:#fff !important;
     border-color:darken(#998, 5%) !important;
 }
-.nscorrect, .imgnscorrect{
+.selectednscorrect, .imgnscorrect{
     background-color:#E0EBBB !important;
     color:#000 !important;
     border-color:darken(#E0EBBB, 5%) !important;

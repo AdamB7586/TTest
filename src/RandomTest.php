@@ -2,7 +2,6 @@
 namespace TheoryTest\Car;
 
 class RandomTest extends TheoryTest{
-    protected $testName = 'Random <span class="hidden-xs"> Theory</span> Test';
     protected $testNo = 15;
     
     protected $scriptVar = 'random';
@@ -54,5 +53,18 @@ UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `casestudyno` = '".ran
             }
         }
         return $this->db->insert($this->progressTable, ['user_id' => $this->user->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => strtolower($this->getTestType())]);
+    }
+    
+    /**
+     * Sets the current test name
+     * @param string $name This should be the name of the test you wish to set it to if left blank will just be Theory Test plus test number
+     */
+    protected function setTestName($name = '') {
+        if(!empty($name)) {
+            $this->testName = $name;
+        }
+        else{
+            $this->testName = 'Random Theory Test';
+        }
     }
 }

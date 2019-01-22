@@ -36,7 +36,7 @@
         <td><strong>Time Taken:</strong></td>
     </tr>
     <tr>
-        <td>{$report.status}</td>
+        <td>{if $report.status == 'pass'}<strong class="pass">Passed</strong>{else}<strong class="fail">Failed</strong>{/if}</td>
         <td>{$report.time}</td>
     </tr>
     </table>
@@ -104,7 +104,7 @@
                             <span class="hidden-xs"> Exit Test</span>
                         </div>
                     </div>
-                    {$extra}
+                    {include file="includes/extra.tpl"}
                 </div>
             </div>
         </div>

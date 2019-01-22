@@ -176,18 +176,28 @@ class LearnTest extends TheoryTest{
      * Returns the HTML code for the options
      * @param int $prim The prim number for the question
      * @param string $option The option text
-     * @param string $letter The letter of the current option
+     * @param int $answer_num This should be the option number
      * @param boolean $image If is a image question should be set to true else if it is multiple choice set to false (default)
      * @param boolean $new Added for compatibility with parent class
-     * @return string Returns the HTML code for a given question option
+     * @return array Should return the option array for the given answer
      */
-    protected function getOptions($prim, $option, $letter, $image = false, $new = false) {
-        if($this->answerSelected($prim, $letter)){
-            $selected = ($image === false ? ' selected' : ' imgselected');
-            if($this->questionStatus() !== 'unattempted'){$selected.= ' selected'.$this->questionStatus();}
+    protected function getOptions($prim, $option, $answer_num, $image = false, $new = false) {
+        if($option){
+            $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            $options = [];
+            if($this->answerSelected($prim, $letters[$answer_num]) && $this->questionStatus() !== 'unattempted'){
+                $options['selected'] = strtolower($this->questionStatus());
+            }
+            if($image !== false){
+                $options['image'] = $this->createImage($prim.strtolower($letters[$answer_num]).'.png');
+            }
+            $options['audio'] = $this->addAudio($prim, $letters[$answer_num]);
+            $options['id'] = strtolower($letters[$answer_num].$prim);
+            $options['prim'] = $prim;
+            $options['letter'] = $letters[$answer_num];
+            $options['option'] = $option;
+            return $options;
         }
-        else{$selected = '';}
-        return '<div class="answer'.($image === true ? 'image' : '').$selected.'" id="'.$letter.'">'.($image === false ? '<div class="selectbtn"></div>'.$this->addAudio($prim, $letter).$option : $option.$this->createImage($prim.strtolower($letter).'.png')).'</div>';
     }
     
     /**
@@ -200,7 +210,7 @@ class LearnTest extends TheoryTest{
             $prim = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('<', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
         }
         else{$prim = $this->getLastQuestion();}
-        return '<div class="prevquestion btn btn-theory" id="'.$prim.'"><span class="fa fa-angle-left fa-fw"></span><span class="hidden-xs"> Previous</span></div>';
+        return ['id' => $prim, 'test' => 'Previous', 'icon' => 'angle-left'];
     }
     
     /**
@@ -213,7 +223,7 @@ class LearnTest extends TheoryTest{
             $prim = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('>', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'ASC'));
         }
         else{$prim = $this->getFirstQuestion();}
-        return '<div class="nextquestion btn btn-theory" id="'.$prim.'"><span class="fa fa-angle-right fa-fw"></span><span class="hidden-xs"> Next</span></div>';
+        return ['id' => $prim, 'test' => 'Next', 'icon' => 'angle-right'];
     }
     
     /**
@@ -363,14 +373,14 @@ class LearnTest extends TheoryTest{
     
     /**
      * Returns the review button for the current test
-     * @return string Returns the review button for the current test
+     * @return array Returns the button array information
      */
     protected function reviewButton() {
         $currentstatus = $this->questionStatus();
-        if($currentstatus == 'correct'){$style = ' checkcorrect'; $text = '<span class="fa fa-check fa-fw"></span><span class="hidden-xs"> Correct</span>';}
-        elseif($currentstatus == 'incorrect'){$style = ' checkincorrect'; $text = '<span class="fa fa-times fa-fw"></span><span class="hidden-xs"> Incorrect</span>';}
-        else{$style = ''; $text = '<span class="fa fa-question fa-fw"></span><span class="hidden-xs"> Check Answer</span>';}
-        return '<div class="check btn btn-theory'.$style.'">'.$text.'</div>';
+        if($currentstatus == 'correct'){$style = ' checkcorrect'; $icon = 'check'; $text = 'Correct';}
+        elseif($currentstatus == 'incorrect'){$style = ' checkincorrect'; $icon = 'times'; $text = 'Incorrect';}
+        else{$style = ''; $icon = 'question'; $text = 'Check Answer';}
+        return ['text' => $text, 'class' => 'check'.$style, 'icon' => $icon];
     }
 
     /**
@@ -379,8 +389,7 @@ class LearnTest extends TheoryTest{
      * @return string Returns the button HTML
      */
     protected function flagHintButton($prim = false){
-        $settings = $this->checkSettings();
-        return '<div class="hint btn btn-theory'.($settings['hint'] === 'on' ? ' studyon' : '').'"><span class="fa fa-book fa-fw"></span><span class="hidden-xs"> Study</span></div>';
+        return ['text' => 'Study', 'class' => 'hint'.($this->checkSettings()['hint'] === 'on' ? ' studyon' : ''), 'icon' => 'book'];
     }
     
     /**
@@ -397,11 +406,12 @@ class LearnTest extends TheoryTest{
      * @return string Returns any extra HTML code that needs adding to the page
      */
     protected function extraContent(){
-        $extra = '';
+        $extra = [];
         if(is_array($this->testInfo['casestudy'])){
-            $extra.= '</div></div><div class="row"><div><div class="col-xs-12 skipcorrectclear"><div class="skipcorrect btn btn-theory'.($_COOKIE['skipCorrect'] == 1 ? ' flagged' : '').'">Skip Correct</div></div>';
+            $extra['skipCorrect'] = true;
+            $extra['flagged'] = ($_COOKIE['skipCorrect'] == 1 ? ' flagged' : '');
         }
-        $extra.='<div class="signal signal'.$this->questionStatus().'"></div>';
+        $extra['signal'] = $this->questionStatus();
         return $extra;
     }
     
@@ -412,18 +422,16 @@ class LearnTest extends TheoryTest{
      * @return string Should return any related question information in a tabbed format
      */
     public function dsaExplanation($explanation, $prim){
-        return '<div class="col-xs-12 showhint'.($this->checkSettings()['hint'] === 'on' ? ' visible' : '').'">
-<ul class="nav nav-tabs">
-<li class="active"><a href="#tab-1" aria-controls="profile" role="tab" data-toggle="tab">Highway Code +</a></li>
-<li><a href="#tab-2" aria-controls="profile" role="tab" data-toggle="tab">DVSA Advice</a></li>'.
-/*<li><a href="#tab-3">Instructor Comment</a></li>*/'
-</ul>
-<div class="tab-content">
-<div role="tabpanel" class="tab-pane active" id="tab-1">'.$this->highwayCodePlus($prim).'</div>
-<div role="tabpanel" class="tab-pane" id="tab-2">'.$this->addAudio($prim, 'DSA').$explanation.'</div>'.
-/*<div role="tabpanel" class="tab-pane" id="tab-3">'.$this->instructorComments($prim).'</div>*/'
-</div>
-</div>';
+        $explain = [];
+        $explain['visable'] = ($this->checkSettings()['hint'] === 'on' ? ' visable' : '');
+        $explain['tabs'][1]['label'] = 'Highway Code +';
+        $explain['tabs'][1]['text'] = $this->highwayCodePlus($prim);
+        $explain['tabs'][2]['label'] = 'DVSA Advice';
+        $explain['tabs'][2]['text'] = $explanation;
+        $explain['tabs'][2]['audio'] = $this->addAudio($prim, 'DSA');
+        //$explain['tabs'][3]['label'] = 'Instructor Comment';
+        //$explain['tabs'][3]['text'] = $this->instructorComments($prim);
+        return $explain;
     }
     
     /**

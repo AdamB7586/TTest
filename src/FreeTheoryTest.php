@@ -110,7 +110,7 @@ class FreeTheoryTest extends TheoryTest{
             $this->testName = $name;
         }
         else{
-            $this->testName = '<span class="hidden-xs">Free Theory </span>Test '.$this->getTest();
+            $this->testName = 'Free Theory Test '.$this->getTest();
         }
     }
 
@@ -306,13 +306,8 @@ class FreeTheoryTest extends TheoryTest{
      */
     protected function testReport(){
         $this->layout->assign('free_test', 'Yes', true);
-        $this->getTestResults();
-        $report = [];
-        $report['testname'] = ucwords($this->getTestName());
-        $report['status'] = $this->testStatus();
-        $report['time'] = $this->getTime();
-        $report['passmark'] = $this->passmark;
-        $report['testdate'] = date('d/m/Y', strtotime($this->testresults['complete']));
+        $report = parent::testReport();
+        unset($report['user']);
         return $report;
     }
 }

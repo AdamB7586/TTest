@@ -92,7 +92,7 @@
     }
     @include media-breakpoint-only(xs){
         min-height:0;
-        .imageright{
+        img.float-right{
             float:none;
             margin:0 auto 10px;
         }
@@ -120,10 +120,6 @@
     margin-left:4px;
     font-size:28px !important;
     vertical-align:middle;
-}
-.imageright{
-    float:right;
-    padding-left:5px
 }
 #time{
     margin:0 10px;
@@ -184,7 +180,7 @@
     overflow:auto;
     padding:15px 16px 15px;
     display:block;
-    .col-xs-3{
+    [class*="col-"]{
         padding-left:($grid-gutter-width / 6);
         padding-right:($grid-gutter-width / 6);
         &:first-child{
@@ -365,4 +361,11 @@ td{
 .msg{
     @extend .alert;
     .btn{border:1px solid !important;}
+}
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }

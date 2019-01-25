@@ -183,7 +183,7 @@ $btn-background: #CCCC99 !default;
     overflow:auto;
     padding:15px 16px 15px;
     display:block;
-    .col-xs-3{
+    [class*="col-"]{
         padding-left:($grid-gutter-width / 6);
         padding-right:($grid-gutter-width / 6);
         &:first-child{
@@ -364,4 +364,11 @@ td{
 .msg{
     @extend .alert;
     .btn{border:1px solid !important;}
+}
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }

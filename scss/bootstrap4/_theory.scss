@@ -177,7 +177,7 @@
 #buttons{
     clear:both;
     background:$btn-background;
-    overflow:auto;
+    overflow:hidden;
     padding:15px 16px 15px;
     display:block;
     [class*="col-"]{

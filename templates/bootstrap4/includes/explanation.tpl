@@ -13,7 +13,7 @@
                 {foreach $dsa_explanation.tabs as $id => $tab}
                     <div role="tabpanel" class="tab-pane active" id="tab-{$id}">
                         {if $tab.audio.enabled}
-                            <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$tab.audio.file|lower}">
+                            <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$tab.audio.file|lower}">
                                 <audio id="audio{$tab.audio.file|lower}" preload="auto">
                                     <source src="{$tab.audio.location}/mp3/{$tab.audio.file}.mp3" type="audio/mpeg">
                                     <source src="{$tab.audio.location}/ogg/{$tab.audio.file}.ogg" type="audio/ogg">
@@ -27,7 +27,7 @@
             {else}
                 <div class="explanation{$dsa_explanation.visable}">
                     {if $dsa_explanation.audio.enabled}
-                        <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$dsa_explanation.audio.file|lower}">
+                        <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$dsa_explanation.audio.file|lower}">
                             <audio id="audio{$dsa_explanation.audio.file|lower}" preload="auto">
                                 <source src="{$dsa_explanation.audio.location}/mp3/{$dsa_explanation.audio.file}.mp3" type="audio/mpeg">
                                 <source src="{$dsa_explanation.audio.location}/ogg/{$dsa_explanation.audio.file}.ogg" type="audio/ogg">

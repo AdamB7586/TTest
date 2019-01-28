@@ -4,10 +4,10 @@
     <thead>
     <tr>
         <th>{$table.title}</th>
-        <th class="text-center noquestions col-xs-2"><div class="fa fa-question fa-2x fa-fw text-info"></div><span class="hidden-xs"><br />Questions</span></th>
-        <th class="text-center reviewcorrect col-xs-2"><div class="fa fa-check fa-2x fa-fw text-success"></div><span class="hidden-xs"><br />Correct</span></th>
-        <th class="text-center reviewincorrect col-xs-2"><div class="fa fa-times fa-2x fa-fw text-danger"></div><span class="hidden-xs"><br />Incorrect</span></th>
-        <th class="text-center reviewunattempt col-xs-2"><div class="fa fa-exclamation fa-2x fa-fw text-warning"></div><span class="hidden-xs"><br />Unattempted</span></th>
+        <th class="text-center noquestions col-xs-2"><div class="fas fa-question fa-2x fa-fw text-info"></div><span class="hidden-xs"><br />Questions</span></th>
+        <th class="text-center reviewcorrect col-xs-2"><div class="fas fa-check fa-2x fa-fw text-success"></div><span class="hidden-xs"><br />Correct</span></th>
+        <th class="text-center reviewincorrect col-xs-2"><div class="fas fa-times fa-2x fa-fw text-danger"></div><span class="hidden-xs"><br />Incorrect</span></th>
+        <th class="text-center reviewunattempt col-xs-2"><div class="fas fa-exclamation fa-2x fa-fw text-warning"></div><span class="hidden-xs"><br />Unattempted</span></th>
     </tr>
     </thead>
     {foreach $table.ans as $a => $cat}

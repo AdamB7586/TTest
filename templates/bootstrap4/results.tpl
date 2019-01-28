@@ -44,22 +44,22 @@
 <div class="panel panel-default">
     <table class="table">
         <tr>
-            <td class="text-center col-md-3"><span class="fa fa-check fa-2x fa-fw text-success"></span><strong class="hidden-xs">Correct</strong></td>
+            <td class="text-center col-md-3"><span class="fas fa-check fa-2x fa-fw text-success"></span><strong class="hidden-xs">Correct</strong></td>
             <td class="text-center valign-center">{$results.correct} / {$results.numquestions}</td>
             <td class="valign-center col-md-6"><div class="progress"><div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.correct}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.correct}%">{$results.percent.correct}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fa fa-times fa-2x fa-fw text-danger"></span><strong class="hidden-xs">Incorrect</strong></td>
+            <td class="text-center"><span class="fas fa-times fa-2x fa-fw text-danger"></span><strong class="hidden-xs">Incorrect</strong></td>
             <td class="text-center valign-center">{math equation="questions - correct" questions=$results.numquestions correct=$results.correct} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar bg-danger progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.incorrect}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.incorrect}%">{$results.percent.incorrect}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fa fa-flag fa-2x text-info"></span><strong class="hidden-xs">Flagged</strong></td>
+            <td class="text-center"><span class="fas fa-flag fa-2x text-info"></span><strong class="hidden-xs">Flagged</strong></td>
             <td class="text-center valign-center">{$results.flagged} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar bginfo progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.flagged}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.flagged}%">{$results.percent.flagged}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fa fa-exclamation fa-2x text-warning"></span><strong class="hidden-xs">Incomplete</strong></td>
+            <td class="text-center"><span class="fas fa-exclamation fa-2x text-warning"></span><strong class="hidden-xs">Incomplete</strong></td>
             <td class="text-center valign-center">{$results.incomplete} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar bg-warning progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.incomplete}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.incomplete}%">{$results.percent.incomplete}%</div></div></td>
         </tr>
@@ -70,9 +70,9 @@
 <thead>
 <tr>
 <th class="text-left">DVSA Category</th>
-<th class="text-center"><span class="fa fa-check fa-fw text-success"></span><span class="hidden-xs">Correct</span></th>
-<th class="text-center"><span class="fa fa-times fa-fw text-danger"></span><span class="hidden-xs">Incorrect</span></th>
-<th class="text-center"><span class="fa fa-question fa-fw text-info"></span><span class="hidden-xs">Total</span></th>
+<th class="text-center"><span class="fas fa-check fa-fw text-success"></span><span class="hidden-xs">Correct</span></th>
+<th class="text-center"><span class="fas fa-times fa-fw text-danger"></span><span class="hidden-xs">Incorrect</span></th>
+<th class="text-center"><span class="fas fa-question fa-fw text-info"></span><span class="hidden-xs">Total</span></th>
 <th class="text-center">% <span class="hidden-xs">Correct</span></th>
 </tr>
 </thead>
@@ -94,13 +94,13 @@
         <div class="col-12">
             <div class="row">
                 <div class="row-eq-height">
-                    <div class="col-xs-3"><div class="reviewtest btn btn-theory" id="{$review_test}"><span class="fa fa-question fa-fw"></span><span class="hidden-xs"> Review Test</span></div></div>
-                    <div class="col-xs-3"><a href="{$print_certificate.location}" title="Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}" target="_blank" class="printcert btn btn-theory"><span class="fa fa-print fa-fw"></span><span class="hidden-xs"> Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}</span></a></div>
+                    <div class="col-xs-3"><div class="reviewtest btn btn-theory" id="{$review_test}"><span class="fas fa-question fa-fw"></span><span class="hidden-xs"> Review Test</span></div></div>
+                    <div class="col-xs-3"><a href="{$print_certificate.location}" title="Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}" target="_blank" class="printcert btn btn-theory"><span class="fas fa-print fa-fw"></span><span class="hidden-xs"> Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}</span></a></div>
                     <div class="col-xs-3"></div>
                     <div class="col-xs-3">
                         <div class="blank"></div>
                         <div class="exittest btn btn-theory">
-                            <span class="fa fa-sign-out fa-fw"></span>
+                            <span class="fas fa-sign-out fa-fw"></span>
                             <span class="hidden-xs"> Exit Test</span>
                         </div>
                     </div>

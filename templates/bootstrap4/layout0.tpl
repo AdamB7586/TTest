@@ -32,7 +32,7 @@
                         <div class="answer{if $answer.selected} selected{$answer.selected}{/if}" id="{$answer.letter}">
                             <div class="selectbtn"></div>
                             {if $answer.audio.enabled}
-                            <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$answer.id}">
+                            <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$answer.id}">
                                 <audio id="audio{$answer.id}" preload="auto">
                                     <source src="{$answer.audio.location}/mp3/{$answer.audio.file}.mp3" type="audio/mpeg">
                                     <source src="{$answer.audio.location}/ogg/{$answer.audio.file}.ogg" type="audio/ogg">
@@ -52,7 +52,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <div class="audioswitch audio{if $audio}off{else}on{/if}"><span class="fa-stack fa-lg"><span class="fa fa-volume-up fa-stack-1x"></span>{if $audio}<span class="fa fa-ban fa-stack-2x text-danger"></span>{/if}</span><span class="sr-only">Turn Sound {if $audio}OFF{else}ON{/if}</span></div>
+            <div class="audioswitch audio{if $audio}off{else}on{/if}"><span class="fa-stack fa-lg"><span class="fas fa-volume-up fa-stack-1x"></span>{if $audio}<span class="fas fa-ban fa-stack-2x text-danger"></span>{/if}</span><span class="sr-only">Turn Sound {if $audio}OFF{else}ON{/if}</span></div>
         {include file="includes/mark.tpl"}
         </div>
     </div>

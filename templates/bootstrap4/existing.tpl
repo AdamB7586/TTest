@@ -17,10 +17,10 @@
         <div class="col-12">
             <div class="row">
                 <div class="row-eq-height">
-                    <div class="col-3"><div class="newtest btn btn-theory"><span class="fa fa-refresh fa-fw"></span><span class="hidden-xs"> Start New Test</span></div></div>
+                    <div class="col-3"><div class="newtest btn btn-theory"><span class="fas fa-refresh fa-fw"></span><span class="hidden-xs"> Start New Test</span></div></div>
                     <div class="col-3"></div>
                     <div class="col-3"></div>
-                    <div class="col-3">{if $continue_test}<div class="continue btn btn-theory" id="{$continue_test}"><span class="fa fa-long-arrow-right fa-fw"></span><span class="hidden-xs"> Continue Test</span></div>{/if}</div>
+                    <div class="col-3">{if $continue_test}<div class="continue btn btn-theory" id="{$continue_test}"><span class="fas fa-long-arrow-right fa-fw"></span><span class="hidden-xs"> Continue Test</span></div>{/if}</div>
                 </div>
             </div>
         </div>

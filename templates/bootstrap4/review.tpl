@@ -28,7 +28,7 @@
 </div>
 <div class="col-12" id="buttons">
     <div class="row-eq-height w-100">
-        <div class="col-xs-3"><div class="reviewall btn btn-theory" id="{$review_all}"><span class="fas fa-refresh fa-fw"></span><span class="hidden-xs"> Review All</span></div></div>
+        <div class="col-xs-3"><div class="reviewall btn btn-theory" id="{$review_all}"><span class="fas fa-sync-alt fa-fw"></span><span class="hidden-xs"> Review All</span></div></div>
         <div class="col-xs-3"><div class="reviewincomplete btn btn-theory" id="{$review_incomplete}"><span class="fas fa-tasks fa-fw"></span><span class="hidden-xs"> Review Incomplete</span></div></div>
         <div class="col-xs-3"><div class="reviewflagged btn btn-theory" id="{$review_flagged}"><span class="fas fa-flag fa-fw"></span><span class="hidden-xs"> Review Flagged</span></div></div>
         <div class="col-xs-3"><div class="endtest btn btn-theory"><span class="fas fa-sign-out fa-fw"></span><span class="hidden-xs"> End Test</span></div></div>

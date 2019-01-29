@@ -78,28 +78,26 @@ function markAnswer(answer, question, remove, replace){
     correctcheck = false;
     if(process == false){
         process = true;
+        $(".selectedcorrect").removeClass('selectedcorrect');
+        $(".selectedincorrect").removeClass('selectedincorrect');
+        $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question'); 
+        $(".check .btn-text").html(' Check Answer');
         if(remove == true){
-            $(".answer").removeClass('selectedcorrect selectedincorrect');
             $(".check").removeClass("recheck checkcorrect checkincorrect");
-            $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question');
-            $(".check .btn-text").html(' Check Answer');
             $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
             $.get("<?php echo($page); ?>?remove=" + answer + "&prim=" + question, function(data){process = false;});
         }
         else{
             if(replace == false){
                 $.get("<?php echo($page); ?>?add=" + answer + "&prim=" + question, function(data){
-                    if(numchecked == max){$(".answer").removeClass('selectedcorrect selectedincorrect'); $(".check").addClass("recheck"); $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question'); $(".check .btn-text").html(' Check Answer');}
+                    if(numchecked == max){$(".check").addClass("recheck");}
                     $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
                     process = false;
                 });
             }
             else{
                 $.get("<?php echo($page); ?>?replace=" + answer + "&prim=" + question, function(data){
-                    $(".answer").removeClass('selectedcorrect selectedincorrect');
                     $(".check").addClass("recheck");
-                    $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question');
-                    $(".check .btn-text").html(' Check Answer');
                     $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
                     process = false;
                 });

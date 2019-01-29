@@ -1,4 +1,4 @@
-{strip nocache}
+{strip}
 <div class="col-md-12" id="buttons">
     <div class="row">
         <div class="col-md-12">

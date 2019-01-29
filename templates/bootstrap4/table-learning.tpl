@@ -1,6 +1,6 @@
 {strip}
 {nocache}
-<table class="table table-striped table-hover table-sm styled">
+<table class="table table-striped table-hover table-sm styled bt-0">
     <thead>
     <tr>
         <th>{$table.title}</th>

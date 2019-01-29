@@ -1,4 +1,4 @@
-{strip nocache}
+{strip}
 <div class="col-12" id="explan">
     <div class="row">
         {if $dsa_explanation}

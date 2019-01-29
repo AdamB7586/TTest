@@ -1,5 +1,5 @@
 {strip}
-<table class="table table-striped table-hover styled">
+<table class="table table-striped table-hover styled bt-0">
     {foreach $cases as $case}
     <tr>
         <td><a href="?test={$case.section}&amp;section=casestudy" title="{$case.section}. {$case.name}">Case {$case.section}. {$case.name}</a></td>

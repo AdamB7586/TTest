@@ -1,4 +1,4 @@
-{strip nocache}
+{strip}
 <div class="col-12" id="buttons">
     <div class="row-eq-height w-100">
         <div class="col-xs-3">

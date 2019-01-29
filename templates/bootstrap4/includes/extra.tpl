@@ -1,4 +1,4 @@
-{strip nocache}
+{strip}
     {if $extra}
         {if $extra.skipCorrect}
     </div>

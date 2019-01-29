@@ -28,10 +28,10 @@
 </div>
 <div class="col-12" id="buttons">
     <div class="row-eq-height w-100">
-        <div class="col-3"><div class="reviewall btn btn-theory" id="{$review_all}"><span class="fas fa-sync-alt fa-fw btn-icon"></span><span class="hidden-xs-down btn-text"> Review All</span></div></div>
-        <div class="col-3"><div class="reviewincomplete btn btn-theory" id="{$review_incomplete}"><span class="fas fa-tasks fa-fw btn-icon"></span><span class="hidden-xs-down btn-text"> Review Incomplete</span></div></div>
-        <div class="col-3"><div class="reviewflagged btn btn-theory" id="{$review_flagged}"><span class="fas fa-flag fa-fw btn-icon"></span><span class="hidden-xs-down btn-text"> Review Flagged</span></div></div>
-        <div class="col-3"><div class="endtest btn btn-theory"><span class="fas fa-sign-out fa-fw btn-icon"></span><span class="hidden-xs-down btn-text"> End Test</span></div></div>
+        <div class="col-3"><div class="reviewall btn btn-theory" id="{$review_all}"><span class="fas fa-sync-alt fa-fw btn-icon"></span><span class="d-none d-sm-block btn-text"> Review All</span></div></div>
+        <div class="col-3"><div class="reviewincomplete btn btn-theory" id="{$review_incomplete}"><span class="fas fa-tasks fa-fw btn-icon"></span><span class="d-none d-sm-block btn-text"> Review Incomplete</span></div></div>
+        <div class="col-3"><div class="reviewflagged btn btn-theory" id="{$review_flagged}"><span class="fas fa-flag fa-fw btn-icon"></span><span class="d-none d-sm-block btn-text"> Review Flagged</span></div></div>
+        <div class="col-3"><div class="endtest btn btn-theory"><span class="fas fa-sign-out fa-fw btn-icon"></span><span class="d-none d-sm-block btn-text"> End Test</span></div></div>
     </div>
 </div>
 <script type="text/javascript" src="{$script}"></script>

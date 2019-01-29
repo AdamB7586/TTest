@@ -976,19 +976,20 @@ class TheoryTest implements TTInterface{
         if($option){
             $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
             $options = [];
+            $letter_num = ($answer_num - 1);
             if($new === false && $this->review !== 'answers') {
-                if($this->answerSelected($question, $letters[$answer_num])) {$options['selected'] = true;}
+                if($this->answerSelected($question, $letters[$letter_num])) {$options['selected'] = true;}
             }
             elseif($new === false) {
-                $options['selected'] = strtolower($this->answerSelectedCorrect($question, $letters[$answer_num]));
+                $options['selected'] = strtolower($this->answerSelectedCorrect($question, $letters[$letter_num]));
             }
             if($image !== false){
-                $options['image'] = $this->createImage($question.strtolower($letters[$answer_num]).'.png');
+                $options['image'] = $this->createImage($question.strtolower($letters[$letter_num]).'.png');
             }
-            $options['audio'] = $this->addAudio($question, $letters[$answer_num]);
-            $options['id'] = strtolower($letters[$answer_num].$question);
+            $options['audio'] = $this->addAudio($question, $letters[$letter_num]);
+            $options['id'] = strtolower($letters[$letter_num].$question);
             $options['prim'] = $question;
-            $options['letter'] = $letters[$answer_num];
+            $options['letter'] = $letters[$letter_num];
             $options['option'] = $option;
             return $options;
         }

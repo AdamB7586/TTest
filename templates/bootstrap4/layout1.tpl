@@ -18,8 +18,8 @@
     <div id="question-content"{if $review_questions} class="isreview"{/if}>
         <div class="row">
             <div class="col-12">
-                {if $image}<img src="{$imagesrc}" alt="" width="{$imagewidth}" height="{$imageheight}" class="imageright questionimage img-fluid" />{/if}
-                {include file="includes/mark.tpl"}<br />
+                {if $image.src nocache}<img src="{$image.src}" alt="" width="{$image.width}" height="{$image.height}" class="imageright questionimage img-fluid" />{/if}
+                {include file="includes/mark.tpl" nocache}<br />
                 <div class="questiontext" id="{$prim}">
                     {if $question.audio.enabled nocache}
                     <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$question.prim}">

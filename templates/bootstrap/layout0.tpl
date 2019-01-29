@@ -18,8 +18,8 @@
     <div id="question-content"{if $review_questions} class="isreview"{/if}>
         <div class="row">
             <div class="col-sm-12" id="question-main">
-                {if $image}<img src="{$imagesrc}" alt="" width="{$imagewidth}" height="{$imageheight}" class="imageright questionimage img-responsive" />{/if}
-                {include file="includes/mark.tpl"}<br />
+                {if $image.src nocache}<img src="{$image.src}" alt="" width="{$image.width}" height="{$image.height}" class="imageright questionimage img-responsive" />{/if}
+                {include file="includes/mark.tpl" nocache}<br />
                 <div class="questiontext" id="{$prim}">
                     {$question}
                 </div>

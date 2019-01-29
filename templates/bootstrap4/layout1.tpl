@@ -33,8 +33,8 @@
                 </div>
             </div>
         </div>
-        <div id="question-images">
-            <div class="row options">
+        <div id="question-images" class="options">
+            <div class="row">
                 {foreach $answers as $a => $answer nocache}
                 <div class="col-md-6">
                     <div class="option">

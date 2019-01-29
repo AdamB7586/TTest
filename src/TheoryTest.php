@@ -1055,7 +1055,8 @@ class TheoryTest implements TTInterface{
             $image = (($question['format'] == '0' || $question['format'] == '2') ? false : true);
             $this->layout->assign('mark', $this->getMark($question['mark']));
             $this->layout->assign('prim', $prim);
-            $this->layout->assign('question', $this->addAudio($prim, 'Q').$question['question']);
+            $question['audio'] = $this->addAudio($prim, 'Q');
+            $this->layout->assign('question', $question);
             for($a = 1; $a <= $this->noAnswers; $a++){
                 $answers[$a] = $this->getOptions($question['prim'], $question['option'.$a], $a, $image, $new);
             }

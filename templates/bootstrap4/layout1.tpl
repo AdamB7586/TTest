@@ -21,15 +21,23 @@
                 {if $image}<img src="{$imagesrc}" alt="" width="{$imagewidth}" height="{$imageheight}" class="imageright questionimage img-fluid" />{/if}
                 {include file="includes/mark.tpl"}<br />
                 <div class="questiontext" id="{$prim}">
-                    {$question}
+                    {if $question.audio.enabled nocache}
+                    <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$question.prim}">
+                        <audio id="audio{$question.prim}" preload="auto">
+                            <source src="{$question.audio.location}/mp3/{$question.audio.file}.mp3" type="audio/mpeg">
+                            <source src="{$question.audio.location}/ogg/{$question.audio.file}.ogg" type="audio/ogg">
+                        </audio>
+                    </div>
+                    {/if}
+                    {$question.question nocache}
                 </div>
             </div>
         </div>
         <div id="question-images">
             <div class="row">
                 <div class="options">
-                    {foreach $answers as $a => $answer}
-                    <div class="col-sm-6">
+                    {foreach $answers as $a => $answer nocache}
+                    <div class="col-md-6">
                         <div class="option">
                             <div class="answerimage {if $answer.selected} img{$answer.selected}{/if}" id="{$answer.letter}">
                                 {$answer.option}
@@ -51,12 +59,12 @@
     <div class="row">
         <div class="col-12">
             <div class="audioswitch audio{if $audio}off{else}on{/if}"><span class="fa-stack fa-lg"><span class="fas fa-volume-up fa-stack-1x"></span>{if $audio}<span class="fas fa-ban fa-stack-2x text-danger"></span>{/if}</span><span class="sr-only">Turn Sound {if $audio}OFF{else}ON{/if}</span></div>
-            {include file="includes/mark.tpl"}
+            {include file="includes/mark.tpl" nocache}
         </div>
     </div>
 </div>
-{include file="includes/buttons.tpl"}
-{include file="includes/explanation.tpl"}
+{include file="includes/buttons.tpl" nocache}
+{include file="includes/explanation.tpl" nocache}
 <script type="text/javascript" src="{$script}"></script>
 {/nocache}
 {/strip}

@@ -44,22 +44,22 @@
 <div class="panel panel-default">
     <table class="table">
         <tr>
-            <td class="text-center col-md-3"><span class="fas fa-check fa-2x fa-fw text-success"></span><strong class="d-none d-sm-block">Correct</strong></td>
+            <td class="text-center col-md-3"><span class="fas fa-check fa-2x fa-fw text-success"></span><strong class="d-none d-sm-inline-block">Correct</strong></td>
             <td class="text-center valign-center">{$results.correct} / {$results.numquestions}</td>
             <td class="valign-center col-md-6"><div class="progress"><div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.correct}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.correct}%">{$results.percent.correct}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fas fa-times fa-2x fa-fw text-danger"></span><strong class="d-none d-sm-block">Incorrect</strong></td>
+            <td class="text-center"><span class="fas fa-times fa-2x fa-fw text-danger"></span><strong class="d-none d-sm-inline-block">Incorrect</strong></td>
             <td class="text-center valign-center">{math equation="questions - correct" questions=$results.numquestions correct=$results.correct} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar bg-danger progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.incorrect}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.incorrect}%">{$results.percent.incorrect}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fas fa-flag fa-2x text-info"></span><strong class="d-none d-sm-block">Flagged</strong></td>
+            <td class="text-center"><span class="fas fa-flag fa-2x text-info"></span><strong class="d-none d-sm-inline-block">Flagged</strong></td>
             <td class="text-center valign-center">{$results.flagged} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar bginfo progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.flagged}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.flagged}%">{$results.percent.flagged}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fas fa-exclamation fa-2x text-warning"></span><strong class="d-none d-sm-block">Incomplete</strong></td>
+            <td class="text-center"><span class="fas fa-exclamation fa-2x text-warning"></span><strong class="d-none d-sm-inline-block">Incomplete</strong></td>
             <td class="text-center valign-center">{$results.incomplete} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar bg-warning progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.incomplete}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.incomplete}%">{$results.percent.incomplete}%</div></div></td>
         </tr>
@@ -70,10 +70,10 @@
 <thead>
 <tr>
 <th class="text-left">DVSA Category</th>
-<th class="text-center"><span class="fas fa-check fa-fw text-success"></span><span class="d-none d-sm-block">Correct</span></th>
-<th class="text-center"><span class="fas fa-times fa-fw text-danger"></span><span class="d-none d-sm-block">Incorrect</span></th>
-<th class="text-center"><span class="fas fa-question fa-fw text-info"></span><span class="d-none d-sm-block">Total</span></th>
-<th class="text-center">% <span class="d-none d-sm-block">Correct</span></th>
+<th class="text-center"><span class="fas fa-check fa-fw text-success"></span><span class="d-none d-sm-inline-block">Correct</span></th>
+<th class="text-center"><span class="fas fa-times fa-fw text-danger"></span><span class="d-none d-sm-inline-block">Incorrect</span></th>
+<th class="text-center"><span class="fas fa-question fa-fw text-info"></span><span class="d-none d-sm-inline-block">Total</span></th>
+<th class="text-center">% <span class="d-none d-sm-inline-block">Correct</span></th>
 </tr>
 </thead>
 {foreach $dsa_cat_results as $cat_results}

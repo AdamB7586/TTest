@@ -1264,10 +1264,10 @@ class TheoryTest implements TTInterface{
             if($this->review == 'flagged' && $this->numFlagged() > 1) {$prev = $this->questionPrim($this->getNextFlagged('prev'));}
             elseif($this->review == 'incomplete' && $this->numIncomplete() > 1) {$prev = $this->questionPrim($this->getNextIncomplete('prev'));}
             else{$prev = $this->questionPrim(($this->currentQuestion() - 1));}
-            return ['id' => $prev, 'test' => 'Previous', 'icon' => 'angle-left'];
+            return ['id' => $prev, 'text' => 'Previous', 'icon' => 'angle-left'];
         }
         if($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
-            return ['id' => $this->getLastQuestion(), 'test' => 'Previous', 'icon' => 'angle-left'];
+            return ['id' => $this->getLastQuestion(), 'text' => 'Previous', 'icon' => 'angle-left'];
         }
         return false;
     }
@@ -1281,10 +1281,10 @@ class TheoryTest implements TTInterface{
             if($this->review == 'flagged' && $this->numFlagged() > 1) {$next = $this->questionPrim($this->getNextFlagged());}
             elseif($this->review == 'incomplete' && $this->numIncomplete() > 1) {$next = $this->questionPrim($this->getNextIncomplete());}
             else{$next = $this->questionPrim(($this->currentQuestion() + 1));}
-            return ['id' => $next, 'test' => 'Next', 'icon' => 'angle-right'];
+            return ['id' => $next, 'text' => 'Next', 'icon' => 'angle-right'];
         }
         if($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
-            return ['id' => $this->getFirstQuestion(), 'test' => 'Next', 'icon' => 'angle-right'];
+            return ['id' => $this->getFirstQuestion(), 'text' => 'Next', 'icon' => 'angle-right'];
             
         }
         return false;

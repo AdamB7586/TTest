@@ -6,7 +6,7 @@
             {if $dsa_explanation.tabs}
             <ul class="nav nav-tabs">
                 {foreach $dsa_explanation.tabs as $id => $tab}
-                <li{if $id == 1} class="active"{/if}><a href="#tab-{$id}" aria-controls="profile" role="tab" data-toggle="tab">{$tab.label}</a></li>
+                <li class="nav-item><a href="#tab-{$id}" aria-controls="profile" role="tab" data-toggle="tab" class="nav-link{if $id == 1} active{/if}">{$tab.label}</a></li>
                 {/foreach}
             </ul>
             <div class="tab-content">

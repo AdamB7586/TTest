@@ -79,6 +79,7 @@ function markAnswer(answer, question, remove, replace){
     if(process == false){
         process = true;
         if(remove == true){
+            $(".answer").removeClass('selectedcorrect selectedincorrect');
             $(".check").removeClass("recheck checkcorrect checkincorrect");
             $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question');
             $(".check .btn-text").html(' Check Answer');
@@ -88,13 +89,14 @@ function markAnswer(answer, question, remove, replace){
         else{
             if(replace == false){
                 $.get("<?php echo($page); ?>?add=" + answer + "&prim=" + question, function(data){
-                    if(numchecked == max){$(".check").addClass("recheck"); $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question'); $(".check .btn-text").html(' Check Answer');}
+                    if(numchecked == max){$(".answer").removeClass('selectedcorrect selectedincorrect'); $(".check").addClass("recheck"); $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question'); $(".check .btn-text").html(' Check Answer');}
                     $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
                     process = false;
                 });
             }
             else{
                 $.get("<?php echo($page); ?>?replace=" + answer + "&prim=" + question, function(data){
+                    $(".answer").removeClass('selectedcorrect selectedincorrect');
                     $(".check").addClass("recheck");
                     $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question');
                     $(".check .btn-text").html(' Check Answer');
@@ -232,6 +234,7 @@ function checkCorrect(question){
         if(numchecked == max){
             $.get("<?php echo($page); ?>?check=" + question, function(data){
                 if(data === 'CORRECT'){
+                    $(".answer").removeClass('selectedcorrect selectedincorrect'); 
                     $(".selected").removeClass("selectedincorrect").addClass("selectedcorrect");
                     $(".signal").removeClass("signalunattempted signalincorrect").addClass("signalcorrect");
                     $(".check").removeClass("recheck checkincorrect").addClass("checkcorrect");
@@ -240,6 +243,7 @@ function checkCorrect(question){
                     correctcheck = true;
                 }
                 else{
+                    $(".answer").removeClass('selectedcorrect selectedincorrect');
                     $(".selected").removeClass("selectedcorrect").addClass("selectedincorrect");
                     $(".signal").removeClass("signalunattempted signalcorrect").addClass("signalincorrect");
                     $(".check").removeClass("recheck checkcorrect").addClass("checkincorrect");

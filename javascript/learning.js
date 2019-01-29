@@ -80,14 +80,15 @@ function markAnswer(answer, question, remove, replace){
         process = true;
         if(remove == true){
             $(".check").removeClass("recheck checkcorrect checkincorrect");
-            $(".check").html('<span class="fa fa-fw fa-question"></span><span class="hidden-xs"> Check Answer</span>');
+            $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question');
+            $(".check .btn-text").html(' Check Answer');
             $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
             $.get("<?php echo($page); ?>?remove=" + answer + "&prim=" + question, function(data){process = false;});
         }
         else{
             if(replace == false){
                 $.get("<?php echo($page); ?>?add=" + answer + "&prim=" + question, function(data){
-                    if(numchecked == max){$(".check").addClass("recheck"); $(".check").html('<span class="fa fa-fw fa-question"></span><span class="hidden-xs"> Check Answer</span>');}
+                    if(numchecked == max){$(".check").addClass("recheck"); $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question'); $(".check .btn-text").html(' Check Answer');}
                     $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
                     process = false;
                 });
@@ -95,7 +96,8 @@ function markAnswer(answer, question, remove, replace){
             else{
                 $.get("<?php echo($page); ?>?replace=" + answer + "&prim=" + question, function(data){
                     $(".check").addClass("recheck");
-                    $(".check").html('<span class="fa fa-fw fa-question"></span><span class="hidden-xs"> Check Answer</span>');
+                    $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question');
+                    $(".check .btn-text").html(' Check Answer');
                     $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
                     process = false;
                 });
@@ -233,14 +235,16 @@ function checkCorrect(question){
                     $(".selected").removeClass("selectedincorrect").addClass("selectedcorrect");
                     $(".signal").removeClass("signalunattempted signalincorrect").addClass("signalcorrect");
                     $(".check").removeClass("recheck checkincorrect").addClass("checkcorrect");
-                    $(".check").html('<span class="fa fa-check fa-fw"></span><span class="hidden-xs"> Correct</span>');
+                    $(".check .btn-icon").removeClass('fa-times fa-question').addClass('fa-check');
+                    $(".check .btn-text").html(' Correct');
                     correctcheck = true;
                 }
                 else{
                     $(".selected").removeClass("selectedcorrect").addClass("selectedincorrect");
                     $(".signal").removeClass("signalunattempted signalcorrect").addClass("signalincorrect");
                     $(".check").removeClass("recheck checkcorrect").addClass("checkincorrect");
-                    $(".check").html('<span class="fa fa-times fa-fw"></span><span class="hidden-xs"> Incorrect</span>');
+                    $(".check .btn-icon").removeClass('fa-check fa-question').addClass('fa-times');
+                    $(".check .btn-text").html(' Incorrect');
                     correctcheck = true;
                 }
             });
@@ -249,7 +253,8 @@ function checkCorrect(question){
             $(".answer").removeClass("selected selectedincorrect selectedcorrect");
             $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
             $(".check").removeClass("recheck checkcorrect checkincorrect");
-            $(".check").html('<span class="fa fa-question fa-fw"></span><span class="hidden-xs"> Check Answer</span>');
+            $(".check .btn-icon").removeClass('fa-times fa-check').addClass('fa-question');
+            $(".check .btn-text").html(' Check Answer');
             correctcheck = true;
         }
     }

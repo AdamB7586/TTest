@@ -52,7 +52,7 @@
                     </div>
                     {if $a == (($answers|@count)/2)}
                 </div>
-                <div class="col-sm-6">
+                <div class="col-md-6">
                     {/if}
                 {/foreach}
             </div>

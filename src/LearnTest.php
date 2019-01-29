@@ -210,7 +210,7 @@ class LearnTest extends TheoryTest{
             $prim = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('<', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'DESC'));
         }
         else{$prim = $this->getLastQuestion();}
-        return ['id' => $prim, 'test' => 'Previous', 'icon' => 'angle-left'];
+        return ['id' => $prim, 'text' => 'Previous', 'icon' => 'angle-left'];
     }
     
     /**
@@ -223,7 +223,7 @@ class LearnTest extends TheoryTest{
             $prim = $this->db->fetchColumn($this->questionsTable, array($this->testInfo['sort'] => array('>', $this->currentQuestion()), $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'), array('prim'), 0, array($this->testInfo['sort'] => 'ASC'));
         }
         else{$prim = $this->getFirstQuestion();}
-        return ['id' => $prim, 'test' => 'Next', 'icon' => 'angle-right'];
+        return ['id' => $prim, 'text' => 'Next', 'icon' => 'angle-right'];
     }
     
     /**

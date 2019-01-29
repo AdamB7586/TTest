@@ -34,25 +34,17 @@
             </div>
         </div>
         <div id="question-images">
-            <div class="row">
-                <div class="options">
-                    {foreach $answers as $a => $answer nocache}
-                    <div class="col-md-6">
-                        <div class="option">
-                            <div class="answerimage {if $answer.selected} img{$answer.selected}{/if}" id="{$answer.letter}">
-                                {$answer.option}
-                                <img src="{$answer.image.src}" alt="{$answer.option}" width="{$answer.image.width}" height="{$answer.image.height}" class="img-fluid" />
-                            </div>
+            <div class="row options">
+                {foreach $answers as $a => $answer nocache}
+                <div class="col-md-6">
+                    <div class="option">
+                        <div class="answerimage {if $answer.selected} img{$answer.selected}{/if}" id="{$answer.letter}">
+                            {$answer.option}
+                            <img src="{$answer.image.src}" alt="{$answer.option}" width="{$answer.image.width}" height="{$answer.image.height}" class="img-fluid" />
                         </div>
                     </div>
-                    {if $a is div by 2 && $a !== $answers|@count}
                 </div>
-            </div>
-            <div class="row">
-                <div class="options">
-                    {/if}
-                    {/foreach}
-                </div>
+                {/foreach}
             </div>
         </div>
     </div>

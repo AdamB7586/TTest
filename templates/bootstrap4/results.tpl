@@ -91,10 +91,10 @@
 </div>
 <div class="col-12" id="buttons">
     <div class="row-eq-height w-100">
-        <div class="col-xs-3"><div class="reviewtest btn btn-theory" id="{$review_test}"><span class="fas fa-question fa-fw"></span><span class="hidden-xs-down"> Review Test</span></div></div>
-        <div class="col-xs-3"><a href="{$print_certificate.location}" title="Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}" target="_blank" class="printcert btn btn-theory"><span class="fas fa-print fa-fw"></span><span class="hidden-xs-down"> Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}</span></a></div>
-        <div class="col-xs-3"></div>
-        <div class="col-xs-3">
+        <div class="col-3"><div class="reviewtest btn btn-theory" id="{$review_test}"><span class="fas fa-question fa-fw"></span><span class="hidden-xs-down"> Review Test</span></div></div>
+        <div class="col-3"><a href="{$print_certificate.location}" title="Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}" target="_blank" class="printcert btn btn-theory"><span class="fas fa-print fa-fw"></span><span class="hidden-xs-down"> Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}</span></a></div>
+        <div class="col-3"></div>
+        <div class="col-3">
             <div class="blank"></div>
             <div class="exittest btn btn-theory">
                 <span class="fas fa-sign-out fa-fw"></span>

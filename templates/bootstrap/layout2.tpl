@@ -21,7 +21,20 @@
         </div>
     </div>
     <div class="row{if $review_questions} isreview{/if}">
-        <div class="col-sm-6"><div id="case"><h4 class="no-margin-t">Case Study</h4>{$case_study}</div></div>
+        <div class="col-sm-6">
+            <div id="case">
+                <h4 class="no-margin-t">Case Study</h4>
+                {if $case_study.audio.enabled nocache}
+                <div class="sound fas fa-fw fa-volume-up" id="audiodcs">
+                    <audio id="audiocs" preload="auto">
+                        <source src="{$case_study.audio.location}/mp3/{$case_study.audio.file}.mp3" type="audio/mpeg">
+                        <source src="{$case_study.audio.location}/ogg/{$case_study.audio.file}.ogg" type="audio/ogg">
+                    </audio>
+                </div>
+                {/if}
+                {$case_study.case}
+            </div>
+        </div>
         <div class="col-sm-6">
             <div class="questiontext" id="{$prim}">
                 {$question}

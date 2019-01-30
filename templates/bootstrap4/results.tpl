@@ -14,7 +14,7 @@
     </div>
     </div>
 <div class="panel panel-default">
-    <table class="table table-striped">
+    <table class="table table-striped table-sm">
     {if $report.user}<tr>
         <td><strong>Candidate:</strong></td>
         <td><strong>Date:</strong></td>
@@ -42,7 +42,7 @@
     </table>
 </div>
 <div class="panel panel-default">
-    <table class="table">
+    <table class="table table-sm">
         <tr>
             <td class="text-center col-md-3"><span class="fas fa-check fa-2x fa-fw text-success"></span><strong class="d-none d-sm-inline-block">Correct</strong></td>
             <td class="text-center valign-center">{$results.correct} / {$results.numquestions}</td>
@@ -66,7 +66,7 @@
     </table>
 </div>
 <div class="panel panel-default">
-<table class="table table-striped">
+<table class="table table-striped table-sm">
 <thead>
 <tr>
 <th class="text-left">DVSA Category</th>

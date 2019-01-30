@@ -4,9 +4,9 @@
 <div class="col-12">
 <table class="table">
 <tr>
-<td><span class="fas fa-question fa-fw fa-2x text-info"></span></td>
-<td class="valign-center"><strong>Total number of test questions:</strong></td>
-<td class="valign-center text-center"><strong>{$test_questions}</strong></td>
+<td class="border-top-0"><span class="fas fa-question fa-fw fa-2x text-info"></span></td>
+<td class="border-top-0" class="valign-center"><strong>Total number of test questions:</strong></td>
+<td class="border-top-0 valign-center text-center"><strong>{$test_questions}</strong></td>
 </tr>
 <tr>
 <td><span class="fas fa-tasks fa-fw fa-2x text-success"></span></td>

@@ -309,7 +309,7 @@ class LearnTest extends TheoryTest{
             else{$_SESSION['answers'][$prim]['status'] = 1;}
         }
         else{$_SESSION['answers'][$prim]['status'] = 0;}
-        return true;
+        return $this->checkAnswer($prim);
     }
     
     /**
@@ -321,7 +321,7 @@ class LearnTest extends TheoryTest{
     public function removeAnswer($answer, $prim){
         $_SESSION['answers'][$prim]['answer'] = str_replace(strtoupper($answer), '', $_SESSION['answers'][$prim]['answer']);
         $_SESSION['answers'][$prim]['status'] = 0;
-        return true;
+        return $this->checkAnswer($prim);
     }
     
     /**

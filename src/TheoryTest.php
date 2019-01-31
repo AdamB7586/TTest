@@ -821,7 +821,7 @@ class TheoryTest implements TTInterface{
     }
 
     /**
-     * Flags/Un-flags the particular question
+     * Adds/Removes flags the particular question
      * @param int $prim This should be the question prim
      * @return boolean Should return true if flag status has been updated else returns false
      */

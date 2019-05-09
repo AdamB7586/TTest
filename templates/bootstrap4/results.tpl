@@ -5,7 +5,7 @@
     <h3 class="col-12 text-center">{$report.testname} Report</h3>
     <div class="text-center col-12">
         {if $results.status == 'pass'}
-            <p>Congratulations{if $report.user} {$report.user}{/if}, you have passed this test with {$results.correct}%</p>
+            <p>Congratulations{if $report.user} {$report.user}{/if}, you have passed this test with {$results.percent.correct}%</p>
             <p>You answered {$results.correct} out of {$results.numquestions} questions correctly</p>
         {else}
             <p>Sorry{if $report.user} {$report.user}{/if}, but you have not passed this time.</p>

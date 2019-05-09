@@ -13,7 +13,7 @@
         {/if}
     </div>
     </div>
-<div class="panel panel-default">
+<div class="card mb-3">
     <table class="table table-striped table-sm">
     {if $report.user}<tr>
         <td><strong>Candidate:</strong></td>
@@ -41,7 +41,7 @@
     </tr>
     </table>
 </div>
-<div class="panel panel-default">
+<div class="card mb-3">
     <table class="table table-sm">
         <tr>
             <td class="text-center col-md-3"><span class="fas fa-check fa-2x fa-fw text-success"></span><strong class="d-none d-sm-inline-block">Correct</strong></td>
@@ -65,7 +65,7 @@
         </tr>
     </table>
 </div>
-<div class="panel panel-default">
+<div class="card mb-3">
 <table class="table table-striped table-sm">
 <thead>
 <tr>

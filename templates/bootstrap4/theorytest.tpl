@@ -6,8 +6,8 @@
             <div id="theoryTest" class="w-100">
                 <div class="row" id="testHeader">
                     <div class="col" id="testname">{$test_name}</div>
-                    {if $report != 'true'}<div class="col text-center" id="questiondata">Q<span class="d-none d-sm-inline-block">uestion</span> <span id="qnum">{$question_no}</span> of <span id="totalq">{$no_questions}</span></div>{/if}
-                    {if $report != 'true'}<div class="col text-right" id="countdown">Time <span class="d-none d-sm-inline-block">remaining</span>: <span id="time">57:00</span></div>{/if}
+                    {if $report != 'true'}<div class="col text-center" id="questiondata">Q<span class="d-none d-sm-inline-block ml-1">uestion</span> <span id="qnum">{$question_no}</span> of <span id="totalq">{$no_questions}</span></div>{/if}
+                    {if $report != 'true'}<div class="col text-right" id="countdown">Time <span class="d-none d-sm-inline-block ml-1">remaining</span>: <span id="time">57:00</span></div>{/if}
                 </div>
                 <div id="question">
                     {$question_data}

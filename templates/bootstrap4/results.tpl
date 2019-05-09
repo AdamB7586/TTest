@@ -14,7 +14,7 @@
     </div>
     </div>
 <div class="card mb-3">
-    <table class="table table-striped table-sm">
+    <table class="table table-striped table-sm mb-0">
     {if $report.user}<tr>
         <td><strong>Candidate:</strong></td>
         <td><strong>Date:</strong></td>
@@ -42,38 +42,38 @@
     </table>
 </div>
 <div class="card mb-3">
-    <table class="table table-sm">
+    <table class="table table-sm mb-0">
         <tr>
-            <td class="text-center col-md-3"><span class="fas fa-check fa-2x fa-fw text-success"></span><strong class="d-none d-sm-inline-block">Correct</strong></td>
+            <td class="text-center col-md-3"><span class="fas fa-check fa-2x fa-fw text-success"></span><strong class="d-none d-sm-block">Correct</strong></td>
             <td class="text-center valign-center">{$results.correct} / {$results.numquestions}</td>
             <td class="valign-center col-md-6"><div class="progress"><div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.correct}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.correct}%">{$results.percent.correct}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fas fa-times fa-2x fa-fw text-danger"></span><strong class="d-none d-sm-inline-block">Incorrect</strong></td>
+            <td class="text-center"><span class="fas fa-times fa-2x fa-fw text-danger"></span><strong class="d-none d-sm-block">Incorrect</strong></td>
             <td class="text-center valign-center">{math equation="questions - correct" questions=$results.numquestions correct=$results.correct} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar bg-danger progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.incorrect}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.incorrect}%">{$results.percent.incorrect}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fas fa-flag fa-2x text-info"></span><strong class="d-none d-sm-inline-block">Flagged</strong></td>
+            <td class="text-center"><span class="fas fa-flag fa-2x text-info"></span><strong class="d-none d-sm-block">Flagged</strong></td>
             <td class="text-center valign-center">{$results.flagged} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar bginfo progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.flagged}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.flagged}%">{$results.percent.flagged}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fas fa-exclamation fa-2x text-warning"></span><strong class="d-none d-sm-inline-block">Incomplete</strong></td>
+            <td class="text-center"><span class="fas fa-exclamation fa-2x text-warning"></span><strong class="d-none d-sm-block">Incomplete</strong></td>
             <td class="text-center valign-center">{$results.incomplete} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar bg-warning progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.incomplete}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.incomplete}%">{$results.percent.incomplete}%</div></div></td>
         </tr>
     </table>
 </div>
 <div class="card mb-3">
-<table class="table table-striped table-sm">
+<table class="table table-striped table-sm mb-0">
 <thead>
 <tr>
 <th class="text-left">DVSA Category</th>
-<th class="text-center"><span class="fas fa-check fa-fw text-success"></span><span class="d-none d-sm-inline-block">Correct</span></th>
-<th class="text-center"><span class="fas fa-times fa-fw text-danger"></span><span class="d-none d-sm-inline-block">Incorrect</span></th>
-<th class="text-center"><span class="fas fa-question fa-fw text-info"></span><span class="d-none d-sm-inline-block">Total</span></th>
-<th class="text-center">% <span class="d-none d-sm-inline-block">Correct</span></th>
+<th class="text-center"><span class="fas fa-check fa-fw text-success"></span><span class="d-none d-sm-inline-block ml-1">Correct</span></th>
+<th class="text-center"><span class="fas fa-times fa-fw text-danger"></span><span class="d-none d-sm-inline-block ml-1">Incorrect</span></th>
+<th class="text-center"><span class="fas fa-question fa-fw text-info"></span><span class="d-none d-sm-inline-block ml-1">Total</span></th>
+<th class="text-center">% <span class="d-none d-sm-inline-block ml-1">Correct</span></th>
 </tr>
 </thead>
 {foreach $dsa_cat_results as $cat_results}
@@ -91,14 +91,14 @@
 </div>
 <div class="col-12" id="buttons">
     <div class="row-eq-height w-100">
-        <div class="col-3"><div class="reviewtest btn btn-theory" id="{$review_test}"><span class="fas fa-question fa-fw btn-icon"></span><span class="d-none d-sm-inline-block btn-text"> Review Test</span></div></div>
-        <div class="col-3"><a href="{$print_certificate.location}" title="Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}" target="_blank" class="printcert btn btn-theory"><span class="fas fa-print fa-fw btn-icon"></span><span class="d-none d-sm-inline-block btn-text"> Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}</span></a></div>
+        <div class="col-3"><div class="reviewtest btn btn-theory" id="{$review_test}"><span class="fas fa-question fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> Review Test</span></div></div>
+        <div class="col-3"><a href="{$print_certificate.location}" title="Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}" target="_blank" class="printcert btn btn-theory"><span class="fas fa-print fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}</span></a></div>
         <div class="col-3"></div>
         <div class="col-3">
             <div class="blank"></div>
             <div class="exittest btn btn-theory">
                 <span class="fas fa-sign-out-alt fa-fw btn-icon"></span>
-                <span class="d-none d-sm-inline-block btn-text"> Exit Test</span>
+                <span class="d-none d-sm-inline-block ml-1 btn-text"> Exit Test</span>
             </div>
         </div>
         {include file="includes/extra.tpl"}

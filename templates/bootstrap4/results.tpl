@@ -97,7 +97,7 @@
         <div class="col-3">
             <div class="blank"></div>
             <div class="exittest btn btn-theory">
-                <span class="fas fa-sign-out-alt fa-fw btn-icon"></span>
+                <span class="fas fa-door-open fa-fw btn-icon"></span>
                 <span class="d-none d-sm-inline-block ml-1 btn-text"> Exit Test</span>
             </div>
         </div>

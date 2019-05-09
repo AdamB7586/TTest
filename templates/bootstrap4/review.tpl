@@ -31,7 +31,7 @@
         <div class="col-3"><div class="reviewall btn btn-theory" id="{$review_all}"><span class="fas fa-sync-alt fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> Review All</span></div></div>
         <div class="col-3"><div class="reviewincomplete btn btn-theory" id="{$review_incomplete}"><span class="fas fa-tasks fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> Review Incomplete</span></div></div>
         <div class="col-3"><div class="reviewflagged btn btn-theory" id="{$review_flagged}"><span class="fas fa-flag fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> Review Flagged</span></div></div>
-        <div class="col-3"><div class="endtest btn btn-theory"><span class="fas fa-sign-out fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> End Test</span></div></div>
+        <div class="col-3"><div class="endtest btn btn-theory"><span class="fas fa-door-open fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> End Test</span></div></div>
     </div>
 </div>
 <script type="text/javascript" src="{$script}"></script>

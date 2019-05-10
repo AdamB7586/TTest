@@ -129,28 +129,30 @@ class Review{
      * @param string $title The title that should be given to the table
      * @return string|boolean Returns the table as a HTML string if the information exists else will return false
      */
-    protected function buildReviewTable($table, $tableSecNo, $title, $section){
+    public function buildReviewTable($table, $tableSecNo, $title, $section){
         $categories = $this->db->selectAll($table, [], '*', ['section' => 'ASC']);
         $review = [];
-        $review['title'] = $title;
-        $review['section'] = $section;
-        foreach($categories as $cat){
-            $review['ans'][$cat['section']] = $cat;
-            $review['ans'][$cat['section']]['notattempted'] = 0;
-            $review['ans'][$cat['section']]['incorrect'] = 0;
-            $review['ans'][$cat['section']]['correct'] = 0;
+        if(is_array($categories)){
+            $review['title'] = $title;
+            $review['section'] = $section;
+            foreach($categories as $cat){
+                $review['ans'][$cat['section']] = $cat;
+                $review['ans'][$cat['section']]['notattempted'] = 0;
+                $review['ans'][$cat['section']]['incorrect'] = 0;
+                $review['ans'][$cat['section']]['correct'] = 0;
 
-            $questions = $this->db->selectAll($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where), ['prim']);
-            $review['ans'][$cat['section']]['numquestions'] = $this->db->count($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where));
-            foreach($questions as $question){
-                if($this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}
-                elseif($this->useranswers[$question['prim']]['status'] == 1){$review['ans'][$cat['section']]['incorrect']++;}
-                elseif($this->useranswers[$question['prim']]['status'] == 2){$review['ans'][$cat['section']]['correct']++;}
+                $questions = $this->db->selectAll($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where), ['prim']);
+                $review['ans'][$cat['section']]['numquestions'] = $this->db->count($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where));
+                foreach($questions as $question){
+                    if($this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}
+                    elseif($this->useranswers[$question['prim']]['status'] == 1){$review['ans'][$cat['section']]['incorrect']++;}
+                    elseif($this->useranswers[$question['prim']]['status'] == 2){$review['ans'][$cat['section']]['correct']++;}
+                }
+                $review['totalquestions'] = $review['totalquestions'] + $review['ans'][$cat['section']]['numquestions'];
+                $review['totalcorrect'] = $review['totalcorrect'] + $review['ans'][$cat['section']]['correct'];
+                $review['totalnotattempted'] = $review['totalnotattempted'] + $review['ans'][$cat['section']]['notattempted'];
+                $review['totalincorrect'] = $review['totalincorrect'] + $review['ans'][$cat['section']]['incorrect'];
             }
-            $review['totalquestions'] = $review['totalquestions'] + $review['ans'][$cat['section']]['numquestions'];
-            $review['totalcorrect'] = $review['totalcorrect'] + $review['ans'][$cat['section']]['correct'];
-            $review['totalnotattempted'] = $review['totalnotattempted'] + $review['ans'][$cat['section']]['notattempted'];
-            $review['totalincorrect'] = $review['totalincorrect'] + $review['ans'][$cat['section']]['incorrect'];
         }
         return $review;
     }

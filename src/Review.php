@@ -73,6 +73,10 @@ class Review{
         return $this->user->getUserID();
     }
     
+    /**
+     * Gets the section table for the learning section
+     * @return array This will be the tables where learning questions are available
+     */
     public function getSectionTables(){
         return [
             ['table' => $this->config->table_theory_hc_sections, 'name' => 'Highway Code Section', 'section' => 'hc', 'sectionNo' => 'hcsection'],
@@ -133,6 +137,7 @@ class Review{
         $categories = $this->db->selectAll($table, [], '*', ['section' => 'ASC']);
         $review = [];
         if(is_array($categories)){
+            if(!is_array($this->useranswers)){$this->getUserAnswers();}
             $review['title'] = $title;
             $review['section'] = $section;
             foreach($categories as $cat){
@@ -143,10 +148,12 @@ class Review{
 
                 $questions = $this->db->selectAll($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where), ['prim']);
                 $review['ans'][$cat['section']]['numquestions'] = $this->db->count($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where));
-                foreach($questions as $question){
-                    if($this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}
-                    elseif($this->useranswers[$question['prim']]['status'] == 1){$review['ans'][$cat['section']]['incorrect']++;}
-                    elseif($this->useranswers[$question['prim']]['status'] == 2){$review['ans'][$cat['section']]['correct']++;}
+                if(is_array($questions)){
+                    foreach($questions as $question){
+                        if($this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}
+                        elseif($this->useranswers[$question['prim']]['status'] == 1){$review['ans'][$cat['section']]['incorrect']++;}
+                        elseif($this->useranswers[$question['prim']]['status'] == 2){$review['ans'][$cat['section']]['correct']++;}
+                    }
                 }
                 $review['totalquestions'] = $review['totalquestions'] + $review['ans'][$cat['section']]['numquestions'];
                 $review['totalcorrect'] = $review['totalcorrect'] + $review['ans'][$cat['section']]['correct'];

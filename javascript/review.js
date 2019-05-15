@@ -78,7 +78,7 @@ $(".reviewtest").click(function(){
 
 $(".exittest").click(function(){
     testended = true;
-    window.location = "<?php if($page == 'free'){echo('/');}else{echo('/tests/theory.htm');} ?>";
+    window.location = "<?php echo($exitpage); ?>";
 });
 
 $("#gohome").click(function(){

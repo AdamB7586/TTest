@@ -397,6 +397,7 @@ class LearnTest extends TheoryTest{
      * @return string Returns the script HTML information
      */
     protected function getScript($review = false){
+        if(is_numeric($this->userClone)){return $this->getJavascriptLocation().'preview-learn.js';}
         return $this->getJavascriptLocation().'learning-learn.js';
     }
     

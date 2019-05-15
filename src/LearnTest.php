@@ -329,7 +329,6 @@ class LearnTest extends TheoryTest{
      * @return boolean Returns true if updated else returns false
      */
     public function updateLearningProgress(){
-        unset($_SESSION['answers']);
         return $this->db->update($this->learningProgressTable, array('progress' => serialize($this->useranswers)), array('user_id' => $this->getUserID()));
     }
     

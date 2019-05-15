@@ -8,9 +8,9 @@ class User extends \UserAuth\User{
      * Returns the users name if logged in else return false
      * @return string|boolean
      */
-    public function getUsername(){
-        if($this->getUserID() !== 0){
-            $this->getFirstname();
+    public function getUsername($user_id = false){
+        if($this->getUserID() !== 0 || is_numeric($user_id)){
+            $this->getFirstname($user_id);
         }
         return false;
     }
@@ -19,8 +19,8 @@ class User extends \UserAuth\User{
      * Returns the users first name from the users information if they are logged in
      * @return string This should be the users first name
      */
-    public function getFirstname(){
-        if(!isset($this->userInfo)){$this->getUserInfo();}
+    public function getFirstname($user_id = false){
+        if(!isset($this->userInfo)){$this->getUserInfo($user_id);}
         return $this->userInfo['first_name'];
     }
     
@@ -28,8 +28,8 @@ class User extends \UserAuth\User{
      * Returns the users last name from the users information if they are logged in
      * @return string This should be the users last name
      */
-    public function getLastname(){
-        if(!isset($this->userInfo)){$this->getUserInfo();}
+    public function getLastname($user_id = false){
+        if(!isset($this->userInfo)){$this->getUserInfo($user_id);}
         return $this->userInfo['last_name'];
     }
     

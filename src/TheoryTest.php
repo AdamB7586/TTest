@@ -1427,8 +1427,8 @@ class TheoryTest implements TTInterface{
         $report = [];
         $this->getTestResults();
         $report['testname'] = ucwords($this->getTestName());
-        if(method_exists($this->user, 'getFirstname') && method_exists($this->user, 'getLastname')){$report['user'] = $this->user->getFirstname().' '.$this->user->getLastname();}
-        elseif(method_exists($this->user, 'getUsername')){$report['user'] = $this->user->getUsername();}
+        if(method_exists($this->user, 'getFirstname') && method_exists($this->user, 'getLastname')){$report['user'] = $this->user->getFirstname(is_numeric($this->userClone) ? $this->getUserID() : false).' '.$this->user->getLastname(is_numeric($this->userClone) ? $this->getUserID() : false);}
+        elseif(method_exists($this->user, 'getUsername')){$report['user'] = $this->user->getUsername(is_numeric($this->userClone) ? $this->getUserID() : false);}
         $report['status'] = $this->testStatus();
         $report['time'] = $this->getTime();
         $report['passmark'] = $this->getPassmark();

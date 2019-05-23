@@ -40,7 +40,7 @@ class Review{
         $this->config = $config;
         $this->user = $user;
         $this->layout = $layout;
-        $this->layout->addTemplateDir(($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates'.DS.$theme : $templateDir), 'theory');
+        $this->layout->addTemplateDir(($templateDir === false ? str_replace(basename(__DIR__), '', dirname(__FILE__)).'templates'.DIRECTORY_SEPARATOR.$theme : $templateDir), 'theory');
         if(is_numeric($userID)){$this->userClone = $userID;}
         $this->setTables();
     }

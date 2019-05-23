@@ -8,7 +8,7 @@ class DeleteDataTest extends SetUp {
     
     protected $delete;
     
-    protected function setUp() {
+    protected function setUp() : void {
         self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
         $this->delete = new DeleteData(self::$db, self::$config, self::$user);
     }

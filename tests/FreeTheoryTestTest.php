@@ -7,7 +7,7 @@ class FreeTheoryTestTest extends TheoryTestTest {
   
     protected $theoryTest;
     
-    protected function setUp() {
+    protected function setUp() : void {
         if(!session_id()){session_start();}
         $_SESSION['current_test'] = 1;
         $_SESSION['test'.$_SESSION['current_test']] = false;
@@ -15,7 +15,7 @@ class FreeTheoryTestTest extends TheoryTestTest {
         
     }
     
-    protected function tearDown() {
+    protected function tearDown() : void {
         $this->theoryTest = null;
     }
     

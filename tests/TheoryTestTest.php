@@ -9,7 +9,7 @@ class TheoryTestTest extends SetUp {
     
     protected $theoryTest;
     
-    protected function setUp() {
+    protected function setUp() : void {
         self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
         $this->theoryTest = new TheoryTest(self::$db, self::$config, self::$template, self::$user);
     }

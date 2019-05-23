@@ -52,7 +52,7 @@ UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `casestudyno` = '".ran
                 $q++;
             }
         }
-        return $this->db->insert($this->progressTable, ['user_id' => $this->user->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize(array()), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => strtolower($this->getTestType())]);
+        return $this->db->insert($this->progressTable, ['user_id' => $this->user->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize([]), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => strtolower($this->getTestType())]);
     }
     
     /**

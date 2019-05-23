@@ -150,7 +150,7 @@ class Review{
                 $review['ans'][$cat['section']]['numquestions'] = $this->db->count($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where));
                 if(is_array($questions)){
                     foreach($questions as $question){
-                        if($this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}
+                        if(!isset($this->useranswers[$question['prim']]) || $this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}
                         elseif($this->useranswers[$question['prim']]['status'] == 1){$review['ans'][$cat['section']]['incorrect']++;}
                         elseif($this->useranswers[$question['prim']]['status'] == 2){$review['ans'][$cat['section']]['correct']++;}
                     }
@@ -229,7 +229,7 @@ class Review{
         $questions = $this->db->selectAll($this->questionsTable, $this->where, ['prim']);
         $info['noQuestions'] = $this->db->rowCount();
         foreach($questions as $question){
-            if($this->useranswers[$question['prim']]['status'] == 0){$notattempted++;}
+            if(!isset($this->useranswers[$question['prim']]) || $this->useranswers[$question['prim']]['status'] == 0){$notattempted++;}
             elseif($this->useranswers[$question['prim']]['status'] == 1){$incorrect++;}
             elseif($this->useranswers[$question['prim']]['status'] == 2){$correct++;}
         }

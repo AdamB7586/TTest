@@ -390,7 +390,7 @@ class TheoryTest implements TTInterface{
      * @return array This should be any test data that exists in the current session
      */
     protected function getUserTestInfo(){
-        if(!is_array($this->testData)){
+        if(!is_array($this->testData) && isset($_SESSION['test'.$this->getTest()])){
             $this->testData = $_SESSION['test'.$this->getTest()];
         }
         return $this->testData;

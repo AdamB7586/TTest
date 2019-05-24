@@ -1,6 +1,6 @@
 {strip}
-    {if $extra}
-        {if $extra.skipCorrect}
+    {if isset($extra)}
+        {if isset($extra.skipCorrect)}
     </div>
 </div>
 <div class="row">

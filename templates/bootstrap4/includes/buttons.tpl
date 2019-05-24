@@ -3,7 +3,7 @@
     <div class="row-eq-height w-100">
         <div class="col-3">
             {if $previous_question}
-            <div class="btn btn-theory prevquestion {$previous_question.class}" id="{$previous_question.id}">
+            <div class="btn btn-theory prevquestion{if isset($previous_question.class)} {$previous_question.class}{/if}" id="{$previous_question.id}">
                 <span class="fas fa-{$previous_question.icon} fa-fw btn-icon"></span>
                 <span class="d-none d-sm-inline-block ml-1 btn-text"> {$previous_question.text}</span>
             </div>
@@ -12,20 +12,20 @@
             {/if}
         </div>
         <div class="col-3">
-            <div class="btn btn-theory {$flag_question.class}">
+            <div class="btn btn-theory{if isset($flag_question.class)}  {$flag_question.class}{/if}">
                 <span class="fas fa-{$flag_question.icon} fa-fw btn-icon"></span>
                 <span class="d-none d-sm-inline-block ml-1 btn-text"> {$flag_question.text}</span>
             </div>
         </div>
         <div class="col-3">
-            <div class="btn btn-theory {$review.class}">
+            <div class="btn btn-theory{if isset($review.class)} {$review.class}{/if}">
                 <span class="fas fa-{$review.icon} fa-fw btn-icon"></span>
                 <span class="d-none d-sm-inline-block ml-1 btn-text"> {$review.text}</span>
             </div>
         </div>
         <div class="col-3">
             {if $previous_question}
-            <div class="btn btn-theory nextquestion {$next_question.class}" id="{$next_question.id}">
+            <div class="btn btn-theory nextquestion{if isset($next_question.class)} {$next_question.class}{/if}" id="{$next_question.id}">
                 <span class="fas fa-{$next_question.icon} fa-fw btn-icon"></span>
                 <span class="d-none d-sm-inline-block ml-1 btn-text"> {$next_question.text}</span>
             </div>

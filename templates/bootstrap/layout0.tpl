@@ -29,7 +29,7 @@
             <div class="col-sm-6">
                 {foreach $answers as $a => $answer}
                     <div class="option">
-                        <div class="answer{if $answer.selected} selected{$answer.selected}{/if}" id="{$answer.letter}">
+                        <div class="answer{if isset($answer.selected)} selected{$answer.selected}{/if}" id="{$answer.letter}">
                             <div class="selectbtn"></div>
                             {if $answer.audio.enabled}
                             <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$answer.id}">

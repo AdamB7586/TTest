@@ -205,7 +205,7 @@ class LearnTest extends TheoryTest{
      * @return string Returns the previous question HTML with the correct prim number for the previous question
      */
     protected function prevQuestion(){
-        if($_COOKIE['skipCorrect'] == 1){$prim = $this->getIncomplete('prev');}
+        if(isset($_COOKIE['skipCorrect'])){$prim = $this->getIncomplete('prev');}
         elseif($this->currentQuestion() != 1 && $this->testInfo['category']){
             $prim = $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => ['<', $this->currentQuestion()], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], 0, [$this->testInfo['sort'] => 'DESC']);
         }
@@ -218,7 +218,7 @@ class LearnTest extends TheoryTest{
      * @return string Returns the next question HTML with the correct prim number for the next question
      */
     protected function nextQuestion(){
-        if($_COOKIE['skipCorrect'] == 1){$prim = $this->getIncomplete();}
+        if(isset($_COOKIE['skipCorrect'])){$prim = $this->getIncomplete();}
         elseif(($this->currentQuestion() < $this->numQuestions()) && $this->testInfo['category']){
             $prim = $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => ['>', $this->currentQuestion()], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], 0, [$this->testInfo['sort'] => 'ASC']);
         }
@@ -339,8 +339,10 @@ class LearnTest extends TheoryTest{
      * @return boolean Returns true if the answer is selected else returns false
      */
     protected function answerSelected($prim, $letter){
-        if(strpos($this->useranswers[$prim]['answer'], strtoupper($letter)) !== false){
-            return true;
+        if(isset($this->useranswers[$prim]['answer'])){
+            if(strpos($this->useranswers[$prim]['answer'], strtoupper($letter)) !== false){
+                return true;
+            }
         }
         return false;
     }
@@ -365,9 +367,11 @@ class LearnTest extends TheoryTest{
      * @return string Will return the current status of the question as a string
      */
     protected function questionStatus(){
-        if($this->useranswers[$this->currentPrim]['status'] == '2'){return 'correct';}
-        elseif($this->useranswers[$this->currentPrim]['status'] == '1'){return 'incorrect';}
-        else{return 'unattempted';}
+        if(isset($this->useranswers[$this->currentPrim]['status'])) {
+            if($this->useranswers[$this->currentPrim]['status'] == '2'){return 'correct';}
+            elseif($this->useranswers[$this->currentPrim]['status'] == '1'){return 'incorrect';}
+        }
+        return 'unattempted';
     }
     
     /**
@@ -388,7 +392,7 @@ class LearnTest extends TheoryTest{
      * @return string Returns the button HTML
      */
     protected function flagHintButton($prim = false){
-        return ['text' => 'Study', 'class' => 'hint'.($this->checkSettings()['hint'] === 'on' ? ' studyon' : ''), 'icon' => 'book'];
+        return ['text' => 'Study', 'class' => 'hint'.(isset($this->checkSettings()['hint']) && $this->checkSettings()['hint'] === 'on' ? ' studyon' : ''), 'icon' => 'book'];
     }
     
     /**
@@ -423,7 +427,7 @@ class LearnTest extends TheoryTest{
      */
     public function dsaExplanation($explanation, $prim){
         $explain = [];
-        $explain['visable'] = ($this->checkSettings()['hint'] === 'on' ? ' visable' : '');
+        $explain['visable'] = (isset($this->checkSettings()['hint']) ? ($this->checkSettings()['hint'] === 'on' ? ' visable' : '') : '');
         $explain['tabs'][1]['label'] = 'Highway Code +';
         $explain['tabs'][1]['text'] = $this->highwayCodePlus($prim);
         $explain['tabs'][2]['label'] = 'DVSA Advice';

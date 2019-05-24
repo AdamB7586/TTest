@@ -135,7 +135,7 @@ class Review{
      */
     public function buildReviewTable($table, $tableSecNo, $title, $section){
         $categories = $this->db->selectAll($table, [], '*', ['section' => 'ASC']);
-        $review = [];
+        $review = ['totalquestions' => 0, 'totalcorrect' => 0, 'totalnotattempted' => 0, 'totalincorrect' => 0];
         if(is_array($categories)){
             if(!is_array($this->useranswers)){$this->getUserAnswers();}
             $review['title'] = $title;

@@ -487,7 +487,7 @@ class TheoryTest implements TTInterface{
             if(!empty($answers)) {
                 $this->useranswers = unserialize($answers['answers']);
                 if(!is_array($this->getUserTestInfo())) {$_SESSION['test'.$this->getTest()] = $this->useranswers;}
-                if(!is_numeric($_SESSION['question_no']['test'.$this->getTest()])) {$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
+                if(!isset($_SESSION['question_no']['test'.$this->getTest()])) {$_SESSION['question_no']['test'.$this->getTest()] = $answers['question_no'];}
                 $this->testID = $answers['id'];
                 return $this->useranswers;
             }

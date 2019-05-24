@@ -1462,9 +1462,9 @@ class TheoryTest implements TTInterface{
         foreach($dsacats as $i => $dsacat) {
             $catresults[$i]['section'] = $dsacat['section'];
             $catresults[$i]['name'] = $dsacat['name'];
-            $catresults[$i]['correct'] = (int)$this->testresults['dsa'][$dsacat['section']]['correct'];
-            $catresults[$i]['incorrect'] = (int)$this->testresults['dsa'][$dsacat['section']]['incorrect'];
-            $catresults[$i]['total'] = ((int)$this->testresults['dsa'][$dsacat['section']]['correct'] + (int)$this->testresults['dsa'][$dsacat['section']]['incorrect'] + (int)$this->testresults['dsa'][$dsacat['section']]['unattempted']);
+            $catresults[$i]['correct'] = isset($this->testresults['dsa'][$dsacat['section']]['correct']) ? (int)$this->testresults['dsa'][$dsacat['section']]['correct'] : 0;
+            $catresults[$i]['incorrect'] = isset($this->testresults['dsa'][$dsacat['section']]['incorrect']) ? (int)$this->testresults['dsa'][$dsacat['section']]['incorrect'] : 0;
+            $catresults[$i]['total'] = ($catresults[$i]['correct'] + $catresults[$i]['incorrect'] + (isset($this->testresults['dsa'][$dsacat['section']]['unattempted']) ? (int)$this->testresults['dsa'][$dsacat['section']]['unattempted'] : 0));
         }
         return $catresults;
     }

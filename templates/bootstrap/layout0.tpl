@@ -21,7 +21,15 @@
                 {if $image.src nocache}<img src="{$image.src}" alt="" width="{$image.width}" height="{$image.height}" class="imageright questionimage img-responsive" />{/if}
                 {include file="includes/mark.tpl" nocache}<br />
                 <div class="questiontext" id="{$prim}">
-                    {$question}
+                    {if $question.audio.enabled nocache}
+                    <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$question.prim}">
+                        <audio id="audio{$question.prim}" preload="auto">
+                            <source src="{$question.audio.location}/mp3/{$question.audio.file}.mp3" type="audio/mpeg">
+                            <source src="{$question.audio.location}/ogg/{$question.audio.file}.ogg" type="audio/ogg">
+                        </audio>
+                    </div>
+                    {/if}
+                    {$question.question}
                 </div>
             </div>
         </div>

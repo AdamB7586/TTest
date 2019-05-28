@@ -37,7 +37,15 @@
         </div>
         <div class="col-sm-6">
             <div class="questiontext" id="{$prim}">
-                {$question}
+                {if $question.audio.enabled nocache}
+                    <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$question.prim}">
+                        <audio id="audio{$question.prim}" preload="auto">
+                            <source src="{$question.audio.location}/mp3/{$question.audio.file}.mp3" type="audio/mpeg">
+                            <source src="{$question.audio.location}/ogg/{$question.audio.file}.ogg" type="audio/ogg">
+                        </audio>
+                    </div>
+                {/if}
+                {$question.question}
             </div>
             {foreach $answers as $a => $answer}
                 <div class="answer{if $answer.selected} selected{$answer.selected}{/if}" id="{$answer.letter}">

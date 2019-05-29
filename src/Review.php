@@ -194,7 +194,7 @@ class Review{
         foreach($this->db->selectAll($this->dvsaCatTable, [], '*', ['section' => 'ASC']) as $cat){
             $case[$cat['section']] = $cat;
             foreach($this->db->selectAll($this->questionsTable, ['casestudyno' => $cat['section']], '*', ['caseqposition' => 'ASC']) as $num => $question){
-                $case[$cat['section']]['q'][$num]['status'] = $this->useranswers[$question['prim']]['status'];
+                $case[$cat['section']]['q'][$num]['status'] = (isset($this->useranswers[$question['prim']]) ? $this->useranswers[$question['prim']]['status'] : 0);
                 $case[$cat['section']]['q'][$num]['num'] = ($num + 1);
             }
         }

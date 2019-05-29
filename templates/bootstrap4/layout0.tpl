@@ -50,7 +50,7 @@
                             {$answer.option}
                         </div>
                     </div>
-                    {if $a == (($answers|@count)/2)}
+                    {if $a == ceil(($answers|@count)/2)}
                 </div>
                 <div class="col-md-6">
                     {/if}

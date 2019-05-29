@@ -25,6 +25,7 @@ class FreeTheoryTest extends TheoryTest{
     protected function clearCookies($testNo){
         unset($_SESSION['test'.$testNo.'q']);
         unset($_SESSION['test'.$testNo]);
+        unset($_SESSION['current_test']);
         unset($_SESSION['question_no']);
         unset($_COOKIE['testinfo']);
         $this->clearSettings();

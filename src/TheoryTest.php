@@ -196,7 +196,7 @@ class TheoryTest implements TTInterface{
         if(is_numeric($userID)){$this->userClone = $userID;}
         if(!session_id()){
             if(defined(SESSION_NAME)){session_name(SESSION_NAME);}
-            session_set_cookie_params(0, '/', '.'.DOMAIN, (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false),  (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false));
+            session_set_cookie_params(0, '/', '.'.(defined('DOMAIN') ? DOMAIN : str_replace(['http://', 'https://', 'www.'], '', $_SERVER['SERVER_NAME'])), (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false),  (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false));
             session_start();
         }
         $this->setTables();

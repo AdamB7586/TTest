@@ -234,6 +234,25 @@ $btn-background: #CCCC99 !default;
     border-color:darken(#69C, 5%);
     box-shadow:inset 0px 0px 4px 0px rgba(0,0,0,0.3)
 }
+.imgnscorrect, .imgcorrect{
+    background-color:#E0EBBB;
+    color:#000 !important;
+    position:relative;
+    &:before{
+        content: $fa-var-check;
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        position: absolute;
+        font-size: 56px;
+        text-shadow: rgba(0,0,0, 0.85) 0 2px 1px;
+        color:#7DAE3C;
+        top: 13px;
+        left: 8px;
+        z-index: 1;
+    }
+}
 .selectedcorrect, .imgcorrect, .correct{
     background-color:#5CB85C !important;
     color:#fff !important;
@@ -256,25 +275,6 @@ $btn-background: #CCCC99 !default;
     background-color:#E0EBBB !important;
     color:#000 !important;
     border-color:darken(#E0EBBB, 5%) !important;
-}
-.imgnscorrect, .imgcorrect{
-    background-color:#E0EBBB !important;
-    color:#000 !important;
-    position:relative;
-    &:before{
-        content: $fa-var-check;
-        font-family: FontAwesome;
-        font-style: normal;
-        font-weight: normal;
-        text-decoration: inherit;
-        position: absolute;
-        font-size: 56px;
-        text-shadow: rgba(0,0,0, 0.85) 0 2px 1px;
-        color:#7DAE3C;
-        top: 13px;
-        left: 8px;
-        z-index: 1;
-    }
 }
 td{
     &.failed, &.incomplete{border-color:$table-border-color !important}

@@ -48,7 +48,7 @@
                 {$question.question}
             </div>
             {foreach $answers as $a => $answer}
-                <div class="answer{if isset($answer.selected) && $answer.selected !== false} selected{$answer.selected}{/if}" id="{$answer.letter}">
+                <div class="answer{if isset($answer.selected) && $answer.selected != false} selected{$answer.selected}{/if}" id="{$answer.letter}">
                     <div class="selectbtn"></div>
                     {if $answer.audio.enabled}
                     <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$answer.id}">

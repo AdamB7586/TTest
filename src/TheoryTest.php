@@ -977,7 +977,7 @@ class TheoryTest implements TTInterface{
             $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
             $options = [];
             if($new === false && $this->review !== 'answers') {
-                if($this->answerSelected($question, $letters[$answer_num])) {$options['selected'] = true;}
+                if($this->answerSelected($question, $letters[$answer_num])) {$options['selected'] = 'selected';}
             }
             elseif($new === false) {
                 $options['selected'] = strtolower($this->answerSelectedCorrect($question, $letters[$answer_num]));

@@ -39,7 +39,7 @@
                     {foreach $answers as $a => $answer}
                     <div class="col-sm-6">
                         <div class="option">
-                            <div class="answerimage {if isset($answer.selected) && $answer.selected !== false} img{$answer.selected}{/if}" id="{$answer.letter}">
+                            <div class="answerimage {if isset($answer.selected) && $answer.selected != false} img{$answer.selected}{/if}" id="{$answer.letter}">
                                 {$answer.option}
                                 <img src="{$answer.image.src}" alt="{$answer.option}" width="{$answer.image.width}" height="{$answer.image.height}" class="img-responsive" />
                             </div>

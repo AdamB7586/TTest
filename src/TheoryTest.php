@@ -830,7 +830,7 @@ class TheoryTest implements TTInterface{
             $_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] = 1;
         }
         else{
-            $_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged'] = 0;
+            unset($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged']);
         }
         return $this->updateAnswers();
     }
@@ -940,7 +940,7 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if current question is flagged else returns false
      */
     public function questionFlagged($prim) {
-        if($this->getUserTestInfo()[$this->questionNo($prim)]['flagged'] === 1) {
+        if(isset($this->getUserTestInfo()[$this->questionNo($prim)]['flagged'])) {
             return true;
         }
         return false;
@@ -1251,7 +1251,8 @@ class TheoryTest implements TTInterface{
      * @return int Returns the current number of seconds remaining for the test
      */
     protected function getSeconds() {
-        list($minutes, $seconds) = explode(':', $this->getTime('remaining'));
+        $remaining = $this->getTime('remaining');
+        list($minutes, $seconds) = explode(':', ($remaining ? $remaining : gmdate('i:s', $this->seconds)));
         return intval((intval($minutes) * 60) + intval($seconds));
     }
 

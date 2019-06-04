@@ -38,7 +38,7 @@
                 {foreach $answers as $a => $answer nocache}
                 <div class="col-md-6">
                     <div class="option">
-                        <div class="answerimage {if isset($answer.selected) && $answer.selected != false} img{$answer.selected}{/if}" id="{$answer.letter}">
+                        <div class="answerimage {if isset($answer.selected) && $answer.selected != false} img{if $answer.selected != 1}{$answer.selected}{else}selected{/if}{/if}" id="{$answer.letter}">
                             {$answer.option}
                             <img src="{$answer.image.src}" alt="{$answer.option}" width="{$answer.image.width}" height="{$answer.image.height}" class="img-fluid" />
                         </div>

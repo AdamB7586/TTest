@@ -21,13 +21,14 @@ class TheoryTestCertificate implements CertificateInterface{
      * Constructor
      * @param object $user This should be an instance of the User object
      * @param object $theoryTest This should be an instance of the Theory Test object
+     * @param int|false $alias If you are viewing a certificate for someone other than the person logged in set this to the users ID
      */
-    public function __construct($user, $theoryTest) {
+    public function __construct($user, $theoryTest, $alias = false) {
         $this->user = $user;
         $this->theory = $theoryTest;
         $this->pdf = new FPDF_Protection();
-        if(method_exists($this->user, 'getFirstname') && method_exists($this->user, 'getLastname')){$this->certUsername = $this->user->getFirstname().' '.$this->user->getLastname();}
-        elseif(method_exists($this->user, 'getUsername')){$this->certUsername = $this->user->getUsername();}
+        if(method_exists($this->user, 'getFirstname') && method_exists($this->user, 'getLastname')){$this->certUsername = $this->user->getFirstname($alias).' '.$this->user->getLastname($alias);}
+        elseif(method_exists($this->user, 'getUsername')){$this->certUsername = $this->user->getUsername($alias);}
     }
     
     /**
@@ -115,12 +116,12 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->pdf->Ln(8);
         $this->pdf->SetFont('Arial','', 12);
         if($this->theory->testresults['status'] == 'pass'){
-            $this->pdf->Cell(184, 10, "Congratulations ".$this->certUsername); $this->pdf->Ln(4);
+            $this->pdf->Cell(184, 10, "Congratulations ".trim($this->certUsername)); $this->pdf->Ln(4);
             $this->pdf->Cell(184, 10, "You have passed this test with ".$this->theory->testresults['percent']['correct']."%."); $this->pdf->Ln(4);
             $this->pdf->Cell(184, 10, "You answered ".$this->theory->testresults['correct']." out of ".$this->theory->testresults['numquestions']." questions correctly");
         }
         else{
-            $this->pdf->Cell(184, 10, "Sorry ".$this->certUsername.", but you have not passed this time."); $this->pdf->Ln(4);
+            $this->pdf->Cell(184, 10, "Sorry ".trim($this->certUsername).", but you have not passed this time."); $this->pdf->Ln(4);
             $this->pdf->Cell(184, 10, "You answered ".$this->theory->testresults['correct'].' out of '.$this->theory->testresults['numquestions']." questions correctly, the pass rate is ".$this->theory->passmark." out of ".$this->theory->testresults['numquestions']);
         }
         $this->pdf->Ln(12);
@@ -130,7 +131,7 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->infoLine('Status:', ($this->theory->testresults['status'] == 'pass' ? ' Passed' : 'Failed'));
         $this->infoLine('Questions:', $this->theory->testresults['numquestions']);
         $this->pdf->Ln(6);
-        $this->infoLine('Candidate:', $this->certUsername);
+        $this->infoLine('Candidate:', trim($this->certUsername));
         $this->infoLine('Time Taken:', $this->theory->getTime());
         $this->pdf->Ln(16);
         $this->pdf->SetFont('Arial','B', 8);

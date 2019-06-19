@@ -182,7 +182,7 @@ class TheoryTest implements TTInterface{
     /**
      * Connects to the database sets the current user and gets any user answers
      * @param Database $db This needs to be an instance of the database class
-     * @param Smarty $layout This needs to be an instance of the Smarty Templating class
+     * @param Smarty $layout This needs to be an instance of the Smarty Template class
      * @param object $user This should be the user class used
      * @param int|false $userID If you want to emulate a user set the user ID here
      * @param string|false $templateDir If you want to change the template location set this location here else set to false

@@ -160,7 +160,7 @@ class TheoryTest implements TTInterface{
     protected $current;
     
     /**
-     * @var string If the question is a case study question, this should be the case study information to display 
+     * @var array If the question is a case study question, this should be an array of ['case' => 'info', 'audio' => []] for the case study information to display 
      */
     protected $casestudy;
     
@@ -1056,6 +1056,7 @@ class TheoryTest implements TTInterface{
             $this->layout->assign('prim', $prim);
             $question['audio'] = $this->addAudio($prim, 'Q');
             $this->layout->assign('question', $question);
+            $answers = [];
             for($a = 1; $a <= $this->noAnswers; $a++){
                 $answers[$a] = $this->getOptions($question['prim'], $question['option'.$a], ($a - 1), $image, $new);
             }

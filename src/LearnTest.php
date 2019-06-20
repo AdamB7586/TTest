@@ -129,10 +129,10 @@ class LearnTest extends TheoryTest{
      */
     public function getUserAnswers() {
         if(!isset($this->useranswers)){
-            $answers = $this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress']);
-            if(!empty($answers)){
-                if(isset($_SESSION['answers'])){$this->useranswers = $_SESSION['answers'] + unserialize(stripslashes($answers['progress']));}
-                else{$this->useranswers = unserialize(stripslashes($answers['progress']));}
+            $answers = $this->db->fetchColumn($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress']);
+            if($answers !== false){
+                if(isset($_SESSION['answers'])){$this->useranswers = $_SESSION['answers'] + unserialize(stripslashes($answers));}
+                else{$this->useranswers = unserialize(stripslashes($answers));}
             }
             else{
                 $this->db->insert($this->learningProgressTable, ['user_id' => $this->getUserID(), 'progress' => serialize([])]);
@@ -491,10 +491,6 @@ class LearnTest extends TheoryTest{
      */
     private function getRealCaseID($sectionNo){
         if($this->getTestType() == 'CAR'){$type = 'car';}else{$type = 'M/C';}
-        $caseInfo = $this->db->select($this->caseTable, ['type' => $type, 'lp' => 1, 'dsacat' => $sectionNo], ['casestudyno']);
-        if(!empty($caseInfo)){
-            return $caseInfo['casestudyno'];
-        }
-        return false;
+        return $this->db->fetchColumn($this->caseTable, ['type' => $type, 'lp' => 1, 'dsacat' => $sectionNo], ['casestudyno']);
     }
 }

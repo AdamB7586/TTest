@@ -437,7 +437,7 @@ class TheoryTest implements TTInterface{
         if(!empty($existing)) {
             $this->exists = true;
             if($existing['status'] == 1) {return 'passed';}
-            else{return 'exists';}
+            return 'exists';
         }
         return false;
     }
@@ -562,18 +562,9 @@ class TheoryTest implements TTInterface{
      */
     public function getNextFlagged($dir = 'next', $current = false) {
         if(!is_numeric($current)){$current = $this->currentQuestion();}
-        if($dir === 'next'){
-            for($q = $current; $q <= $this->numQuestions(); $q++) {
-                if($q != $current && $this->getUserTestInfo()[$q]['flagged'] == 1) {
-                    return (int)$q;
-                }
-            }
-        }
-        else{
-            for($q = $current; $q >= 1; $q--) {
-                if($q != $current && $this->getUserTestInfo()[$q]['flagged'] == 1) {
-                    return (int)$q;
-                }
+        for($q = $current; ($dir === 'next' ? $q <= $this->numQuestions() : $q >= 1); ($dir === 'next' ? $q++ : $q--)) {
+            if($q != $current && $this->getUserTestInfo()[$q]['flagged'] == 1) {
+                return (int)$q;
             }
         }
         if($this->numFlagged() > 1) {
@@ -589,20 +580,10 @@ class TheoryTest implements TTInterface{
      */
     public function getNextIncomplete($dir = 'next', $questionNo = false) {
         $current = $this->currentQuestion();
-        if($dir === 'next'){
-            for($q = (is_numeric($questionNo) ? $questionNo : $current); $q <= $this->numQuestions(); $q++) {
-                $value = $this->getUserTestInfo()[$q]['status'];
-                if($q != $current && ($value < 3 || !$value)) {
-                    return (int)$q;
-                }
-            }
-        }
-        else{
-            for($q = (is_numeric($questionNo) ? $questionNo : $current); $q >= 1; $q--) {
-                $value = $this->getUserTestInfo()[$q]['status'];
-                if($q != $current && ($value < 3 || !$value)) {
-                    return (int)$q;
-                }
+        for($q = (is_numeric($questionNo) ? $questionNo : $current); ($dir === 'next' ? $q <= $this->numQuestions() : $q >= 1); ($dir === 'next' ? $q++ : $q--)) {
+            $value = $this->getUserTestInfo()[$q]['status'];
+            if($q != $current && ($value < 3 || !$value)) {
+                return (int)$q;
             }
         }
         if($this->numIncomplete() > 1) {

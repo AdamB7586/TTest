@@ -145,6 +145,9 @@ class TheoryTestCertificate implements CertificateInterface{
     protected function overallResults(){
         $header = ['Group', 'Topics in group', 'Correct', 'Incorrect', 'Total', 'Percentage', 'Status'];
         $groupdata = [];
+        $totalcorrect = 0;
+        $totalincorrect = 0;
+        $totalq = 0;
         foreach($this->theory->getCategories() as $data){
             $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
             $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
@@ -179,7 +182,7 @@ class TheoryTestCertificate implements CertificateInterface{
             $questioninfo = $this->theory->questionInfo($prim);
             $testdata[] = [$question, $questioninfo['cat'], $questioninfo['topic'], $correct];
         }
-        $this->pdf->basicTable($testheader, $testdata, [22,98,30,40], 5, 2);
+        $this->pdf->basicTable($testheader, $testdata, [22,98,30,40], 5, true);
     }
     
     /**
@@ -207,7 +210,7 @@ class FPDF_Protection extends FPDF{
         $first = true;
         $this->SetFont('Arial', 'B');
         foreach($header as $col){
-            if($first == true){$first = false; $currentwidth = intval(current($widths));}else{$currentwidth = intval(next($widths));}
+            if($first === true){$first = false; $currentwidth = intval(current($widths));}else{$currentwidth = intval(next($widths));}
             $this->Cell($currentwidth,7,$col,1,0,'C');
         }
         $this->Ln();
@@ -218,8 +221,8 @@ class FPDF_Protection extends FPDF{
             $first = true;
             $i = 1;
             foreach($row as $col){
-                if($first == true){$first = false; $currentwidth = intval(current($widths));}else{$currentwidth = intval(next($widths));}
-                if($left != false){if($i == $left){$align = 'L';}else{$align = 'C';}}else{$align = 'C';}
+                if($first === true){$first = false; $currentwidth = intval(current($widths));}else{$currentwidth = intval(next($widths));}
+                if($left !== false){if($i == $left){$align = 'L';}else{$align = 'C';}}else{$align = 'C';}
                 $this->Cell($currentwidth,$height,$col,1,0,$align);
                 $i++;
             }

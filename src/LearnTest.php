@@ -288,7 +288,7 @@ class LearnTest extends TheoryTest{
      * Adds the answer to the selected ones and updated the database
      * @param string $answer The letter of the option the user has selected
      * @param int $prim The prim number for the question the user is answering
-     * @return boolean Returns true
+     * @return string Returns if the answer is is correct, incorrect or incomplete
      */
     public function addAnswer($answer, $prim){
         $arraystring = str_replace($answer, '', trim($_SESSION['answers'][$prim]['answer'])).$answer;
@@ -299,7 +299,7 @@ class LearnTest extends TheoryTest{
      * Replaces a given question answer in the database
      * @param string $answer The new answer letter
      * @param int $prim The prim number for the current question
-     * @return boolean Returns true
+     * @return string Returns if the answer is is correct, incorrect or incomplete
      */
     public function replaceAnswer($answer, $prim){
         $questiondata = $this->getQuestionData($prim);
@@ -316,7 +316,7 @@ class LearnTest extends TheoryTest{
      * Removes an answer from those that are selected
      * @param string $answer The Answer letter that you wish to remove
      * @param int $prim The prim number for the current question
-     * @return boolean Returns true
+     * @return string Returns if the answer is is correct, incorrect or incomplete
      */
     public function removeAnswer($answer, $prim){
         $_SESSION['answers'][$prim]['answer'] = str_replace(strtoupper($answer), '', $_SESSION['answers'][$prim]['answer']);
@@ -407,7 +407,7 @@ class LearnTest extends TheoryTest{
     
     /**
      * Returns any extra HTML code that needs adding to the page
-     * @return string Returns any extra HTML code that needs adding to the page
+     * @return array Returns any extra HTML code that needs adding to the page
      */
     protected function extraContent(){
         $extra = [];
@@ -423,7 +423,7 @@ class LearnTest extends TheoryTest{
      * Returns any related information about the current question
      * @param string $explanation This should be the DVSA explanation for the database as it has already been retrieved
      * @param int $prim This should be the questions unique prim number
-     * @return string Should return any related question information in a tabbed format
+     * @return array Should return any related question information in a tabbed format
      */
     public function dsaExplanation($explanation, $prim){
         $explain = [];
@@ -446,15 +446,18 @@ class LearnTest extends TheoryTest{
     protected function highwayCodePlus($prim){
         $highwaycode = '';
         $hcClass = new HighwayCode($this->db);
-        foreach($hcClass->getRule($this->db->select($this->questionsTable, ['prim' => $prim], ['hcrule1', 'hcrule2', 'hcrule3'])) as $ruleno){
-            if(!$ruleno['hcrule']){
-                $rule = '<p class="center">'.$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']).$this->hcImage($ruleno['imagetitle2'], $ruleno['hctitle']).'</p><p class="center">'.$ruleno['hctitle'].'</p>';
+        $rules = $hcClass->getRule($this->db->select($this->questionsTable, ['prim' => $prim], ['hcrule1', 'hcrule2', 'hcrule3']));
+        if(is_array($rules)){
+            foreach($rules as $ruleno){
+                if(!$ruleno['hcrule']){
+                    $rule = '<p class="center">'.$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']).$this->hcImage($ruleno['imagetitle2'], $ruleno['hctitle']).'</p><p class="center">'.$ruleno['hctitle'].'</p>';
+                }
+                else{
+                    $rule = $ruleno['hcrule'].$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']);
+                }
+                $this->setAudioLocation('/audio/highway-code');
+                $highwaycode.= $this->addAudio($ruleno, 'HC').$rule;
             }
-            else{
-                $rule = $ruleno['hcrule'].$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']);
-            }
-            $this->setAudioLocation('/audio/highway-code');
-            $highwaycode.= $this->addAudio($ruleno, 'HC').$rule;
         }
         $this->setAudioLocation('/audio');
         return $highwaycode;

@@ -159,7 +159,7 @@ class TheoryTestCertificate implements CertificateInterface{
             $totalq = $totalq + $total;
         }
         $widths = [14,78,19,19,19,20,21];
-        $this->pdf->basicTable($header, $groupdata, $widths, 6, 2);
+        $this->pdf->basicTable($header, $groupdata, $widths, 6, true);
         $first = true;
         $grouppercent = round(($totalcorrect / $totalq) * 100);
         
@@ -206,7 +206,7 @@ class FPDF_Protection extends FPDF{
      * @param int $height The hight given to the table fields
      * @param boolean $left If left aligned columns set to true for center aligned set to false
      */
-    function basicTable($header, $data, $widths = '', $height = 6, $left = false){
+    public function basicTable($header, $data, $widths = '', $height = 6, $left = false){
         $first = true;
         $this->SetFont('Arial', 'B');
         foreach($header as $col){

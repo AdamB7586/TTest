@@ -988,7 +988,7 @@ class TheoryTest implements TTInterface{
         $this->layout->assign('review_incomplete', $this->getIncompleteQuestion(), true);
         $this->layout->assign('review_flagged', $this->getFlaggedQuestion(), true);
         $this->layout->assign('script', $this->getScript(false), true);
-        $this->layout->display('review.tpl');
+        return $this->layout->fetch('review.tpl');
     }
     
     /**

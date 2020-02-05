@@ -44,22 +44,22 @@
 <div class="panel panel-default">
     <table class="table">
         <tr>
-            <td class="text-center col-md-3"><span class="fa fa-check fa-2x fa-fw text-success"></span><strong class="hidden-xs">Correct</strong></td>
+            <td class="text-center col-md-3"><span class="fa fa-check fa-2x fa-fw text-success"></span> <strong class="hidden-xs">Correct</strong></td>
             <td class="text-center valign-center">{$results.correct} / {$results.numquestions}</td>
             <td class="valign-center col-md-6"><div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.correct}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.correct}%">{$results.percent.correct}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fa fa-times fa-2x fa-fw text-danger"></span><strong class="hidden-xs">Incorrect</strong></td>
+            <td class="text-center"><span class="fa fa-times fa-2x fa-fw text-danger"></span> <strong class="hidden-xs">Incorrect</strong></td>
             <td class="text-center valign-center">{math equation="questions - correct" questions=$results.numquestions correct=$results.correct} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.incorrect}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.incorrect}%">{$results.percent.incorrect}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fa fa-flag fa-2x text-info"></span><strong class="hidden-xs">Flagged</strong></td>
+            <td class="text-center"><span class="fa fa-flag fa-2x fa-fw text-info"></span> <strong class="hidden-xs">Flagged</strong></td>
             <td class="text-center valign-center">{$results.flagged} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.flagged}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.flagged}%">{$results.percent.flagged}%</div></div></td>
         </tr>
         <tr>
-            <td class="text-center"><span class="fa fa-exclamation fa-2x text-warning"></span><strong class="hidden-xs">Incomplete</strong></td>
+            <td class="text-center"><span class="fa fa-exclamation fa-2x fa-fw text-warning"></span> <strong class="hidden-xs">Incomplete</strong></td>
             <td class="text-center valign-center">{$results.incomplete} / {$results.numquestions}</td>
             <td class="valign-center"><div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.incomplete}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.incomplete}%">{$results.percent.incomplete}%</div></div></td>
         </tr>

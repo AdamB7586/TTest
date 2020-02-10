@@ -1153,7 +1153,7 @@ class TheoryTest implements TTInterface{
      * @param int $testNo This should be the current test number
      */
     public function setTest($testNo) {
-        if(is_numeric($testNo) && !is_numeric($this->testNo)){
+        if(is_numeric($testNo) && $this->testNo !== $testNo){
             $this->testNo = $testNo;
         }
         if($this->user->setUserSettings(['current_test' => $testNo])) {

@@ -821,7 +821,7 @@ class TheoryTest implements TTInterface{
      * @return boolean
      */
     protected function updateAnswers() {
-        return $this->db->update($this->progressTable, ['answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID]);
+        return $this->db->update($this->progressTable, ['answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
     }
     
     /**
@@ -1211,7 +1211,7 @@ class TheoryTest implements TTInterface{
             if($type == 'taken') {
                 list($mins, $secs) = explode(':', $time);
                 $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
-                $this->db->update($this->progressTable, ['time_'.$type => $newtime], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID]);
+                $this->db->update($this->progressTable, ['time_'.$type => $newtime], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
             }
             else{
                 $_SESSION['time_'.$type]['test'.$this->getTest()] = $time;
@@ -1287,7 +1287,7 @@ class TheoryTest implements TTInterface{
      * @return boolean If existing tests are deleted will return true else will return false
      */
     public function startNewTest() {
-        return $this->db->delete($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID]);
+        return $this->db->delete($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
     }
     
     /**
@@ -1347,7 +1347,7 @@ class TheoryTest implements TTInterface{
             $this->testresults['status'] = 'fail';
             $status = 2;
         }
-        $this->db->update($this->progressTable, ['status' => $status, 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'id' => $this->testID]);
+        $this->db->update($this->progressTable, ['status' => $status, 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
     }
     
     /**

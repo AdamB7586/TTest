@@ -167,7 +167,7 @@ class FreeTheoryTest extends TheoryTest{
      */
     protected function currentQuestion(){
         if(!isset($this->current)){
-            $this->current = $_SESSION['question_no'];
+            $this->current = $_SESSION['question_no']['free'];
         }
         return $this->current;
     }
@@ -179,7 +179,7 @@ class FreeTheoryTest extends TheoryTest{
      */
     protected function updateTestProgress($prim){
         $this->current = $this->questionNo($prim);
-        $_SESSION['question_no'] = $this->current;
+        $_SESSION['question_no']['free'] = $this->current;
     }
     
     /**

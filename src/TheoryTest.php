@@ -758,7 +758,8 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if the answer has been updated else returns false
      */
     public function replaceAnswer($letters, $prim) {
-        $qNo = $this->questionNo($prim);
+        $this->updateTestProgress($prim);
+        $qNo = $this->currentQuestion();
         $questiondata = $this->getQuestionData($prim);
         $answer = strtoupper($letters);
         $_SESSION['test'.$this->getTest()][$qNo]['answer'] = $answer;
@@ -778,7 +779,8 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if database has been updated else return false
      */
     public function removeAnswer($answer, $prim) {
-        $qNo = $this->questionNo($prim);
+        $this->updateTestProgress($prim);
+        $qNo = $this->currentQuestion();
         $removed = str_replace(strtoupper($answer), '', filter_var($this->getUserTestInfo()[$qNo]['answer'], FILTER_SANITIZE_STRING));
         $_SESSION['test'.$this->getTest()][$qNo]['answer'] = $removed;
         if($removed === '') {$_SESSION['test'.$this->getTest()][$qNo]['status'] = 0;}
@@ -1143,6 +1145,8 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if the settings are cleared and updated else returns false
      */
     protected function clearSettings() {
+        unset($_SESSION['test'.$this->getTest()]);
+        unset($_SESSION['question_no']);
         $settings = $this->checkSettings();
         unset($settings['review']);
         return $this->user->setUserSettings($settings);

@@ -60,7 +60,7 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate{
         $this->infoLine('Test:', strip_tags($this->theory->getTestName()));
         $this->infoLine('Date:', date('d/m/Y', strtotime($this->theory->testresults['complete'])));
         $this->pdf->Ln(6);
-        $this->infoLine('Status:', strip_tags($this->theory->testStatus()));
+        $this->infoLine('Status:', ($this->theory->testresults['status'] == 'pass' ? ' Passed' : 'Failed'));
         $this->infoLine('Questions:', $this->theory->testresults['numquestions']);
         $this->pdf->Ln(6);
         $this->infoLine('Time Taken:', $this->theory->getTime());

@@ -250,6 +250,7 @@ function checkCorrect(question){
             });
         }
         else{
+            $(".selectedincorrect, .selectedcorrect").removeClass("selected selectedincorrect selectedcorrect");
             $(".answer").removeClass("selected selectedincorrect selectedcorrect");
             $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
             $(".check").removeClass("recheck checkcorrect checkincorrect");

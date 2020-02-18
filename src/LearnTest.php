@@ -355,11 +355,11 @@ class LearnTest extends TheoryTest{
     public function checkAnswer($prim){
         if(!isset($_SESSION['answers'])){$_SESSION['answers'] = $this->useranswers;}
         if($_SESSION['answers'][$prim]['status'] == '2'){
-            echo('CORRECT');
             $this->updateLearningProgress();
+            return 'CORRECT';
         }
-        elseif($_SESSION['answers'][$prim]['status'] == '1'){echo('INCORRECT');}
-        else{echo('INCOMPLETE');}
+        elseif($_SESSION['answers'][$prim]['status'] == '1'){return 'INCORRECT';}
+        else{return 'INCOMPLETE';}
     }
     
     /**

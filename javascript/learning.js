@@ -87,21 +87,19 @@ function markAnswer(answer, question, remove, replace){
             $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
             $.get("<?php echo($page); ?>?remove=" + answer + "&prim=" + question, function(data){process = false;});
         }
+        else if(replace == false){
+            $.get("<?php echo($page); ?>?add=" + answer + "&prim=" + question, function(data){
+                if(numchecked == max){checkCorrect(question);}
+                $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
+                process = false;
+            });
+        }
         else{
-            if(replace == false){
-                $.get("<?php echo($page); ?>?add=" + answer + "&prim=" + question, function(data){
-                    if(numchecked == max){$(".check").addClass("recheck");}
-                    $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
-                    process = false;
-                });
-            }
-            else{
-                $.get("<?php echo($page); ?>?replace=" + answer + "&prim=" + question, function(data){
-                    $(".check").addClass("recheck");
-                    $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
-                    process = false;
-                });
-            }
+            $.get("<?php echo($page); ?>?replace=" + answer + "&prim=" + question, function(data){
+                if(numchecked == max){checkCorrect(question);}
+                $(".signal").removeClass("signalincorrect signalcorrect").addClass("signalunattempted");
+                process = false;
+            });
         }
     }
     else{
@@ -230,7 +228,7 @@ function checkCorrect(question){
     $(".check").removeClass("recheck");
     if(process == false){
         if(numchecked == max){
-            $.get("<?php echo($page); ?>?check=" + question, function(data){
+            $.getJSON("<?php echo($page); ?>?check=" + question, function(data){
                 if(data === 'CORRECT'){
                     $(".answer").removeClass('selectedcorrect selectedincorrect'); 
                     $(".selected").removeClass("selectedincorrect").addClass("selectedcorrect");
@@ -268,11 +266,11 @@ function checkCorrect(question){
 }
 
 function questionData(question){
-    $.get("<?php echo($page); ?>?question=" + question, function(data){
+    $.getJSON("<?php echo($page); ?>?question=" + question, function(data){
         $("#question").html(data.html);
         $("#qnum").html(data.questionnum);
         //$('html, body').animate({ scrollTop: 0 }, 0);
-    }, "json");
+    });
 }
 
 function moveQuestion(question){

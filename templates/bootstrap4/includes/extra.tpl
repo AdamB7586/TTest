@@ -5,8 +5,8 @@
 </div>
 <div class="row">
     <div class="col-12 skipcorrectclear">
-        <div class="btn btn-theory skipcorrect{$extra.flagged}">Skip Correct</div>
+        <div class="btn btn-theory skipcorrect{if isset($extra.flagged)}{$extra.flagged}{/if}">Skip Correct</div>
         {/if}
-        <div class="signal signal{$extra.signal}"></div>
+        <div class="signal signal{if isset($extra.signal)}{$extra.signal}{/if}"></div>
     {/if}
 {/strip}

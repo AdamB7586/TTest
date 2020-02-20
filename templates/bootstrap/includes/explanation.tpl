@@ -24,7 +24,7 @@
                     </div>
                 {/foreach}
             </div>
-            {else}
+            {elseif isset($dsa_explanation.explanation)}
                 <div class="explanation{$dsa_explanation.visable}">
                     {if isset($dsa_explanation.audio.enabled)}
                         <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$dsa_explanation.audio.file|lower}">

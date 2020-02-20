@@ -5,13 +5,7 @@
     <div class="row">
         <div class="col-md-12">
             {include file="includes/alert.tpl"}
-            {if isset($review_questions)}
-                <div class="numreviewq">
-                    {foreach $review_questions as $r => $review_question}
-                        <div class="questionreview {if $review_question.status == 4}correct{elseif $review_question.status == 3}incorrect{else}incomplete{/if}{if $review_question.current == 4} currentreview{/if}" id="{$review_question.prim}">{$r}</div>
-                    {/foreach}
-                </div>
-            {/if}
+            {include file="includes/review.tpl"}
         </div>
     </div>
     {/if}

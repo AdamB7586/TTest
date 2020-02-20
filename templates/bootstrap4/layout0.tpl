@@ -5,20 +5,14 @@
     <div class="row">
         <div class="col-12">
             {include file="includes/alert.tpl"}
-            {if isset($review_questions)}
-                <div class="numreviewq">
-                    {foreach $review_questions as $r => $review_question}
-                        <div class="questionreview {if $review_question.status == 4}correct{elseif $review_question.status == 3}incorrect{else}incomplete{/if}{if $review_question.current == 4} currentreview{/if}" id="{$review_question.prim}">{$r}</div>
-                    {/foreach}
-                </div>
-            {/if}
+            {include file="includes/review.tpl"}
         </div>
     </div>
     {/if}
     <div id="question-content"{if isset($review_questions)} class="isreview"{/if}>
         <div class="row">
             <div class="col-12" id="question-main">
-                {if $image.src nocache}<img src="{$image.src}" alt="" width="{$image.width}" height="{$image.height}" class="float-right questionimage img-fluid pl-1" />{/if}
+                {if isset($image.src) nocache}<img src="{$image.src}" alt="" width="{$image.width}" height="{$image.height}" class="float-right questionimage img-fluid pl-1" />{/if}
                 {include file="includes/mark.tpl" nocache}<br />
                 <div class="questiontext" id="{$prim}">
                     {if isset($question.audio.enabled) nocache}

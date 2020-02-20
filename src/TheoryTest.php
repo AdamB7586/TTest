@@ -509,8 +509,11 @@ class TheoryTest implements TTInterface{
      * @return int Returns the current question number
      */
     protected function currentQuestion() {
-        if(!isset($this->current)) {
+        if(!isset($this->current) && isset($_SESSION['question_no'])) {
             $this->current = $_SESSION['question_no']['test'.$this->getTest()];
+        }
+        elseif(!isset($this->current)){
+            $this->current = 1;
         }
         return $this->current;
     }

@@ -1,4 +1,4 @@
-{if $alert}
+{if isset($alert)}
     {if $alert == 'flagged' || $alert == 'incomplete'}
         <div class="alert alert-danger">Reviewing {$alert} questions only</div>
     {elseif $alert == 'allmarked'}

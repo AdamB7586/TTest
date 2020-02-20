@@ -1,11 +1,11 @@
 {strip}
 {nocache}
 <div class="col-md-12">
-    {if $alert || $review_questions}
+    {if isset($alert) || isset($review_questions)}
     <div class="row">
         <div class="col-md-12">
             {include file="includes/alert.tpl"}
-            {if $review_questions}
+            {if isset($review_questions)}
                 <div class="numreviewq">
                     {foreach $review_questions as $r => $review_question}
                         <div class="questionreview {if $review_question.status == 4}correct{elseif $review_question.status == 3}incorrect{else}incomplete{/if}{if $review_question.current == 4} currentreview{/if}" id="{$review_question.prim}">{$r}</div>
@@ -15,13 +15,13 @@
         </div>
     </div>
     {/if}
-    <div id="question-content"{if $review_questions} class="isreview"{/if}>
+    <div id="question-content"{if isset($review_questions)} class="isreview"{/if}>
         <div class="row">
             <div class="col-sm-12" id="question-main">
                 {if $image.src nocache}<img src="{$image.src}" alt="" width="{$image.width}" height="{$image.height}" class="imageright questionimage img-responsive" />{/if}
                 {include file="includes/mark.tpl" nocache}<br />
                 <div class="questiontext" id="{$prim}">
-                    {if $question.audio.enabled nocache}
+                    {if isset($question.audio.enabled) nocache}
                     <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$question.prim}">
                         <audio id="audio{$question.prim}" preload="auto">
                             <source src="{$question.audio.location}/mp3/{$question.audio.file}.mp3" type="audio/mpeg">
@@ -39,7 +39,7 @@
                     <div class="option">
                         <div class="answer{if isset($answer.selected) && $answer.selected != false} selected selected{if $answer.selected != 1}{$answer.selected}{/if}{/if}" id="{$answer.letter}">
                             <div class="selectbtn"></div>
-                            {if $answer.audio.enabled}
+                            {if isset($answer.audio.enabled)}
                             <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$answer.id}">
                                 <audio id="audio{$answer.id}" preload="auto">
                                     <source src="{$answer.audio.location}/mp3/{$answer.audio.file}.mp3" type="audio/mpeg">

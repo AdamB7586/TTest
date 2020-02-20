@@ -2,7 +2,7 @@
 <div class="col-12" id="explan">
     <div class="row">
         {if isset($dsa_explanation)}
-        <div class="col-12 {if $dsa_explanation.tabs} showhint{$dsa_explanation.visable}{/if}">
+        <div class="col-12 {if isset($dsa_explanation.tabs)} showhint{$dsa_explanation.visable}{/if}">
             {if isset($dsa_explanation.tabs)}
             <ul class="nav nav-tabs">
                 {foreach $dsa_explanation.tabs as $id => $tab}

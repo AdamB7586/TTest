@@ -147,7 +147,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return array Returns the current users answers for the current test
      */
     public function getUserAnswers() {
-        if(!isset($this->useranswers)){
+        if(!isset($this->useranswers) && isset($_SESSION['test'.$this->getTest()])){
             $this->useranswers = $_SESSION['test'.$this->getTest()];
         }
         return $this->useranswers;
@@ -166,8 +166,11 @@ class FreeTheoryTest extends TheoryTest{
      * @return int Returns the current question number
      */
     protected function currentQuestion(){
-        if(!isset($this->current)){
+        if(!isset($this->current) && isset($_SESSION['question_no']['free'])){
             $this->current = $_SESSION['question_no']['free'];
+        }
+        elseif(!isset($this->current)){
+            $this->current = 1;
         }
         return $this->current;
     }
@@ -195,7 +198,7 @@ class FreeTheoryTest extends TheoryTest{
      * @return boolean If the test has been started will return true else return false
      */
     private function testStarted(){
-        if(is_numeric($_COOKIE['started'])){
+        if(isset($_COOKIE['started']) && is_numeric($_COOKIE['started'])){
             return true;
         }
         return false;

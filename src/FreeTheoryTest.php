@@ -57,16 +57,20 @@ class FreeTheoryTest extends TheoryTest{
      * @return array Returns the current users settings which they have enabled
      */
     protected function checkSettings($new = false) {
-        $settings = unserialize($_SESSION['settings']);
-        if($new !== true){
-            if($settings['review'] == 'all'){$this->review = (string) 'all';}
-            elseif($settings['review'] == 'flagged'){$this->review = (string) 'flagged';}
-            elseif($settings['review'] == 'incomplete'){$this->review = (string) 'incomplete';}
-            elseif($settings['review'] == 'answers'){$this->review = (string) 'answers';}
+        $settings = [];
+        if(isset($_SESSION['settings'])){
+            $settings = unserialize($_SESSION['settings']);
+            if($new !== true){
+                if($settings['review'] == 'all'){$this->review = (string) 'all';}
+                elseif($settings['review'] == 'flagged'){$this->review = (string) 'flagged';}
+                elseif($settings['review'] == 'incomplete'){$this->review = (string) 'incomplete';}
+                elseif($settings['review'] == 'answers'){$this->review = (string) 'answers';}
+            }
+            else{$this->review = false;}
+            if($settings['audio'] == 'on'){$this->audioEnabled = true;}
         }
-        else{$this->review = false;}
-        if($settings['audio'] == 'on'){$this->audioEnabled = true;}
         return $settings;
+        
     }
     
     /**

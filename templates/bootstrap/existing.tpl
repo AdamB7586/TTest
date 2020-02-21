@@ -11,7 +11,7 @@
         {else}
             <p>Please click the start test button below when you are ready to start. Please make sure you do not navigate away from the page as you will not be able to pick up from where you left the test.</p>
         {/if}
-        <div class="timeremaining" id="{$seconds}"></div>
+        <div class="timeremaining" id="{if isset($seconds)}{$seconds}{/if}"></div>
     </div>
 </div>
 <div class="col-md-12" id="buttons">

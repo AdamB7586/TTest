@@ -149,8 +149,8 @@ class TheoryTestCertificate implements CertificateInterface{
         $totalincorrect = 0;
         $totalq = 0;
         foreach($this->theory->getCategories() as $data){
-            $correct = (int)$this->theory->testresults['dsa'][$data['section']]['correct'];
-            $incorrect = (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'];
+            $correct = isset($this->theory->testresults['dsa'][$data['section']]['correct']) ? (int)$this->theory->testresults['dsa'][$data['section']]['correct'] : 0;
+            $incorrect = isset($this->theory->testresults['dsa'][$data['section']]['incorrect']) ? (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'] : 0;
             $total = $correct + $incorrect;
             $groupdata[] = [$data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format(intval(($correct / $total) * 100), 0).'%', ''];
             
@@ -178,7 +178,7 @@ class TheoryTestCertificate implements CertificateInterface{
         $testheader = ['Question', 'Learning Section', 'Question No.', 'Status'];
         $testdata = [];
         foreach($this->theory->questions as $question => $prim){
-            if($this->theory->useranswers[$question]['status'] == '4'){$correct = 'Correct';}else{$correct = 'Incorrect';}
+            if(isset($this->theory->useranswers[$question]['status']) && $this->theory->useranswers[$question]['status'] == '4'){$correct = 'Correct';}else{$correct = 'Incorrect';}
             $questioninfo = $this->theory->questionInfo($prim);
             $testdata[] = [$question, $questioninfo['cat'], $questioninfo['topic'], $correct];
         }

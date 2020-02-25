@@ -1178,7 +1178,9 @@ class TheoryTest implements TTInterface{
     public function getTest() {
         if(!is_numeric($this->testNo)) {
             $testNo = $this->user->getUserSettings();
-            $this->testNo = $testNo['current_test'];
+            if(is_array($testNo)){
+                $this->testNo = $testNo['current_test'];
+            }
         }
         return $this->testNo;
     }

@@ -44,7 +44,7 @@
             {foreach $answers as $a => $answer nocache}
                 <div class="answer{if isset($answer.selected) && $answer.selected != false} selected selected{if $answer.selected != 1}{$answer.selected}{/if}{/if}" id="{$answer.letter}">
                     <div class="selectbtn"></div>
-                    {if $answer.audio.enabled}
+                    {if isset($answer.audio.enabled)}
                     <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$answer.id}">
                         <audio id="audio{$answer.id}" preload="auto">
                             <source src="{$answer.audio.location}/mp3/{$answer.audio.file}.mp3" type="audio/mpeg">

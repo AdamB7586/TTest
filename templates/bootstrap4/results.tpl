@@ -92,7 +92,7 @@
 <div class="col-12" id="buttons">
     <div class="row-eq-height w-100">
         <div class="col-3"><div class="reviewtest btn btn-theory" id="{$review_test}"><span class="fas fa-question fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> Review Test</span></div></div>
-        <div class="col-3"><a href="{$print_certificate.location}" title="Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}" target="_blank" class="printcert btn btn-theory"><span class="fas fa-print fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}</span></a></div>
+        <div class="col-3">{if isset($print_certificate.location)}<a href="{$print_certificate.location}" title="Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}" target="_blank" class="printcert btn btn-theory"><span class="fas fa-print fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> Print {if $print_certificate.status == 'pass'}Certificate{else}Results{/if}</span></a>{/if}</div>
         <div class="col-3"></div>
         <div class="col-3">
             <div class="blank"></div>

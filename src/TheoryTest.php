@@ -1047,9 +1047,9 @@ class TheoryTest implements TTInterface{
                 if(isset($question['option'.$a])){$answers[$a] = $this->getOptions($question['prim'], $question['option'.$a], ($a - 1), $image, $new);}
             }
             $this->layout->assign('answers', array_filter($answers));
-            $this->layout->assign('image', ($question['dsaimageid'] ? $this->createImage($question['prim'].'.jpg', true) : false));
+            $this->layout->assign('image', (!empty($question['dsaimageid']) ? $this->createImage($question['prim'].'.jpg', true) : false));
             $this->layout->assign('case_study', $this->casestudy);
-            $this->layout->assign('dsa_explanation', $this->dsaExplanation($question['dsaexplanation'], $prim));
+            $this->layout->assign('dsa_explanation', (isset($question['dsaexplanation']) && !empty($question['dsaexplanation']) ? $this->dsaExplanation($question['dsaexplanation'], $prim) : false));
             $this->layout->assign('previous_question', $this->prevQuestion());
             $this->layout->assign('flag_question', $this->flagHintButton($question['prim']));
             $this->layout->assign('review', $this->reviewButton());

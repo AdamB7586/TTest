@@ -57,7 +57,7 @@ class TheoryTest implements TTInterface{
     /*
      * @var in This is the maximum number of answers each question has within the test
      */
-    public $noAnswers = 6;
+    public $noAnswers = 4;
     
     /**
      * @var string The name of the user tests database table
@@ -946,7 +946,7 @@ class TheoryTest implements TTInterface{
      * @return array|boolean Returns question data as array if data exists else returns false
      */
     protected function getQuestionData($prim) {
-        return $this->db->select($this->questionsTable, ['prim' => $prim], ['prim', 'question', 'mark', 'option1', 'option2', 'option3', 'option4', 'option5', 'option6', 'answerletters', 'dsaimageid', 'format', 'dsaexplanation', 'casestudyno']);
+        return $this->db->select($this->questionsTable, ['prim' => $prim]);
     }
     
     /**
@@ -1036,7 +1036,7 @@ class TheoryTest implements TTInterface{
         $this->checkSettings($new);
         $question = $this->getQuestionData($prim);
         if(!empty($question)) {
-            if(is_numeric($question['casestudyno'])) {$this->setCaseStudy($question['casestudyno']);}
+            if(isset($question['casestudyno']) && is_numeric($question['casestudyno'])) {$this->setCaseStudy($question['casestudyno']);}
             $image = (($question['format'] == '0' || $question['format'] == '2') ? false : true);
             $this->layout->assign('mark', $this->getMark($question['mark']));
             $this->layout->assign('prim', $prim);
@@ -1044,7 +1044,7 @@ class TheoryTest implements TTInterface{
             $this->layout->assign('question', $question);
             $answers = [];
             for($a = 1; $a <= $this->noAnswers; $a++){
-                $answers[$a] = $this->getOptions($question['prim'], $question['option'.$a], ($a - 1), $image, $new);
+                if(isset($question['option'.$a])){$answers[$a] = $this->getOptions($question['prim'], $question['option'.$a], ($a - 1), $image, $new);}
             }
             $this->layout->assign('answers', array_filter($answers));
             $this->layout->assign('image', ($question['dsaimageid'] ? $this->createImage($question['prim'].'.jpg', true) : false));

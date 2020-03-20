@@ -39,6 +39,7 @@ class LearnTest extends TheoryTest{
         parent::setTables();
         $this->hcCatTable = $this->config->table_theory_hc_sections;
         $this->l2dCatTable = $this->config->table_theory_l2d_sections;
+        $this->casestudyCatTable = $this->config->table_theory_case_studies;
     }
     
     /**
@@ -52,9 +53,9 @@ class LearnTest extends TheoryTest{
         if($type == 'casestudy'){$sectionNo = $this->getRealCaseID($sectionNo);}
         $this->chooseStudyQuestions($sectionNo, $type);
         $this->setTest($type.$sectionNo);
+        $table = strtolower($type).'CatTable';
+        if(empty($this->$table)){return false;}
         if($type != 'casestudy'){
-            $table = strtolower($type).'CatTable';
-            if(empty($this->$table)){return false;}
             $learnName = $this->db->select($this->$table, ['section' => $sectionNo], ['name', 'free']);
             $name = $sectionNo.'. '.$learnName['name'];
             if($learnName['free'] == 0 && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}

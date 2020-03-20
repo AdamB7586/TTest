@@ -14,6 +14,7 @@ class RandomTest extends TheoryTest{
     public function createNewTest($theorytest = 15){
         $this->clearSettings();
         $this->setTest($this->testNo);
+        if(method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess($theorytest);}
         $this->setTestName($this->testName);
         if($this->anyExisting() === false){
             $this->chooseQuestions($this->testNo);

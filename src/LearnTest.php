@@ -59,7 +59,10 @@ class LearnTest extends TheoryTest{
             $name = $sectionNo.'. '.$learnName['name'];
             if($learnName['free'] == 0 && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}
         }
-        else{$name = 'Case Study '.$sectionNo;}
+        else{
+            $name = 'Case Study '.$sectionNo;
+            if($this->db->select($this->$table, ['casestudyno' => $sectionNo], ['free'])['free'] == 0 && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}
+        }
         $this->setTestName($name);
         return $this->buildTest();
     }

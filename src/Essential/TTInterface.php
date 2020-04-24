@@ -21,7 +21,4 @@ interface TTInterface{
     public function getTestType();
     public function setPassmark($mark);
     public function getPassmark();
-    
-    public function setAudioLocation($location);
-    public function getAudioLocation();
 }

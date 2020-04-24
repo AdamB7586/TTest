@@ -54,6 +54,6 @@
 </div>
 {include file="includes/buttons.tpl"}
 {include file="includes/explanation.tpl"}
-<script src="{$script}{if isset($scriptVersion}?v={$scriptVersion}{/if}"></script>
+<script src="{$script}{if isset($scriptVersion)}?v={$scriptVersion}{/if}"></script>
 {/nocache}
 {/strip}

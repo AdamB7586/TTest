@@ -110,6 +110,6 @@
         </div>
     </div>
 </div>
-<script src="{$script}{if isset($scriptVersion}?v={$scriptVersion}{/if}"></script>
+<script src="{$script}{if isset($scriptVersion)}?v={$scriptVersion}{/if}"></script>
 {/nocache}
 {/strip}

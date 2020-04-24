@@ -15,5 +15,5 @@
     </div>
 </div>
 {/nocache}
-{if $report != 'true'}<script src="{$js_script_location}testtimer.js{if isset($scriptVersion}?v={$scriptVersion}{/if}"></script>{/if}
+{if $report != 'true'}<script src="{$js_script_location}testtimer.js{if isset($scriptVersion)}?v={$scriptVersion}{/if}"></script>{/if}
 {/strip}

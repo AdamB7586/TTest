@@ -22,6 +22,6 @@
         <div class="col-3">{if isset($continue_test)}<div class="continue btn btn-theory" id="{$continue_test}"><span class="fas fa-long-arrow-alt-right fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> Continue Test</span></div>{/if}</div>
     </div>
 </div>
-<script src="{$script}{if isset($scriptVersion}?v={$scriptVersion}{/if}"></script>
+<script src="{$script}{if isset($scriptVersion)}?v={$scriptVersion}{/if}"></script>
 {/nocache}
 {/strip}

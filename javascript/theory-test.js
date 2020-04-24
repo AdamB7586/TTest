@@ -5,7 +5,8 @@ var totalq = $("#totalq").html();
 var questionid = $(".questiontext").attr('id');
 var countstart = true;
 
-var audio;
+var voicePitch = 1;
+var voiceRate = 1;
 
 var process = false;
 var proceed = false;
@@ -95,46 +96,22 @@ function markAnswer(answer, question, remove, replace){
     }
 }
 
-function audioCompatible(){
-    audioElement = document.createElement('audio');
-    var canPlayMP4 = audioElement.canPlayType("audio/mpeg");
-    var canPlayOGG = audioElement.canPlayType("audio/ogg");
-    if(canPlayMP4.match(/maybe|probably/i) || canPlayOGG.match(/maybe|probably/i)){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
 $(".sound").click(function(event){
-    audioid = event.target.id.replace('audioanswer', '');
-    
-    if(audioCompatible()){
-        if(audio != undefined){audio.pause();}
-        audio = document.getElementById('audio' + audioid);
-        initAudio();
-        audio.currentTime = 0;
-        audio.play();
+    if ('speechSynthesis' in window) {
+        var msg = new SpeechSynthesisUtterance();
+        var voices = window.speechSynthesis.getVoices();
+        msg.voice = voices[0];
+        msg.rate = voiceRate;
+        msg.pitch = voicePitch;
+        msg.text = $('#audio'+event.target.data('audio-id')).text();
+
+        speechSynthesis.speak(msg);
     }
     else{
-        //alert('Your browser does not support sound');
+        alert("Audio is not supported on your browser. Please use a modern browser such as Google Chrome or Firefox!");
     }
 });
 
-//this function should be called on a click event handler otherwise video & audio won't start loading on iOS
-function initAudio(){
-    audio.play(); //start loading, didn't used `vid.load()` since it causes problems with the `ended` event
-    if(audio.readyState !== 4){ //HAVE_ENOUGH_DATA
-        audio.addEventListener('canplaythrough', onCanPlay, false);
-        audio.addEventListener('load', onCanPlay, false); //add load event as well to avoid errors, sometimes 'canplaythrough' won't dispatch.
-        setTimeout(function(){
-            audio.pause(); //block play so it buffers before playing
-        }, 200); //it needs to be after a delay otherwise it doesn't work properly.
-    }else{
-        //audio is ready
-    }
-}
 
 $(".audioswitch").click(function(){
     if($(".audioswitch").hasClass('audioon')){

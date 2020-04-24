@@ -7,7 +7,7 @@ use Smarty;
 use DBAL\Database;
 
 /**
- * Produces a Theory Test including HTML5 audio if compatible
+ * Produces a Theory Test
  * @package Theory Test
  * @author Adam Binnersley <adam.binnersley@learnerdriving.com>
  * @version 2.1
@@ -83,11 +83,6 @@ class TheoryTest implements TTInterface{
      * @var string The name of the DVSA sections database table
      */
     public $dvsaCatTable;
-    
-    /**
-     * @var string The location where any audio can be found relative to where the Theory Test is located
-     */
-    protected $audioLocation = '/audio';
     
     /**
      * @var string The location where the JavaScript files can be found relative to where the Theory Test is located
@@ -300,26 +295,6 @@ class TheoryTest implements TTInterface{
      */
     public function getStartSeconds() {
         return $this->seconds;
-    }
-    
-    /**
-     * Sets the location where the audio files can be found
-     * @param string $location The should either be a URL or a relative position (minus mp4 & ogg folders)
-     * @return $this
-     */
-    public function setAudioLocation($location) {
-        if(is_string($location)) {
-            $this->audioLocation = $location;
-        }
-        return $this;
-    }
-    
-    /**
-     * Returns the currents set location of the audio files
-     * @return string This should be the folder where all the audio files can be found
-     */
-    public function getAudioLocation() {
-        return $this->audioLocation;
     }
     
     /**
@@ -614,7 +589,7 @@ class TheoryTest implements TTInterface{
      */
     protected function addAudio($prim, $letter) {
         if($this->audioEnabled && is_numeric($prim)) {
-            return ['enabled' => true, 'location' => $this->getAudioLocation(), 'file' => strtoupper($letter).$prim];
+            return ['enabled' => true, 'file' => strtoupper($letter).$prim];
         }
         return false;
     }

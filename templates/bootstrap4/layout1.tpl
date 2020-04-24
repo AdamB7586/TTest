@@ -16,14 +16,9 @@
                 {include file="includes/mark.tpl" nocache}<br />
                 <div class="questiontext" id="{$prim}">
                     {if isset($question.audio.enabled) nocache}
-                    <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$question.prim}">
-                        <audio id="audio{$question.prim}" preload="auto">
-                            <source src="{$question.audio.location}/mp3/{$question.audio.file}.mp3" type="audio/mpeg">
-                            <source src="{$question.audio.location}/ogg/{$question.audio.file}.ogg" type="audio/ogg">
-                        </audio>
-                    </div>
+                    <div class="sound fas fa-fw fa-volume-up" data-audio-id="{$question.prim}"></div>
                     {/if}
-                    {$question.question nocache}
+                    <span id="audio{$question.prim}">{$question.question nocache}</span>
                 </div>
             </div>
         </div>

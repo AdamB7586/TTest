@@ -13,29 +13,21 @@
                 {foreach $dsa_explanation.tabs as $id => $tab}
                     <div role="tabpanel" class="tab-pane active" id="tab-{$id}">
                         {if isset($tab.audio.enabled)}
-                            <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$tab.audio.file|lower}">
-                                <audio id="audio{$tab.audio.file|lower}" preload="auto">
-                                    <source src="{$tab.audio.location}/mp3/{$tab.audio.file}.mp3" type="audio/mpeg">
-                                    <source src="{$tab.audio.location}/ogg/{$tab.audio.file}.ogg" type="audio/ogg">
-                                </audio>
-                            </div>
+                            <div class="sound fa fa-fw fa-volume-up" data-audio-id="{$tab.audio.file|lower}"></div>
                         {/if}
-                        {$tab.text}
+                        <span id="audio{$tab.audio.file|lower}">{$tab.text}</span>
                     </div>
                 {/foreach}
             </div>
             {elseif isset($dsa_explanation.explanation)}
                 <div class="explanation{$dsa_explanation.visable}">
                     {if isset($dsa_explanation.audio.enabled)}
-                        <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$dsa_explanation.audio.file|lower}">
-                            <audio id="audio{$dsa_explanation.audio.file|lower}" preload="auto">
-                                <source src="{$dsa_explanation.audio.location}/mp3/{$dsa_explanation.audio.file}.mp3" type="audio/mpeg">
-                                <source src="{$dsa_explanation.audio.location}/ogg/{$dsa_explanation.audio.file}.ogg" type="audio/ogg">
-                            </audio>
-                        </div>
+                        <div class="sound fa fa-fw fa-volume-up" data-audio-id="{$dsa_explanation.audio.file|lower}"></div>
                     {/if}
-                    <strong>Official DVSA answer explanation:</strong>
-                    {$dsa_explanation.explanation}
+                    <span id="audio{$dsa_explanation.audio.file|lower}">
+                        <strong>Official DVSA answer explanation:</strong>
+                        {$dsa_explanation.explanation}
+                    </span>
                 </div>
             {/if}
         </div>

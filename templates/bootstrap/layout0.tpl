@@ -16,14 +16,9 @@
                 {include file="includes/mark.tpl" nocache}<br />
                 <div class="questiontext" id="{$prim}">
                     {if isset($question.audio.enabled) nocache}
-                    <div class="sound fas fa-fw fa-volume-up" id="audioanswer{$question.prim}">
-                        <audio id="audio{$question.prim}" preload="auto">
-                            <source src="{$question.audio.location}/mp3/{$question.audio.file}.mp3" type="audio/mpeg">
-                            <source src="{$question.audio.location}/ogg/{$question.audio.file}.ogg" type="audio/ogg">
-                        </audio>
-                    </div>
+                    <div class="sound fas fa-fw fa-volume-up" data-audio-id="{$question.prim}"></div>
                     {/if}
-                    {$question.question}
+                    <span id="audio{$question.prim}">{$question.question nocache}</span>
                 </div>
             </div>
         </div>
@@ -34,14 +29,9 @@
                         <div class="answer{if isset($answer.selected) && $answer.selected != false} selected selected{if $answer.selected != 1}{$answer.selected}{/if}{/if}" id="{$answer.letter}">
                             <div class="selectbtn"></div>
                             {if isset($answer.audio.enabled)}
-                            <div class="sound fa fa-fw fa-volume-up" id="audioanswer{$answer.id}">
-                                <audio id="audio{$answer.id}" preload="auto">
-                                    <source src="{$answer.audio.location}/mp3/{$answer.audio.file}.mp3" type="audio/mpeg">
-                                    <source src="{$answer.audio.location}/ogg/{$answer.audio.file}.ogg" type="audio/ogg">
-                                </audio>
-                            </div>
+                            <div class="sound fa fa-fw fa-volume-up" data-audio-id="{$answer.id}"></div>
                             {/if}
-                            {$answer.option}
+                            <span id="audio{$answer.id}">{$answer.option}</span>
                         </div>
                     </div>
                     {if $a == ceil(($answers|@count)/2)}

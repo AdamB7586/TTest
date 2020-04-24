@@ -104,6 +104,6 @@
         {include file="includes/extra.tpl"}
     </div>
 </div>
-<script type="text/javascript" src="{$script}"></script>
+<script src="{$script}{if isset($scriptVersion}?v={$scriptVersion}{/if}"></script>
 {/nocache}
 {/strip}

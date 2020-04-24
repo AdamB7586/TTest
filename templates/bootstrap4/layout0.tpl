@@ -51,6 +51,6 @@
 </div>
 {include file="includes/buttons.tpl" nocache}
 {include file="includes/explanation.tpl" nocache}
-<script type="text/javascript" src="{$script}"></script>
+<script src="{$script}{if isset($scriptVersion}?v={$scriptVersion}{/if}"></script>
 {/nocache}
 {/strip}

@@ -112,13 +112,13 @@ function markAnswer(answer, question, remove, replace){
 
 $(".sound").click(function(event){
     if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
         var msg = new SpeechSynthesisUtterance();
         var voices = window.speechSynthesis.getVoices();
         msg.voice = voices[0];
         msg.rate = voiceRate;
         msg.pitch = voicePitch;
-        msg.text = $('#audio'+event.target.data('audio-id')).text();
-
+        msg.text = $('#audio'+$(this).data('audio-id')).text();
         speechSynthesis.speak(msg);
     }
     else{

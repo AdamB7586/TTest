@@ -34,6 +34,6 @@
         <div class="col-3"><div class="endtest btn btn-theory"><span class="fas fa-door-open fa-fw btn-icon"></span><span class="d-none d-sm-inline-block ml-1 btn-text"> End Test</span></div></div>
     </div>
 </div>
-<script type="text/javascript" src="{$script}"></script>
+<script src="{$script}{if isset($scriptVersion}?v={$scriptVersion}{/if}"></script>
 {/nocache}
 {/strip}

@@ -459,11 +459,9 @@ class LearnTest extends TheoryTest{
                 else{
                     $rule = $ruleno['hcrule'].$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']);
                 }
-                $this->setAudioLocation('/audio/highway-code');
                 $highwaycode.= $this->addAudio($ruleno, 'HC').$rule;
             }
         }
-        $this->setAudioLocation('/audio');
         return $highwaycode;
     }
     

@@ -575,7 +575,6 @@ class TheoryTest implements TTInterface{
      */
     public function audioEnable($status = 'on') {
         if($status == 'on') {$this->audioEnabled = true;}else{$this->audioEnabled = false;}
-        $settings = $this->checkSettings();
         $settings['audio'] = $status;
         return $this->user->setUserSettings($settings);
     }
@@ -606,7 +605,6 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if DB updated else returns false
      */
     public function hintEnable() {
-        $settings = $this->checkSettings();
         $settings['hint'] = ($settings['hint'] === 'on' ? 'off' : 'on');
         return $this->user->setUserSettings($settings);
     }
@@ -712,7 +710,6 @@ class TheoryTest implements TTInterface{
      * @return boolean Returns true if the settings are updated
      */
     public function reviewOnly($type = 'all') {
-        $settings = $this->checkSettings();
         $settings['review'] = $type;
         return $this->user->setUserSettings($settings);
     }
@@ -975,7 +972,6 @@ class TheoryTest implements TTInterface{
      * @return string Returns the test HTML code
      */
     public function buildTest() {
-        $this->reviewOnly(false);
         if($this->exists) {$this->existingLayout();}
         else{$this->createQuestionHTML($this->getFirstQuestion(), true);}
         $this->layout->assign('test_name', $this->getTestName(), true);

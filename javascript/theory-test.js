@@ -59,13 +59,13 @@ $(".answerimage").click(function(){
     
     var checkstatus = checkmarked(numchecked);
     if(checkstatus == 'OK'){
-        $(this).toggleClass("imgselected");
+        $(this).toggleClass("selected imgselected");
         markAnswer($(this).attr('id'), questionid, remove, false);
     }
     else if(checkstatus == 'REPLACE'){
         numchecked--;
-        $("div").removeClass("imgselected");
-        $(this).toggleClass("imgselected");
+        $("div").removeClass("selected imgselected");
+        $(this).toggleClass("selected imgselected");
         markAnswer($(this).attr('id'), questionid, remove, true);
     }
     else{

@@ -10,7 +10,6 @@ use DBAL\Database;
  * Produces a Theory Test
  * @package Theory Test
  * @author Adam Binnersley <adam.binnersley@learnerdriving.com>
- * @version 2.1
  */
 class TheoryTest implements TTInterface{
     
@@ -20,7 +19,7 @@ class TheoryTest implements TTInterface{
     protected $db;
     
     /**
-     * @var object Should be an instance of config class
+     * @var object Should be an instance of configuration class
      */
     protected $config;
     
@@ -258,8 +257,8 @@ class TheoryTest implements TTInterface{
     }
     
     /**
-     * Sets the passmark for the test the default is set to 43 which is what is set by the DVSA
-     * @param int $mark This should be the passmark for the test (no greater than 50 as only 50 questions are retrieved)
+     * Sets the pass mark for the test the default is set to 43 which is what is set by the DVSA
+     * @param int $mark This should be the pass mark for the test (no greater than 50 as only 50 questions are retrieved)
      * @return $this
      */
     public function setPassmark($mark) {
@@ -270,8 +269,8 @@ class TheoryTest implements TTInterface{
     }
     
     /**
-     * Returns the current passmark for the test
-     * @return int Returns the set passmark for the current test
+     * Returns the current pass mark for the test
+     * @return int Returns the set pass mark for the current test
      */
     public function getPassmark() {
         return intval($this->passmark);
@@ -976,6 +975,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the test HTML code
      */
     public function buildTest() {
+        $this->reviewOnly(false);
         if($this->exists) {$this->existingLayout();}
         else{$this->createQuestionHTML($this->getFirstQuestion(), true);}
         $this->layout->assign('test_name', $this->getTestName(), true);

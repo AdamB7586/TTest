@@ -449,7 +449,7 @@ class LearnTest extends TheoryTest{
      */
     protected function highwayCodePlus($prim){
         $highwaycode = '';
-        $hcClass = new HighwayCode($this->db);
+        $hcClass = new HighwayCode($this->db, $this->config);
         $rules = $hcClass->getRule($this->db->select($this->questionsTable, ['prim' => $prim], ['hcrule1', 'hcrule2', 'hcrule3']));
         if(is_array($rules)){
             foreach($rules as $ruleno){
@@ -459,7 +459,7 @@ class LearnTest extends TheoryTest{
                 else{
                     $rule = $ruleno['hcrule'].$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']);
                 }
-                $highwaycode.= $this->addAudio($ruleno, 'HC').$rule;
+                $highwaycode.= ($this->audioEnabled ? '<div class="sound" data-audio-id="hc'.$prim.'"></div>' : '').'<span id="audiohc'.$ruleno.'">'.$rule.'</span>';
             }
         }
         return $highwaycode;
@@ -472,7 +472,7 @@ class LearnTest extends TheoryTest{
      * @return string|boolean If the image exists will return the image HTML else will return false
      */
     public function hcImage($imagesrc, $alttext){
-        $hcClass = new HighwayCode($this->db, $_SERVER["DOCUMENT_ROOT"]);
+        $hcClass = new HighwayCode($this->db, $this->config, $_SERVER["DOCUMENT_ROOT"]);
         $image = $hcClass->buildImage($imagesrc);
         if(!empty($image)){
             return '<img src="'.$image['image'].'" alt="'.$alttext.'" width="'.$image['width'].'" height="'.$image['height'].'" class="img-responsive center-block" />';

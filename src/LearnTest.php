@@ -459,7 +459,7 @@ class LearnTest extends TheoryTest{
                 else{
                     $rule = $ruleno['hcrule'].$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']);
                 }
-                $highwaycode.= ($this->audioEnabled ? '<div class="sound" data-audio-id="hc'.$prim.'"></div>' : '').'<span id="audiohc'.$ruleno.'">'.$rule.'</span>';
+                $highwaycode.= ($this->audioEnabled ? '<div class="sound" data-audio-id="hc'.$ruleno['hcno'].'"></div>' : '').'<span id="audiohc'.$ruleno['hcno'].'">'.$rule.'</span>';
             }
         }
         return $highwaycode;

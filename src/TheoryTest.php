@@ -975,6 +975,7 @@ class TheoryTest implements TTInterface{
      * @return string Returns the test HTML code
      */
     public function buildTest() {
+        $this->clearSettings();
         if($this->exists) {$this->existingLayout();}
         else{$this->createQuestionHTML($this->getFirstQuestion(), true);}
         $this->layout->assign('test_name', $this->getTestName(), true);
@@ -1006,7 +1007,6 @@ class TheoryTest implements TTInterface{
      * @return string|boolean Returns the question HTML and Question number as a JSON encoded string if question exists else returns false
      */
     public function createQuestionHTML($prim, $new = false) {
-        $this->clearSettings();
         $this->updateTestProgress($prim);
         $this->checkSettings($new);
         $question = $this->getQuestionData($prim);

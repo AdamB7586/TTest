@@ -1125,7 +1125,7 @@ class TheoryTest implements TTInterface{
         unset($_SESSION['test'.$this->getTest()]);
         unset($_SESSION['question_no']);
         $settings = $this->checkSettings();
-        unset($settings['review']);
+        $settings['review'] = false;
         return $this->user->setUserSettings($settings);
     }
     

@@ -44,9 +44,9 @@
 <div class="card mb-3">
     <table class="table table-sm mb-0">
         <tr>
-            <td class="text-center col-md-3"><span class="fas fa-check fa-2x fa-fw text-success"></span> <strong class="d-none d-sm-block">Correct</strong></td>
+            <td class="text-center w-25"><span class="fas fa-check fa-2x fa-fw text-success"></span> <strong class="d-none d-sm-block">Correct</strong></td>
             <td class="text-center valign-center">{$results.correct} / {$results.numquestions}</td>
-            <td class="valign-center col-md-6"><div class="progress"><div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.correct}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.correct}%">{$results.percent.correct}%</div></div></td>
+            <td class="valign-center w-50"><div class="progress"><div class="progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="{$results.percent.correct}" aria-valuemin="0" aria-valuemax="100" style="width:{$results.percent.correct}%">{$results.percent.correct}%</div></div></td>
         </tr>
         <tr>
             <td class="text-center"><span class="fas fa-times fa-2x fa-fw text-danger"></span> <strong class="d-none d-sm-block">Incorrect</strong></td>

@@ -226,8 +226,8 @@ class TheoryTest implements TTInterface{
      * @return string|false Returns the HTML for a test if valid else returns false
      */
     public function createNewTest($theorytest = 1) {
-        $this->clearSettings();
         $this->setTest($theorytest);
+        $this->clearSettings();
         if(method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess($theorytest);}
         $this->setTestName();
         if($this->anyExisting() === false) {
@@ -975,7 +975,6 @@ class TheoryTest implements TTInterface{
      * @return string Returns the test HTML code
      */
     public function buildTest() {
-        $this->clearSettings();
         if($this->exists) {$this->existingLayout();}
         else{$this->createQuestionHTML($this->getFirstQuestion(), true);}
         $this->layout->assign('test_name', $this->getTestName(), true);

@@ -226,8 +226,8 @@ class TheoryTest implements TTInterface{
      * @return string|false Returns the HTML for a test if valid else returns false
      */
     public function createNewTest($theorytest = 1) {
-        $this->setTest($theorytest);
         $this->clearSettings();
+        $this->setTest($theorytest);
         if(method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess($theorytest);}
         $this->setTestName();
         if($this->anyExisting() === false) {
@@ -1111,10 +1111,12 @@ class TheoryTest implements TTInterface{
     /**
      * This should set the case study for this group of questions
      * @param int $casestudy This should be the case study number for the set of questions
+     * @return $this
      */
     protected function setCaseStudy($casestudy) {
         $case = $this->db->fetchColumn($this->caseTable, ['casestudyno' => $casestudy], ['cssituation']);
         $this->casestudy = ['case' => $case, 'audio' => $this->addAudio($casestudy, 'CS')];
+        return $this;
     }
     
     /**
@@ -1126,23 +1128,28 @@ class TheoryTest implements TTInterface{
         unset($_SESSION['question_no']);
         $settings = $this->checkSettings();
         $settings['review'] = false;
+        $settings['hint'] = 'off';
         return $this->user->setUserSettings($settings);
     }
     
     /**
      * Sets the current test number
      * @param int $testNo This should be the current test number
+     * @return $this
      */
     public function setTest($testNo) {
         if(is_numeric($testNo) && $this->testNo !== $testNo){
             $this->testNo = $testNo;
         }
-        if($this->user->setUserSettings(['current_test' => $testNo])) {
+        $settings = $this->checkSettings();
+        $settings['current_test'] = $testNo;
+        if($this->user->setUserSettings($settings)) {
             unset($this->questions);
             unset($this->useranswers);
             $this->getQuestions();
             $this->getUserAnswers();
         }
+        return $this;
     }
     
     /**
@@ -1162,6 +1169,7 @@ class TheoryTest implements TTInterface{
     /**
      * Sets the current test name
      * @param string $name This should be the name of the test you wish to set it to if left blank will just be Theory Test plus test number
+     * Return $this
      */
     protected function setTestName($name = '') {
         if(!empty($name)) {
@@ -1170,6 +1178,7 @@ class TheoryTest implements TTInterface{
         else{
             $this->testName = 'Theory Test '.$this->getTest();
         }
+        return $this;
     }
     
     /**
@@ -1187,7 +1196,7 @@ class TheoryTest implements TTInterface{
      * Produces the amount of time the user has spent on the current test
      * @param int $time This should be the amount of seconds remaining for the current test
      * @param string $type This should be either set to 'taken' or 'remaining' depending on which you wish to update 'taken' by default
-     * @return void
+     * return $this
      */
     public function setTime($time, $type = 'taken') {
         if($time) {
@@ -1200,6 +1209,7 @@ class TheoryTest implements TTInterface{
                 $_SESSION['time_'.$type]['test'.$this->getTest()] = $time;
             }
         }
+        return $this;
     }
     
     /**
@@ -1300,7 +1310,7 @@ class TheoryTest implements TTInterface{
     
     /**
      * Marks the current test
-     * @return void Nothing is returned
+     * @return $this;
      */
     protected function markTest() {
         $this->getQuestions();
@@ -1331,6 +1341,7 @@ class TheoryTest implements TTInterface{
             $status = 2;
         }
         $this->db->update($this->progressTable, ['status' => $status, 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
+        return $this;
     }
     
     /**

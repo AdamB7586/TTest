@@ -65,7 +65,7 @@ class User extends \UserAuth\User{
     public function setUserSettings($vars, $userID = false){
         if($userID === false){$userID = $this->getUserID();}
         if(is_array($vars)){
-            return $this->db->update($this->table_users, ['settings' => serialize(array_merge($this->getUserSettings($userID), $vars))], ['id' => $userID], 1);
+            return $this->db->update($this->table_users, ['settings' => serialize(array_filter($vars))], ['id' => $userID], 1);
         }
         return false;
     }

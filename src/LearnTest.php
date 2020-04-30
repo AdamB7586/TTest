@@ -15,6 +15,7 @@ class LearnTest extends TheoryTest{
     
     protected $hcCatTable;
     protected $l2dCatTable;
+    protected $casestudyCatTable;
     
     protected $categories = ['dvsa' => 'dsacat', 'hc' => 'hcsection', 'l2d' => 'ldclessonno', 'casestudy' => 'casestudyno'];
     protected $sortBy = ['dvsa' => 'dsaqposition', 'hc' => 'hcqposition', 'l2d' => 'ldcqno', 'casestudy' => 'caseqposition'];
@@ -56,14 +57,14 @@ class LearnTest extends TheoryTest{
         $table = strtolower($type).'CatTable';
         if(empty($this->$table)){return false;}
         if($type != 'casestudy'){
-            $learnName = $this->db->select($this->$table, ['section' => $sectionNo], ['name', 'free']);
-            $name = $sectionNo.'. '.$learnName['name'];
-            if($learnName['free'] == 0 && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}
+            $sectionInfo = $this->getSectionInfo($this->$table, $sectionNo);
+            $name = $sectionNo.'. '.$sectionInfo['name'];
         }
         else{
+            $sectionInfo = $this->getSectionInfo($this->$table, $sectionNo, 'casestudyno');
             $name = 'Case Study '.$sectionNo;
-            if($this->db->select($this->$table, ['casestudyno' => $sectionNo], ['free'])['free'] == 0 && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}
         }
+        if((!isset($sectionInfo['free']) || $sectionInfo['free'] == 0) && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}
         $this->setTestName($name);
         return $this->buildTest();
     }
@@ -117,6 +118,17 @@ class LearnTest extends TheoryTest{
         if(!isset($this->testInfo) && isset($_COOKIE['testinfo'])){
             $this->testInfo = unserialize($_COOKIE['testinfo']);
         }
+    }
+    
+    /**
+     * Get the information from the section table if it exists
+     * @param string $table This should be the table reference
+     * @param int $sectionID This should be the section number
+     * @param string $field If the field you searching on has another name than section this should be entered here
+     * @return array|false If any results exist will return an array else returns false
+     */
+    public function getSectionInfo($table, $sectionID, $field = 'section'){
+        return $this->db->select($table, [$field => $sectionID]);
     }
     
     /**

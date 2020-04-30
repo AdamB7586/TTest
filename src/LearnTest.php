@@ -8,6 +8,7 @@ use DVSA\HighwayCode;
 
 class LearnTest extends TheoryTest{
     protected $section = 'learn';
+    protected $scriptVar = 'learn';
       
     protected $testInfo;
     protected $current;
@@ -417,8 +418,8 @@ class LearnTest extends TheoryTest{
      * @return string Returns the script HTML information
      */
     protected function getScript($review = false){
-        if(is_numeric($this->userClone)){return $this->getJavascriptLocation().'preview-learn.js';}
-        return $this->getJavascriptLocation().'learning-learn.js';
+        if(is_numeric($this->userClone)){return $this->getJavascriptLocation().'preview-'.$this->scriptVar.'.js';}
+        return $this->getJavascriptLocation().'learning-'.$this->scriptVar.'.js';
     }
     
     /**

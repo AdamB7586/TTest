@@ -104,6 +104,7 @@ class FreeTheoryTest extends TheoryTest{
         $settings = $this->checkSettings();
         $settings['audio'] = $status;
         $_SESSION['settings'] = serialize($settings);
+        return json_encode(true);
     }
     
     /**

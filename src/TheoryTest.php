@@ -577,7 +577,7 @@ class TheoryTest implements TTInterface{
         if($status == 'on') {$this->audioEnabled = true;}else{$this->audioEnabled = false;}
         $settings = $this->checkSettings();
         $settings['audio'] = $status;
-        return $this->user->setUserSettings($settings);
+        return json_encode($this->user->setUserSettings($settings));
     }
     
     /**
@@ -608,7 +608,7 @@ class TheoryTest implements TTInterface{
     public function hintEnable() {
         $settings = $this->checkSettings();
         $settings['hint'] = ($settings['hint'] === 'on' ? 'off' : 'on');
-        return $this->user->setUserSettings($settings);
+        return json_encode($this->user->setUserSettings($settings));
     }
     
     /**
@@ -714,7 +714,7 @@ class TheoryTest implements TTInterface{
     public function reviewOnly($type = 'all') {
         $settings = $this->checkSettings();
         $settings['review'] = $type;
-        return $this->user->setUserSettings($settings);
+        return json_encode($this->user->setUserSettings($settings));
     }
     
     /**
@@ -800,7 +800,7 @@ class TheoryTest implements TTInterface{
      * @return boolean
      */
     protected function updateAnswers() {
-        return $this->db->update($this->progressTable, ['answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
+        return json_encode($this->db->update($this->progressTable, ['answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]));
     }
     
     /**
@@ -967,7 +967,7 @@ class TheoryTest implements TTInterface{
         $this->layout->assign('review_incomplete', $this->getIncompleteQuestion(), true);
         $this->layout->assign('review_flagged', $this->getFlaggedQuestion(), true);
         $this->layout->assign('script', $this->getScript(false), true);
-        return $this->layout->fetch('review.tpl');
+        return json_encode($this->layout->fetch('review.tpl'));
     }
     
     /**
@@ -1280,7 +1280,7 @@ class TheoryTest implements TTInterface{
      * @return boolean If existing tests are deleted will return true else will return false
      */
     public function startNewTest() {
-        return $this->db->delete($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
+        return json_encode($this->db->delete($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]));
     }
     
     /**
@@ -1305,7 +1305,7 @@ class TheoryTest implements TTInterface{
         $this->layout->assign('print_certificate', $this->printCertif());
         $this->layout->assign('script', $this->getScript(true));
         $this->questiondata = $this->layout->fetch('results.tpl');
-        return $this->questiondata;
+        return json_encode($this->questiondata);
     }
     
     /**

@@ -373,10 +373,10 @@ class LearnTest extends TheoryTest{
         if(!isset($_SESSION['answers'])){$_SESSION['answers'] = $this->useranswers;}
         if($_SESSION['answers'][$prim]['status'] == '2'){
             $this->updateLearningProgress();
-            return 'CORRECT';
+            return json_encode('CORRECT');
         }
-        elseif($_SESSION['answers'][$prim]['status'] == '1'){return 'INCORRECT';}
-        else{return 'INCOMPLETE';}
+        elseif($_SESSION['answers'][$prim]['status'] == '1'){return json_encode('INCORRECT');}
+        else{return json_encode('INCOMPLETE');}
     }
     
     /**

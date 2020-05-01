@@ -71,7 +71,7 @@ $(".nextquestion").click(function(){
 
 $(".hint").click(function(){
     $(this).toggleClass("studyon");
-    $(".showhint").slideToggle('slow', function(){
+    $(".showhint").toggleClass("visable").slideToggle('slow', function(){
         if($(".showhint").is(":visible")){
             $(document).scrollTop(500);
         }

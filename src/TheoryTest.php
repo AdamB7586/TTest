@@ -1100,7 +1100,7 @@ class TheoryTest implements TTInterface{
     public function dsaExplanation($explanation, $prim) {
         if($this->review == 'answers') {
             $explain = [];
-            $explain['visable'] = ($this->checkSettings()['hint'] === 'on' ? ' visable' : '');
+            $explain['visable'] = (isset($this->checkSettings()['hint']) && $this->checkSettings()['hint'] == 'on' ? ' visable' : '');
             $explain['audio'] = $this->addAudio($prim, 'DSA');
             $explain['explanation'] = $explanation;
             return $explain;

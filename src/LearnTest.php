@@ -444,7 +444,7 @@ class LearnTest extends TheoryTest{
      */
     public function dsaExplanation($explanation, $prim){
         $explain = [];
-        $explain['visable'] = (isset($this->checkSettings()['hint']) ? ($this->checkSettings()['hint'] === 'on' ? ' visable' : '') : '');
+        $explain['visable'] = (isset($this->checkSettings()['hint']) && $this->checkSettings()['hint'] == 'on' ? ' visable' : '');
         $explain['tabs'][1]['label'] = 'Highway Code +';
         $explain['tabs'][1]['text'] = $this->highwayCodePlus($prim);
         $explain['tabs'][2]['label'] = 'DVSA Advice';

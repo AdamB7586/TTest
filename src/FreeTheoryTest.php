@@ -92,6 +92,7 @@ class FreeTheoryTest extends TheoryTest{
         $settings = $this->checkSettings();
         $settings['review'] = $type;
         $_SESSION['settings'] = serialize($settings);
+        return json_encode(true);
     }
     
     /**
@@ -160,10 +161,10 @@ class FreeTheoryTest extends TheoryTest{
     
     /**
      * Updates the useranswers field in the progress table in the database
-     * @return void Nothing is returned
+     * @return true
      */
     protected function updateAnswers(){
-        return false;
+        return json_encode(true);
     }
     
     /**
@@ -215,6 +216,7 @@ class FreeTheoryTest extends TheoryTest{
      */
     public function startNewTest(){
         setcookie('started', 1, time() + 3600, '/', '', (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false), true);
+        return json_encode(true);
     }
     
     /**

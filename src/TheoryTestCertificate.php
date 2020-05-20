@@ -12,6 +12,7 @@ class TheoryTestCertificate implements CertificateInterface{
     protected $pdf;
     protected $theory;
     
+    protected $certImage = 'images/cert.jpg';
     protected $questions;
     protected $testType = 'CAR';
     
@@ -29,6 +30,23 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->pdf = new FPDF_Protection();
         if(method_exists($this->user, 'getFirstname') && method_exists($this->user, 'getLastname')){$this->certUsername = $this->user->getFirstname($alias).' '.$this->user->getLastname($alias);}
         elseif(method_exists($this->user, 'getUsername')){$this->certUsername = $this->user->getUsername($alias);}
+    }
+    
+    /**
+     * Sets the path to the certificate background image
+     * @param string $path
+     */
+    public function setCertificateImage($path){
+        $this->certImage = $path;
+        return $this;
+    }
+    
+    /**
+     * Returns the certificate image path
+     * @return string
+     */
+    public function getCertificateImage(){
+        return $this->certImage;
     }
     
     /**
@@ -78,7 +96,7 @@ class TheoryTestCertificate implements CertificateInterface{
         $this->PDFInfo();
         if($this->theory->testresults['status'] == 'pass'){
             $this->pdf->AddPage();
-            $this->pdf->Image('images/cert.jpg', 0, 0, 210, 297);
+            $this->pdf->Image($this->getCertificateImage(), 0, 0, 210, 297);
             $this->pdf->SetFont('Arial','B', 24);
             $this->pdf->Ln(30);
             $this->pdf->Cell(190, 15, strip_tags($this->theory->getTestName()), 0, 0, 'C');

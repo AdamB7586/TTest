@@ -1092,8 +1092,8 @@ class TheoryTest implements TTInterface{
     }
     
     /**
-     * Returns the correct HTML for the DSA explanation in the review section
-     * @param string $explanation Should be the DSA explanation for the particular question
+     * Returns the correct HTML for the DVSA explanation in the review section
+     * @param string $explanation Should be the DVSA explanation for the particular question
      * @param int $prim Should be the prim number of the current question
      * @return string|false Returns the HTML string if in the review section else returns false
      */
@@ -1318,8 +1318,8 @@ class TheoryTest implements TTInterface{
              if($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == 4) {$type = 'correct';}
              else{$type = 'incorrect';}
              
-             $dsa = $this->getDSACat($prim);
-             $this->testresults['dsa'][$dsa][$type] = (int)$this->testresults['dsa'][$dsa][$type] + 1;
+             $dvsa = $this->getDSACat($prim);
+             $this->testresults['dvsa'][$dvsa][$type] = (int)$this->testresults['dvsa'][$dvsa][$type] + 1;
         }
         
         $this->testresults['correct'] = $this->numCorrect();
@@ -1434,14 +1434,13 @@ class TheoryTest implements TTInterface{
      * @return string Returns an overview of the test results table
      */
     protected function createOverviewResults() {
-        $dsacats = $this->getCategories();
         $catresults = [];
-        foreach($dsacats as $i => $dsacat) {
-            $catresults[$i]['section'] = $dsacat['section'];
-            $catresults[$i]['name'] = $dsacat['name'];
-            $catresults[$i]['correct'] = isset($this->testresults['dsa'][$dsacat['section']]['correct']) ? (int)$this->testresults['dsa'][$dsacat['section']]['correct'] : 0;
-            $catresults[$i]['incorrect'] = isset($this->testresults['dsa'][$dsacat['section']]['incorrect']) ? (int)$this->testresults['dsa'][$dsacat['section']]['incorrect'] : 0;
-            $catresults[$i]['total'] = ($catresults[$i]['correct'] + $catresults[$i]['incorrect'] + (isset($this->testresults['dsa'][$dsacat['section']]['unattempted']) ? (int)$this->testresults['dsa'][$dsacat['section']]['unattempted'] : 0));
+        foreach($this->getCategories() as $i => $dvsacat) {
+            $catresults[$i]['section'] = $dvsacat['section'];
+            $catresults[$i]['name'] = $dvsacat['name'];
+            $catresults[$i]['correct'] = isset($this->testresults['dvsa'][$dvsacat['section']]['correct']) ? (int)$this->testresults['dvsa'][$dvsacat['section']]['correct'] : 0;
+            $catresults[$i]['incorrect'] = isset($this->testresults['dvsa'][$dvsacat['section']]['incorrect']) ? (int)$this->testresults['dvsa'][$dvsacat['section']]['incorrect'] : 0;
+            $catresults[$i]['total'] = ($catresults[$i]['correct'] + $catresults[$i]['incorrect'] + (isset($this->testresults['dvsa'][$dvsacat['section']]['unattempted']) ? (int)$this->testresults['dvsa'][$dvsacat['section']]['unattempted'] : 0));
         }
         return $catresults;
     }

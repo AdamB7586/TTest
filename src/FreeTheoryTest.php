@@ -268,8 +268,8 @@ class FreeTheoryTest extends TheoryTest{
              if($this->getUserAnswers()[$this->questionNo($prim)]['status'] == 4){$type = 'correct';}
              else{$type = 'incorrect';}
              
-             $dsa = $this->getDSACat($prim);
-             $this->testresults['dsa'][$dsa][$type] = (int)$this->testresults['dsa'][$dsa][$type] + 1;
+             $dvsa = $this->getDSACat($prim);
+             $this->testresults['dvsa'][$dvsa][$type] = (int)$this->testresults['dvsa'][$dvsa][$type] + 1;
         }
         
         $this->testresults['id'] = date('jn').'-'.rand(1000, 9999);

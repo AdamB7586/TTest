@@ -167,8 +167,8 @@ class TheoryTestCertificate implements CertificateInterface{
         $totalincorrect = 0;
         $totalq = 0;
         foreach($this->theory->getCategories() as $data){
-            $correct = isset($this->theory->testresults['dsa'][$data['section']]['correct']) ? (int)$this->theory->testresults['dsa'][$data['section']]['correct'] : 0;
-            $incorrect = isset($this->theory->testresults['dsa'][$data['section']]['incorrect']) ? (int)$this->theory->testresults['dsa'][$data['section']]['incorrect'] : 0;
+            $correct = isset($this->theory->testresults['dvsa'][$data['section']]['correct']) ? (int)$this->theory->testresults['dvsa'][$data['section']]['correct'] : 0;
+            $incorrect = isset($this->theory->testresults['dvsa'][$data['section']]['incorrect']) ? (int)$this->theory->testresults['dvsa'][$data['section']]['incorrect'] : 0;
             $total = $correct + $incorrect;
             $groupdata[] = [$data['section'], substr($data['name'], 0, 53), $correct, $incorrect, $total, number_format(intval(($correct / $total) * 100), 0).'%', ''];
             

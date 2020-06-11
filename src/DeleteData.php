@@ -55,7 +55,7 @@ class DeleteData {
     public function deleteOnlyTestData($userID = false) {
         if($userID === false){$userID = $this->user->getUserID();}
         if(is_numeric($userID)){
-            return $this->db->delete($this->progressTable, ['user_id' => $userID, 'type' => 'car']);
+            return $this->db->delete($this->progressTable, ['user_id' => $userID]);
         }
         return false;
     }

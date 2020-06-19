@@ -694,14 +694,19 @@ class TheoryTest implements TTInterface{
      * @return array Returns the current test settings
      */
     protected function checkSettings($new = false) {
-        $settings = $this->user->getUserSettings();
-        if($new !== true && isset($settings['review'])) {
-            if($settings['review'] == 'all') {$this->review = 'all';}
-            elseif($settings['review'] == 'flagged') {$this->review = 'flagged';}
-            elseif($settings['review'] == 'incomplete') {$this->review = 'incomplete';}
-            elseif($settings['review'] == 'answers') {$this->review = 'answers';}
+        if(!is_numeric($this->userClone)){
+            $settings = $this->user->getUserSettings();
+            if($new !== true && isset($settings['review'])) {
+                if($settings['review'] == 'all') {$this->review = 'all';}
+                elseif($settings['review'] == 'flagged') {$this->review = 'flagged';}
+                elseif($settings['review'] == 'incomplete') {$this->review = 'incomplete';}
+                elseif($settings['review'] == 'answers') {$this->review = 'answers';}
+            }
+            else{$this->review = false;}
         }
-        else{$this->review = false;}
+        else{
+            $this->review = 'answers';
+        }
         if(isset($settings['audio']) && $settings['audio'] == 'on') {$this->audioEnabled = true;}
         return $settings;
     }

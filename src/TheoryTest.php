@@ -1143,6 +1143,7 @@ class TheoryTest implements TTInterface{
         }
         $settings = $this->checkSettings();
         $settings['current_test'] = $testNo;
+        $_SESSION['current_test'] = $testNo;
         if($this->user->setUserSettings($settings)) {
             unset($this->questions);
             unset($this->useranswers);
@@ -1158,9 +1159,14 @@ class TheoryTest implements TTInterface{
      */
     public function getTest() {
         if(!is_numeric($this->testNo)) {
-            $testNo = $this->user->getUserSettings();
-            if(is_array($testNo)){
-                $this->testNo = $testNo['current_test'];
+            if(isset($_SESSION['current_test'])){
+                $this->testNo = $_SESSION['current_test'];
+            }
+            else{
+                $testNo = $this->user->getUserSettings();
+                if(is_array($testNo)){
+                    $this->testNo = $testNo['current_test'];
+                }
             }
         }
         return $this->testNo;

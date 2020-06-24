@@ -371,10 +371,8 @@ class LearnTest extends TheoryTest{
      */
     public function checkAnswer($prim){
         if(!isset($_SESSION['answers'])){$_SESSION['answers'] = $this->useranswers;}
-        if($_SESSION['answers'][$prim]['status'] == '2'){
-            $this->updateLearningProgress();
-            return json_encode('CORRECT');
-        }
+        $this->updateLearningProgress();
+        if($_SESSION['answers'][$prim]['status'] == '2'){return json_encode('CORRECT');}
         elseif($_SESSION['answers'][$prim]['status'] == '1'){return json_encode('INCORRECT');}
         else{return json_encode('INCOMPLETE');}
     }

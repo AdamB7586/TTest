@@ -139,7 +139,8 @@ class Review{
      * @return string|boolean Returns the table as a HTML string if the information exists else will return false
      */
     public function buildReviewTable($table, $tableSecNo, $title, $section){
-        $categories = $this->db->selectAll($table, [], '*', ['section' => 'ASC']);
+        $$where = $this->db->where($this->where);
+        $categories = $this->db->query("SELECT `{$table}`.*, count(*) as `numquestions` FROM `{$table}`, `{$this->questionsTable}`".(empty($where) ? ' WHERE' : $where.' AND')."`section` = `{$tableSecNo}` GROUP BY `{$tableSecNo}`{$this->db->orderBy(['section' => 'ASC'])};", $this->db->values);
         $review = ['totalquestions' => 0, 'totalcorrect' => 0, 'totalnotattempted' => 0, 'totalincorrect' => 0];
         if(is_array($categories)){
             if(!is_array($this->useranswers)){$this->getUserAnswers();}
@@ -152,7 +153,6 @@ class Review{
                 $review['ans'][$cat['section']]['correct'] = 0;
 
                 $questions = $this->db->selectAll($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where), ['prim']);
-                $review['ans'][$cat['section']]['numquestions'] = $this->db->count($this->questionsTable, array_merge([$tableSecNo => $cat['section']], $this->where));
                 if(is_array($questions)){
                     foreach($questions as $question){
                         if(!isset($this->useranswers[$question['prim']]) || $this->useranswers[$question['prim']]['status'] == 0){$review['ans'][$cat['section']]['notattempted']++;}

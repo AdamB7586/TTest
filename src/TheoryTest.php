@@ -746,7 +746,7 @@ class TheoryTest implements TTInterface{
      * Adds a given answer to the users progress in the database
      * @param string $answer This is the answer the user has just selected
      * @param int $prim The current question number to add the answer to
-     * @return boolean If answer added returns true else returns false
+     * @return true
      */
     public function addAnswer($answer, $prim) {
         $arraystring = str_replace($answer, '', trim(filter_var($this->getUserTestInfo()[$this->questionNo($prim)]['answer'], FILTER_SANITIZE_STRING))).$answer;
@@ -757,7 +757,7 @@ class TheoryTest implements TTInterface{
      * Replaces the answer for the given prim number
      * @param string $letters This should be the answer the user has selected
      * @param int $prim This should be the question prim number
-     * @return boolean Returns true if the answer has been updated else returns false
+     * @return true
      */
     public function replaceAnswer($letters, $prim) {
         $this->updateTestProgress($prim);
@@ -771,14 +771,14 @@ class TheoryTest implements TTInterface{
         }
         else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 1;}
         
-        return $this->updateAnswers();
+        return json_encode(true);
     }
     
     /**
      * Removes a given answer from the current question
      * @param string $answer This should be the answer you wish to remove
      * @param int $prim This should be the question prim you wish to remove the answer from
-     * @return boolean Returns true if database has been updated else return false
+     * @return true
      */
     public function removeAnswer($answer, $prim) {
         $this->updateTestProgress($prim);
@@ -788,7 +788,7 @@ class TheoryTest implements TTInterface{
         if($removed === '') {$_SESSION['test'.$this->getTest()][$qNo]['status'] = 0;}
         else{$_SESSION['test'.$this->getTest()][$qNo]['status'] = 1;}
 
-        return $this->updateAnswers();
+        return json_encode(true);
     }
     
     /**
@@ -817,7 +817,7 @@ class TheoryTest implements TTInterface{
         else{
             unset($_SESSION['test'.$this->getTest()][$this->questionNo($prim)]['flagged']);
         }
-        return $this->updateAnswers();
+        return json_encode(true);
     }
     
     /**
@@ -1385,10 +1385,12 @@ class TheoryTest implements TTInterface{
         $userprogress = unserialize(stripslashes($info['progress']));
         $this->getQuestions();
         foreach($this->questions as $prim) {
-            $userprogress[$prim]['answer'] = $this->getUserTestInfo()[$this->questionNo($prim)]['answer'];
-            if($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == '4') {$userprogress[$prim]['status'] = 2;}
-            elseif($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == '3') {$userprogress[$prim]['status'] = 1;}
-            else{$userprogress[$prim]['status'] = 0;}
+            $answer = $this->getUserTestInfo()[$this->questionNo($prim)]['answer'];
+            if(!empty($answer)){
+                $userprogress[$prim]['answer'] = $answer;
+                if($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == '4') {$userprogress[$prim]['status'] = 2;}
+                elseif($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == '3') {$userprogress[$prim]['status'] = 1;}
+            }
         }
         return $this->db->update($this->learningProgressTable, ['progress' => serialize(array_filter($userprogress))], ['user_id' => $this->getUserID()]);
     }

@@ -958,25 +958,23 @@ class TheoryTest implements TTInterface{
      * @return array Should return the option array for the given answer
      */
     protected function getOptions($question, $option, $answer_num, $image = false, $new = false) {
-        if($option){
-            $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-            $options = [];
-            if($new === false && $this->review !== 'answers') {
-                if($this->answerSelected($question, $letters[$answer_num])) {$options['selected'] = true;}
-            }
-            elseif($new === false) {
-                $options['selected'] = strtolower($this->answerSelectedCorrect($question, $letters[$answer_num]));
-            }
-            if($image !== false){
-                $options['image'] = $this->createImage($question.strtolower($letters[$answer_num]).'.png');
-            }
-            $options['audio'] = $this->addAudio($question, $letters[$answer_num]);
-            $options['id'] = strtolower($letters[$answer_num].$question);
-            $options['prim'] = $question;
-            $options['letter'] = $letters[$answer_num];
-            $options['option'] = $option;
-            return $options;
+        $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        $options = [];
+        if($new === false && $this->review !== 'answers') {
+            if($this->answerSelected($question, $letters[$answer_num])) {$options['selected'] = true;}
         }
+        elseif($new === false) {
+            $options['selected'] = strtolower($this->answerSelectedCorrect($question, $letters[$answer_num]));
+        }
+        if($image !== false){
+            $options['image'] = $this->createImage($question.strtolower($letters[$answer_num]).'.png');
+        }
+        $options['audio'] = $this->addAudio($question, $letters[$answer_num]);
+        $options['id'] = strtolower($letters[$answer_num].$question);
+        $options['prim'] = $question;
+        $options['letter'] = $letters[$answer_num];
+        $options['option'] = $option;
+        return $options;
     }
     
     /**
@@ -1043,7 +1041,7 @@ class TheoryTest implements TTInterface{
             $this->layout->assign('question', $question);
             $answers = [];
             for($a = 1; $a <= $this->noAnswers; $a++){
-                if(isset($question['option'.$a])){$answers[$a] = $this->getOptions($question['prim'], $question['option'.$a], ($a - 1), $image, $new);}
+                $answers[$a] = $this->getOptions($question['prim'], $question['option'.$a], ($a - 1), $image, $new);
             }
             $this->layout->assign('answers', array_filter($answers));
             $this->layout->assign('image', (!empty($question['dsaimageid']) ? $this->createImage($question['prim'].'.jpg', true) : false));

@@ -199,22 +199,20 @@ class LearnTest extends TheoryTest{
      * @return array Should return the option array for the given answer
      */
     protected function getOptions($prim, $option, $answer_num, $image = false, $new = false) {
-        if($option){
-            $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-            $options = [];
-            if($this->answerSelected($prim, $letters[$answer_num]) && $this->questionStatus() !== 'unattempted'){
-                $options['selected'] = strtolower($this->questionStatus());
-            }
-            if($image !== false){
-                $options['image'] = $this->createImage($prim.strtolower($letters[$answer_num]).'.png');
-            }
-            $options['audio'] = $this->addAudio($prim, $letters[$answer_num]);
-            $options['id'] = strtolower($letters[$answer_num].$prim);
-            $options['prim'] = $prim;
-            $options['letter'] = $letters[$answer_num];
-            $options['option'] = $option;
-            return $options;
+        $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        $options = [];
+        if($this->answerSelected($prim, $letters[$answer_num]) && $this->questionStatus() !== 'unattempted'){
+            $options['selected'] = strtolower($this->questionStatus());
         }
+        if($image !== false){
+            $options['image'] = $this->createImage($prim.strtolower($letters[$answer_num]).'.png');
+        }
+        $options['audio'] = $this->addAudio($prim, $letters[$answer_num]);
+        $options['id'] = strtolower($letters[$answer_num].$prim);
+        $options['prim'] = $prim;
+        $options['letter'] = $letters[$answer_num];
+        $options['option'] = $option;
+        return $options;
     }
     
     /**

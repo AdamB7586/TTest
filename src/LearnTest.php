@@ -507,4 +507,12 @@ class LearnTest extends TheoryTest{
         if($this->getTestType() == 'CAR'){$type = 'car';}else{$type = 'M/C';}
         return $this->db->fetchColumn($this->caseTable, ['type' => $type, 'lp' => 1, 'dsacat' => $sectionNo], ['casestudyno']);
     }
+    
+    /**
+     * Returns the status of each questions and the styles for the review answers section
+     * @return string|false Returns false for learning section
+     */
+    protected function reviewAnswers() {
+        return false;
+    }
 }

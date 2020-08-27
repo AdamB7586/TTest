@@ -825,7 +825,10 @@ class TheoryTest implements TTInterface{
      * @return boolean
      */
     protected function updateAnswers() {
-        return json_encode($this->db->update($this->progressTable, ['answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]));
+        if(!empty($this->getUserTestInfo())){
+            return json_encode($this->db->update($this->progressTable, ['answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]));
+        }
+        return json_encode(false);
     }
     
     /**

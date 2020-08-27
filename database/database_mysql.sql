@@ -12,7 +12,7 @@ INSERT INTO `config` (`setting`, `value`) VALUES
 ('table_theory_l2d_sections', 'theory_l2d_sections'),
 ('table_theory_dvsa_sections', 'theory_dsa_sections'),
 ('table_theory_case_studies', 'theory_case_studies'),
-('table_theory_questions', 'theory_questions_2016');
+('table_theory_questions', 'theory_questions');
 
 CREATE TABLE IF NOT EXISTS `theory_case_studies` (
   `casestudyno` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `theory_l2d_sections` (
   PRIMARY KEY (`section`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `theory_questions_2016` (
+CREATE TABLE IF NOT EXISTS `theory_questions` (
   `prim` smallint(6) UNSIGNED NOT NULL DEFAULT '0',
   `dsacat` tinyint(3) UNSIGNED DEFAULT NULL,
   `dsaqposition` smallint(6) UNSIGNED DEFAULT NULL,
@@ -121,6 +121,7 @@ CREATE TABLE IF NOT EXISTS `users_test_progress` (
   `answers` text NOT NULL,
   `results` text,
   `test_id` int(11) NOT NULL,
+  `current_test` tinyint(1) UNSIGNED NOT NULL DEFAULT 1,
   `question_no` int(11) NOT NULL DEFAULT '1',
   `started` datetime NOT NULL,
   `complete` datetime DEFAULT NULL,
@@ -131,7 +132,8 @@ CREATE TABLE IF NOT EXISTS `users_test_progress` (
   `type` varchar(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `test_id` (`test_id`),
+  KEY `test_id` (`test_id`),,
+  KEY `current` (`current_test`)
   KEY `type` (`type`),
   KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -148,14 +150,14 @@ ADD `settings` TEXT NULL DEFAULT NULL AFTER `isactive`;
 ALTER TABLE `theory_case_studies`
   ADD CONSTRAINT `theory_case_studies_ibfk_1` FOREIGN KEY (`dsacat`) REFERENCES `theory_dsa_sections` (`section`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `theory_questions_2016`
-  ADD CONSTRAINT `theory_questions_2016_ibfk_1` FOREIGN KEY (`casestudyno`) REFERENCES `theory_case_studies` (`casestudyno`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `theory_questions_2016_ibfk_2` FOREIGN KEY (`dsacat`) REFERENCES `theory_dsa_sections` (`section`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `theory_questions_2016_ibfk_3` FOREIGN KEY (`hcsection`) REFERENCES `theory_hc_sections` (`section`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `theory_questions_2016_ibfk_4` FOREIGN KEY (`ldclessonno`) REFERENCES `theory_l2d_sections` (`section`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `theory_questions_2016_ibfk_5` FOREIGN KEY (`hcrule1`) REFERENCES `highway_code` (`hcno`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `theory_questions_2016_ibfk_6` FOREIGN KEY (`hcrule2`) REFERENCES `highway_code` (`hcno`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `theory_questions_2016_ibfk_7` FOREIGN KEY (`hcrule3`) REFERENCES `highway_code` (`hcno`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `theory_questions`
+  ADD CONSTRAINT `theory_questions_ibfk_1` FOREIGN KEY (`casestudyno`) REFERENCES `theory_case_studies` (`casestudyno`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `theory_questions_ibfk_2` FOREIGN KEY (`dsacat`) REFERENCES `theory_dsa_sections` (`section`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `theory_questions_ibfk_3` FOREIGN KEY (`hcsection`) REFERENCES `theory_hc_sections` (`section`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `theory_questions_ibfk_4` FOREIGN KEY (`ldclessonno`) REFERENCES `theory_l2d_sections` (`section`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `theory_questions_ibfk_5` FOREIGN KEY (`hcrule1`) REFERENCES `highway_code` (`hcno`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `theory_questions_ibfk_6` FOREIGN KEY (`hcrule2`) REFERENCES `highway_code` (`hcno`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `theory_questions_ibfk_7` FOREIGN KEY (`hcrule3`) REFERENCES `highway_code` (`hcno`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `users_progress`
   ADD CONSTRAINT `users_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

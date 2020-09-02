@@ -1324,8 +1324,7 @@ class TheoryTest implements TTInterface{
      */
     public function endTest($time, $mark = true) {
         if($mark === true) {
-            $this->setTime($time);
-            $this->markTest();
+            $this->markTest($time);
         }
         else{
             $this->getTestResults();
@@ -1345,7 +1344,7 @@ class TheoryTest implements TTInterface{
      * Marks the current test
      * @return $this;
      */
-    protected function markTest() {
+    protected function markTest($time = false) {
         $this->getQuestions();
         foreach($this->questions as $prim) {
              if($this->getUserTestInfo()[$this->questionNo($prim)]['status'] == 4) {$type = 'correct';}
@@ -1364,7 +1363,7 @@ class TheoryTest implements TTInterface{
         $this->testresults['percent']['incorrect'] = round(($this->testresults['incorrect'] / $this->testresults['numquestions']) * 100);
         $this->testresults['percent']['flagged'] = round(($this->testresults['flagged'] / $this->testresults['numquestions']) * 100);
         $this->testresults['percent']['incomplete'] = round(($this->testresults['incomplete'] / $this->testresults['numquestions']) * 100);
-        $this->updateLearningSection();
+        //$this->updateLearningSection();
         if($this->numCorrect() >= $this->getPassmark()) {
             $this->testresults['status'] = 'pass';
             $status = 1;
@@ -1373,7 +1372,11 @@ class TheoryTest implements TTInterface{
             $this->testresults['status'] = 'fail';
             $status = 2;
         }
-        $this->db->update($this->progressTable, ['status' => $status, 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
+        if($time !== false){
+            list($mins, $secs) = explode(':', $time);
+            $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
+        }
+        $this->db->update($this->progressTable, array_merge(['status' => $status, 'answers' => serialize($this->getUserTestInfo()), 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect()], ($time !== false ? ['time_taken' => $newtime] : [])), ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
         return $this;
     }
     

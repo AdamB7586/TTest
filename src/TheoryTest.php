@@ -1359,10 +1359,10 @@ class TheoryTest implements TTInterface{
         $this->testresults['incomplete'] = $this->numIncomplete();
         $this->testresults['flagged'] = $this->numFlagged();
         $this->testresults['numquestions'] = $this->numQuestions();
-        $this->testresults['percent']['correct'] = round(($this->testresults['correct'] / $this->testresults['numquestions']) * 100);
-        $this->testresults['percent']['incorrect'] = round(($this->testresults['incorrect'] / $this->testresults['numquestions']) * 100);
-        $this->testresults['percent']['flagged'] = round(($this->testresults['flagged'] / $this->testresults['numquestions']) * 100);
-        $this->testresults['percent']['incomplete'] = round(($this->testresults['incomplete'] / $this->testresults['numquestions']) * 100);
+        $this->testresults['percent']['correct'] = round(intval($this->testresults['correct'] / $this->testresults['numquestions']) * 100);
+        $this->testresults['percent']['incorrect'] = round(intval($this->testresults['incorrect'] / $this->testresults['numquestions']) * 100);
+        $this->testresults['percent']['flagged'] = round(intval($this->testresults['flagged'] / $this->testresults['numquestions']) * 100);
+        $this->testresults['percent']['incomplete'] = round(intval($this->testresults['incomplete'] / $this->testresults['numquestions']) * 100);
         //$this->updateLearningSection();
         if($this->numCorrect() >= $this->getPassmark()) {
             $this->testresults['status'] = 'pass';

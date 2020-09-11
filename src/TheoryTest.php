@@ -59,6 +59,11 @@ class TheoryTest implements TTInterface{
     public $noAnswers = 4;
     
     /**
+     * @var string The name of the tests question order database table
+     */
+    public $testsTable;
+    
+    /**
      * @var string The name of the user tests database table
      */
     public $questionsTable;
@@ -207,6 +212,7 @@ class TheoryTest implements TTInterface{
      * Sets the tables
      */
     protected function setTables() {
+        $this->testsTable = $this->config->table_theory_tests;
         $this->questionsTable = $this->config->table_theory_questions;
         $this->learningProgressTable = $this->config->table_users_progress;
         $this->progressTable = $this->config->table_users_test_progress;
@@ -395,7 +401,7 @@ class TheoryTest implements TTInterface{
      * @return boolean If the test questions are inserted into the database will return true else returns false
      */
     protected function chooseQuestions($testNo) {
-        $questions = $this->db->selectAll($this->questionsTable, ['mocktestcarno' => $testNo], ['prim'], ['mocktestcarqposition' => 'ASC']);
+        $questions = $this->db->selectAll($this->testsTable, ['test' => $testNo], ['prim'], ['position' => 'ASC']);
         $this->db->delete($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()]);
         unset($_SESSION['test'.$this->getTest()]);
         if(is_array($questions)){
@@ -1359,10 +1365,10 @@ class TheoryTest implements TTInterface{
         $this->testresults['incomplete'] = $this->numIncomplete();
         $this->testresults['flagged'] = $this->numFlagged();
         $this->testresults['numquestions'] = $this->numQuestions();
-        $this->testresults['percent']['correct'] = round(intval($this->testresults['correct'] / $this->testresults['numquestions']) * 100);
-        $this->testresults['percent']['incorrect'] = round(intval($this->testresults['incorrect'] / $this->testresults['numquestions']) * 100);
-        $this->testresults['percent']['flagged'] = round(intval($this->testresults['flagged'] / $this->testresults['numquestions']) * 100);
-        $this->testresults['percent']['incomplete'] = round(intval($this->testresults['incomplete'] / $this->testresults['numquestions']) * 100);
+        $this->testresults['percent']['correct'] = round($this->testresults['correct'] / $this->testresults['numquestions'] * 100);
+        $this->testresults['percent']['incorrect'] = round($this->testresults['incorrect'] / $this->testresults['numquestions'] * 100);
+        $this->testresults['percent']['flagged'] = round($this->testresults['flagged'] / $this->testresults['numquestions'] * 100);
+        $this->testresults['percent']['incomplete'] = round($this->testresults['incomplete'] / $this->testresults['numquestions'] * 100);
         //$this->updateLearningSection();
         if($this->numCorrect() >= $this->getPassmark()) {
             $this->testresults['status'] = 'pass';

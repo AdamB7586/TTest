@@ -12,7 +12,8 @@ INSERT INTO `config` (`setting`, `value`) VALUES
 ('table_theory_l2d_sections', 'theory_l2d_sections'),
 ('table_theory_dvsa_sections', 'theory_dsa_sections'),
 ('table_theory_case_studies', 'theory_case_studies'),
-('table_theory_questions', 'theory_questions');
+('table_theory_questions', 'theory_questions'),
+('table_theory_tests', 'theory_test_positions');
 
 CREATE TABLE IF NOT EXISTS `theory_case_studies` (
   `casestudyno` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -87,24 +88,28 @@ CREATE TABLE IF NOT EXISTS `theory_questions` (
   `casestudyno` smallint(5) UNSIGNED DEFAULT NULL,
   `caseqposition` int(11) UNSIGNED DEFAULT NULL,
   `alertcasestudy` smallint(6) DEFAULT NULL,
-  `mocktestcarno` smallint(6) DEFAULT NULL,
-  `mocktestcarqposition` smallint(6) DEFAULT NULL,
-  `mocktestbikeno` smallint(6) DEFAULT NULL,
-  `mocktestbikeqposition` smallint(6) DEFAULT NULL,
   PRIMARY KEY (`prim`),
   UNIQUE KEY `prim` (`prim`),
   KEY `dsacat` (`dsacat`),
   KEY `ldclesssonno` (`ldclessonno`),
   KEY `hcsection` (`hcsection`),
-  KEY `mocktestcarno` (`mocktestcarno`),
   KEY `carquestion` (`carquestion`),
   KEY `bikequestion` (`bikequestion`),
-  KEY `mocktestbikeno` (`mocktestbikeno`),
   KEY `casestudyno` (`casestudyno`),
   KEY `hcrule1` (`hcrule1`),
   KEY `hcrule2` (`hcrule2`),
   KEY `hcrule3` (`hcrule3`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `theory_test_positions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `prim` smallint(6) UNSIGNED DEFAULT NULL,
+  `test` smallint(6) UNSIGNED DEFAULT NULL,
+  `position` tinyint(3) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_test_position` (`test`,`position`),
+  KEY `prim` (`prim`)
+) ENGINE=InnoDB AUTO_INCREMENT=771 DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `users_progress` (
   `user_id` int(11) UNSIGNED NOT NULL,
@@ -158,6 +163,10 @@ ALTER TABLE `theory_questions`
   ADD CONSTRAINT `theory_questions_ibfk_5` FOREIGN KEY (`hcrule1`) REFERENCES `highway_code` (`hcno`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `theory_questions_ibfk_6` FOREIGN KEY (`hcrule2`) REFERENCES `highway_code` (`hcno`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `theory_questions_ibfk_7` FOREIGN KEY (`hcrule3`) REFERENCES `highway_code` (`hcno`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `theory_test_positions`
+  ADD CONSTRAINT `theory_test_positions_ibfk_1` FOREIGN KEY (`prim`) REFERENCES `theory_questions` (`prim`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+COMMIT;
 
 ALTER TABLE `users_progress`
   ADD CONSTRAINT `users_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

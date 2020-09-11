@@ -94,6 +94,11 @@ class TheoryTest implements TTInterface{
     protected $javascriptLocation = '/js/theory/';
     
     /**
+     * @var string The location where the video files can be found relative to where the Theory Test is located
+     */
+    public $videoLocation = '/videos/case/';
+    
+    /**
      * @var string The variant of the JavaScript file being looked at for the current test 
      */
     protected $scriptVar = 'questions';
@@ -325,6 +330,24 @@ class TheoryTest implements TTInterface{
      */
     public function getJavascriptLocation() {
         return $this->javascriptLocation;
+    }
+    
+    /**
+     * The location where the videos are located (can be absolute or root path)
+     * @param string $location The path to the video clips
+     * @return $this
+     */
+    public function setVidLocation($location) {
+        $this->videoLocation = $location;
+        return $this;
+    }
+    
+    /**
+     * Returns the video path
+     * @return string This is the path to where the videos are located (minus the mp4 and ogv)
+     */
+    public function getVidLocation() {
+        return $this->videoLocation;
     }
     
     /**
@@ -1146,8 +1169,8 @@ class TheoryTest implements TTInterface{
      * @return $this
      */
     protected function setCaseStudy($casestudy) {
-        $case = $this->db->fetchColumn($this->caseTable, ['casestudyno' => $casestudy], ['cssituation']);
-        $this->casestudy = ['case' => $case, 'audio' => $this->addAudio($casestudy, 'CS')];
+        $case = $this->db->select($this->caseTable, ['casestudyno' => $casestudy]);
+        $this->casestudy = ['case' => $case['cssituation'], 'audio' => $this->addAudio($casestudy, 'CS'), 'video' => $case['video'], 'videoLocation' => $this->getVidLocation()];
         return $this;
     }
     

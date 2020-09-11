@@ -16,8 +16,8 @@
     </div>
     <div class="row{if isset($review_questions)} isreview{/if}">
         <div class="col-md-6">
-            <div id="case">
-                <video width="544" height="408" id="video" class="video embed-responsive-item" data-duration="{$video.endClip}" preload="auto" controlsList="nodownload nofullscreen noremoteplayback" {*data-dashjs-player*} muted playsinline webkit-playsinline disablePictureInPicture>
+            <div class="embed-responsive embed-responsive-4by3">
+                <video width="544" height="408" id="video" class="video embed-responsive-item" data-duration="{$video.endClip}" controlsList="nodownload nofullscreen noremoteplayback" {*data-dashjs-player*} controls muted playsinline webkit-playsinline disablePictureInPicture>
                     {*<source src="{$video.videoLocation}dash/{$case_study.video}.mpd" type="application/dash+xml" />*}
                     <source src="{$case_study.videoLocation}mp4/{$case_study.video}.mp4" type="video/mp4" />
                     <source src="{$case_study.videoLocation}ogv/{$case_study.video}.ogv" type="video/ogg" />

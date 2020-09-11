@@ -86,7 +86,6 @@ class Review{
         return [
             ['table' => $this->config->table_theory_hc_sections, 'name' => 'Highway Code Section', 'section' => 'hc', 'sectionNo' => 'hcsection'],
             ['table' => $this->config->table_theory_dvsa_sections, 'name' => 'DVSA Category', 'section' => 'dvsa', 'sectionNo' => 'dsacat'],
-            ['table' => $this->config->table_theory_l2d_sections, 'name' => 'Learn to Drive Lesson', 'section' => 'l2d', 'sectionNo' => 'ldclessonno'],
             'case' => true
         ];
     }

@@ -18,8 +18,8 @@ class LearnTest extends TheoryTest{
     protected $l2dCatTable;
     protected $casestudyCatTable;
     
-    protected $categories = ['dvsa' => 'dsacat', 'hc' => 'hcsection', 'l2d' => 'ldclessonno', 'casestudy' => 'casestudyno'];
-    protected $sortBy = ['dvsa' => 'dsaqposition', 'hc' => 'hcqposition', 'l2d' => 'ldcqno', 'casestudy' => 'caseqposition'];
+    protected $categories = ['dvsa' => 'dsacat', 'hc' => 'hcsection', 'casestudy' => 'casestudyno'];
+    protected $sortBy = ['dvsa' => 'dsaqposition', 'hc' => 'hcqposition', 'casestudy' => 'caseqposition'];
 
     /**
      * Set up all of the components needed to create a Theory Test

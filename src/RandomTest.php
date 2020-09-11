@@ -38,7 +38,7 @@ class RandomTest extends TheoryTest{
      */
     protected function chooseQuestions($testNo) {
         $this->db->delete($this->progressTable, ['user_id' => $this->user->getUserID(), 'test_id' => $testNo]);
-        $questions = $this->db->query("SELECT * FROM ((SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '1' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 2)
+        $questions = $this->db->query("SELECT * FROM ((SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '1' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 3)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '2' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 3)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '3' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 4)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '4' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 3)
@@ -49,10 +49,10 @@ UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '8' AND `ca
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '9' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 3)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '10' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 4)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '11' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 6)
-UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '12' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 1)
+UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '12' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 2)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '13' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 3)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '14' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 1) ORDER BY RAND()) as a
-UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `casestudyno` = '".rand(1, 28)."');");
+UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `casestudyno` = '".rand(67, 80)."');");
          
         $q = 1;
         unset($_SESSION['test'.$this->getTest()]);

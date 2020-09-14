@@ -12,7 +12,7 @@
     <div id="question-content"{if isset($review_questions)} class="isreview"{/if}>
         <div class="row">
             <div class="col-12" id="question-main">
-                {if isset($image.src) nocache}<img src="{$image.src}" alt="" width="{$image.width}" height="{$image.height}" class="float-right questionimage img-fluid pl-1" />{/if}
+                {if isset($image.src) nocache}<img src="{$image.src}" alt="" width="273" class="float-right questionimage img-fluid pl-1" />{/if}
                 {include file="includes/mark.tpl" nocache}<br />
                 <div class="questiontext" id="{$prim}">
                     {if isset($question.audio.enabled) nocache}

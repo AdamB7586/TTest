@@ -200,6 +200,7 @@ class Review{
         $this->getUserAnswers();
         $cases = [];
         foreach($this->db->selectAll($this->caseStudyTable, ['lp' => 'IS NOT NULL', 'type' => $this->testType], '*', ['video' => 'DESC', 'dsacat' => 'ASC']) as $i => $case){
+            $cases[$i] = $case;
             $cases[$i]['section'] = $case['casestudyno'];
             if(!is_null($case['video'])){
                 $cases[$i]['name'] = 'Video Case';

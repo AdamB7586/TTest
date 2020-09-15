@@ -1170,7 +1170,7 @@ class TheoryTest implements TTInterface{
      */
     protected function setCaseStudy($casestudy) {
         $case = $this->db->select($this->caseTable, ['casestudyno' => $casestudy]);
-        $this->casestudy = ['case' => $case['cssituation'], 'audio' => $this->addAudio($casestudy, 'CS'), 'video' => $case['video'], 'videoLocation' => $this->getVidLocation()];
+        $this->casestudy = ['case' => $case['cssituation'], 'audio' => $this->addAudio($casestudy, 'CS'), 'video' => $case['video'], 'videoLocation' => $this->getVidLocation(), 'ratio' => $case['ratio']];
         return $this;
     }
     

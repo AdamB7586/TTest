@@ -17,10 +17,12 @@ INSERT INTO `config` (`setting`, `value`) VALUES
 
 CREATE TABLE IF NOT EXISTS `theory_case_studies` (
   `casestudyno` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `cssituation` longtext,
+  `cssituation` text DEFAULT NULL,
+  `video` varchar(100) DEFAULT NULL,
+  `ratio` enum('16by9','4by3') DEFAULT NULL,
   `type` varchar(50) DEFAULT NULL,
   `dsacat` tinyint(3) UNSIGNED DEFAULT '0',
-  `lp` tinyint(3) UNSIGNED DEFAULT '0',
+  `lp` tinyint(3) UNSIGNED DEFAULT NULL,
   `free` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`casestudyno`),
   UNIQUE KEY `casestudyno` (`casestudyno`),

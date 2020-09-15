@@ -52,7 +52,6 @@ class LearnTest extends TheoryTest{
      */
     public function createNewTest($sectionNo = '1', $type = 'dvsa'){
         $this->clearSettings();
-        if($type == 'casestudy'){$sectionNo = $this->getRealCaseID($sectionNo);}
         $this->chooseStudyQuestions($sectionNo, $type);
         $this->setTest($type.$sectionNo);
         $table = strtolower($type).'CatTable';
@@ -63,7 +62,7 @@ class LearnTest extends TheoryTest{
         }
         else{
             $sectionInfo = $this->getSectionInfo($this->$table, $sectionNo, 'casestudyno');
-            $name = 'Case Study '.$sectionNo;
+            $name = 'Case Study';
         }
         if((!isset($sectionInfo['free']) || $sectionInfo['free'] == 0) && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}
         $this->setTestName($name);
@@ -496,16 +495,6 @@ class LearnTest extends TheoryTest{
      */
     protected function instructorComments($prim){
         return $this->db->fetchColumn($this->questionsTable, ['prim' => $prim], ['explanation']);
-    }
-    
-    /**
-     * The case ID's give may not match so make sure to get the correct one
-     * @param int $sectionNo This should be the section number for the test
-     * @return int|false Returns the real case study ID number if it exists or returns false
-     */
-    private function getRealCaseID($sectionNo){
-        if($this->getTestType() == 'CAR'){$type = 'car';}else{$type = 'M/C';}
-        return $this->db->fetchColumn($this->caseTable, ['type' => $type, 'lp' => 1, 'dsacat' => $sectionNo], ['casestudyno']);
     }
     
     /**

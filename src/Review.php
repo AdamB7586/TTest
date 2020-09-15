@@ -17,6 +17,7 @@ class Review{
     
     public $noOfTests = 15;
     
+    protected $testsTable;
     protected $questionsTable;
     protected $dvsaCatTable;
     protected $learningProgressTable;
@@ -62,6 +63,7 @@ class Review{
      * Sets the tables
      */
     protected function setTables() {
+        $this->testsTable = $this->config->table_theory_tests;
         $this->questionsTable = $this->config->table_theory_questions;
         $this->learningProgressTable = $this->config->table_users_progress;
         $this->progressTable = $this->config->table_users_test_progress;
@@ -110,7 +112,7 @@ class Review{
      */
     public function numberOfTests(){
         if(!is_numeric($this->noOfTests)){
-            $this->db->query("SELECT DISTINCT `mocktestcarno` FROM `{$this->questionsTable}` WHERE `mocktestcarno` IS NOT NULL LIMIT 50;");
+            $this->db->query("SELECT DISTINCT `test` FROM `{$this->testsTable}`;");
             $this->noOfTests = $this->db->numRows();
         }
         return $this->noOfTests;

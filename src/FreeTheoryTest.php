@@ -127,11 +127,9 @@ class FreeTheoryTest extends TheoryTest{
      * @return boolean Returns true
      */
     protected function chooseQuestions($testNo){
-        $questions = $this->db->selectAll($this->questionsTable, ['mocktestcarno' => $testNo], ['prim'], ['mocktestcarqposition' => 'ASC']);
-        $q = 1;
-        foreach($questions as $question){
-            $this->questions[$q] = $question['prim'];
-            $q++;
+        $questions = $this->db->selectAll($this->testsTable, ['test' => $testNo], ['prim'], ['position' => 'ASC']);
+        foreach($questions as $i => $question){
+            $this->questions[($i + 1)] = $question['prim'];
         }
         $_SESSION['test'.$testNo.'q'] = serialize($this->questions);
         return true;

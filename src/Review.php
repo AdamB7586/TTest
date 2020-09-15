@@ -21,6 +21,7 @@ class Review{
     protected $dvsaCatTable;
     protected $learningProgressTable;
     protected $progressTable;
+    protected $caseStudyTable;
     
     protected $useranswers;
     
@@ -65,6 +66,7 @@ class Review{
         $this->learningProgressTable = $this->config->table_users_progress;
         $this->progressTable = $this->config->table_users_test_progress;
         $this->dvsaCatTable = $this->config->table_theory_dvsa_sections;
+        $this->caseStudyTable = $this->config->table_theory_case_studies;
     }
     
     /**
@@ -194,15 +196,21 @@ class Review{
      */
     public function reviewCaseStudy(){
         $this->getUserAnswers();
-        $case = [];
-        foreach($this->db->selectAll($this->dvsaCatTable, [], '*', ['section' => 'ASC']) as $cat){
-            $case[$cat['section']] = $cat;
-            foreach($this->db->selectAll($this->questionsTable, ['casestudyno' => $cat['section']], '*', ['caseqposition' => 'ASC']) as $num => $question){
-                $case[$cat['section']]['q'][$num]['status'] = (isset($this->useranswers[$question['prim']]) ? $this->useranswers[$question['prim']]['status'] : 0);
-                $case[$cat['section']]['q'][$num]['num'] = ($num + 1);
+        $cases = [];
+        foreach($this->db->selectAll($this->caseStudyTable, ['lp' => 'IS NOT NULL', 'type' => $this->testType], '*', ['video' => 'DESC', 'dsacat' => 'ASC']) as $i => $case){
+            $cases[$i]['section'] = $case['casestudyno'];
+            if(!is_null($case['video'])){
+                $cases[$i]['name'] = 'Video Case';
+            }
+            else{
+                $cases[$i]['name'] = $this->db->fetchColumn($this->dvsaCatTable, ['section' => $case['dsacat']], ['name']);
+            }
+            foreach($this->db->selectAll($this->questionsTable, ['casestudyno' => $case['casestudyno']], '*', ['caseqposition' => 'ASC']) as $num => $question){
+                $cases[$i]['q'][$num]['status'] = (isset($this->useranswers[$question['prim']]) ? $this->useranswers[$question['prim']]['status'] : 0);
+                $cases[$i]['q'][$num]['num'] = ($num + 1);
             }
         }
-        return $case;
+        return $cases;
     }
     
     /**

@@ -721,7 +721,7 @@ class TheoryTest implements TTInterface{
      */
     protected function flagHintButton($prim) {
         if($this->review !== 'answers') {
-            return ['text' => 'Flag Question', 'class' => 'flag'.($this->questionFlagged($prim) ? ' flagged' : ''), 'icon' => 'flag'];
+            return ['text' => 'Flag <span class="d-none d-xl-inline-block visible-lg-inline-block">Question</span>', 'class' => 'flag'.($this->questionFlagged($prim) ? ' flagged' : ''), 'icon' => 'flag'];
         }
         return ['text' => 'Explain', 'class' => 'viewfeedback'.($this->checkSettings()['hint'] === 'on' ? ' flagged' : ''), 'icon' => 'book'];
     }
@@ -1302,10 +1302,10 @@ class TheoryTest implements TTInterface{
             if($this->review == 'flagged' && $this->numFlagged() > 1) {$prev = $this->questionPrim($this->getNextFlagged('prev'));}
             elseif($this->review == 'incomplete' && $this->numIncomplete() > 1) {$prev = $this->questionPrim($this->getNextIncomplete('prev'));}
             else{$prev = $this->questionPrim(($this->currentQuestion() - 1));}
-            return ['id' => $prev, 'text' => 'Previous', 'icon' => 'angle-left'];
+            return ['id' => $prev, 'text' => 'Prev<span class="d-none d-lg-inline-block visible-lg-inline-block">ious</span>', 'icon' => 'angle-left'];
         }
         if($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
-            return ['id' => $this->getLastQuestion(), 'text' => 'Previous', 'icon' => 'angle-left'];
+            return ['id' => $this->getLastQuestion(), 'text' => 'Prev<span class="d-none d-lg-inline-block visible-lg-inline-block">ious</span>', 'icon' => 'angle-left'];
         }
         return false;
     }

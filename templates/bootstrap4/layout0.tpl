@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-lg-6">
                 {foreach $answers as $a => $answer nocache}
                     <div class="option">
                         <div class="answer{if isset($answer.selected) && $answer.selected != false} selected selected{if $answer.selected != 1}{$answer.selected}{/if}{/if}" id="{$answer.letter}">
@@ -36,7 +36,7 @@
                     </div>
                     {if $a == ceil(($answers|@count)/2)}
                 </div>
-                <div class="col-md-6">
+                <div class="col-lg-6">
                     {/if}
                 {/foreach}
             </div>

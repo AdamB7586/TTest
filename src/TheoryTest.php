@@ -1264,6 +1264,7 @@ class TheoryTest implements TTInterface{
             if($type == 'taken') {
                 list($mins, $secs) = explode(':', $time);
                 $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
+                $this->userProgress['time_taken'] = $newtime;
                 $this->db->update($this->progressTable, ['time_'.$type => $newtime], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
             }
             else{
@@ -1404,6 +1405,7 @@ class TheoryTest implements TTInterface{
         if($time !== false){
             list($mins, $secs) = explode(':', $time);
             $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
+            $this->userProgress['time_taken'] = $newtime;
         }
         $this->db->update($this->progressTable, array_merge(['status' => $status, 'answers' => serialize($this->getUserTestInfo()), 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect()], ($time !== false ? ['time_taken' => $newtime] : [])), ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
         return $this;

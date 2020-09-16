@@ -77,7 +77,11 @@
 </tr>
 </thead>
 {foreach $dsa_cat_results as $cat_results}
-{$percent = round(intval($cat_results.correct / $cat_results.total) * 100, 0)}
+{if $cat_results.total > 0}
+{$percent = round(($cat_results.correct / $cat_results.total) * 100, 0)}
+{else}
+{$percent = 0}
+{/if}
 <tr>
     <td>{$cat_results.section}. {$cat_results.name}</td>
     <td class="text-center">{$cat_results.correct}</td>

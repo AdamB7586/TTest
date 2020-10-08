@@ -3,19 +3,23 @@ namespace TheoryTest\Tests;
 
 use TheoryTest\Car\FreeTheoryTest;
 
-class FreeTheoryTestTest extends TheoryTestTest {
+class FreeTheoryTestTest extends TheoryTestTest
+{
   
     protected $theoryTest;
     
-    protected function setUp() : void {
-        if(!session_id()){session_start();}
+    protected function setUp() : void
+    {
+        if (!session_id()) {
+            session_start();
+        }
         $_SESSION['current_test'] = 1;
         $_SESSION['test'.$_SESSION['current_test']] = false;
         $this->theoryTest = new FreeTheoryTest(self::$db, self::$config, self::$template, self::$user);
-        
     }
     
-    protected function tearDown() : void {
+    protected function tearDown() : void
+    {
         $this->theoryTest = null;
     }
     
@@ -44,7 +48,8 @@ class FreeTheoryTestTest extends TheoryTestTest {
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
      */
-    public function testCreateNewTest() {
+    public function testCreateNewTest()
+    {
         parent::testCreateNewTest();
     }
     
@@ -58,7 +63,8 @@ class FreeTheoryTestTest extends TheoryTestTest {
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
      */
-    public function testSetPassmark() {
+    public function testSetPassmark()
+    {
         parent::testSetPassmark();
     }
 
@@ -72,7 +78,8 @@ class FreeTheoryTestTest extends TheoryTestTest {
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
      */
-    public function testSetTestType(){
+    public function testSetTestType()
+    {
         parent::testSetTestType();
     }
 }

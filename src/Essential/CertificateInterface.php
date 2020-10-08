@@ -1,7 +1,8 @@
 <?php
 namespace TheoryTest\Car\Essential;
 
-interface CertificateInterface{
+interface CertificateInterface
+{
     public function PDFInfo();
     public function generateCertificate();
 }

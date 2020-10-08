@@ -1,7 +1,8 @@
 <?php
 namespace TheoryTest\Car;
 
-class FreeTheoryTest extends TheoryTest{
+class FreeTheoryTest extends TheoryTest
+{
     
     protected $scriptVar = 'free';
     
@@ -9,7 +10,8 @@ class FreeTheoryTest extends TheoryTest{
      * Create a new Theory Test for the test number given
      * @param int $theorytest Should be the test number
      */
-    public function createNewTest($theorytest = 1){
+    public function createNewTest($theorytest = 1)
+    {
         $this->clearCookies($theorytest);
         $this->setTest($theorytest);
         $this->setTestName();
@@ -22,7 +24,8 @@ class FreeTheoryTest extends TheoryTest{
      * @param int $testNo The current test number
      * @return void nothing is returned
      */
-    protected function clearCookies($testNo){
+    protected function clearCookies($testNo)
+    {
         unset($_SESSION['test'.$testNo.'q']);
         unset($_SESSION['test'.$testNo]);
         unset($_SESSION['current_test']);
@@ -35,7 +38,8 @@ class FreeTheoryTest extends TheoryTest{
      * Sets the current test number
      * @param int $testNo Sets the current test number
      */
-    public function setTest($testNo){
+    public function setTest($testNo)
+    {
         $this->testNo = $testNo;
         $_SESSION['current_test'] = $this->testNo;
     }
@@ -44,8 +48,9 @@ class FreeTheoryTest extends TheoryTest{
      * Returns the current test number
      * @return int Returns the current test number
      */
-    public function getTest(){
-        if(!is_numeric($this->testNo)){
+    public function getTest()
+    {
+        if (!is_numeric($this->testNo)) {
             $this->testNo = $_SESSION['current_test'];
         }
         return $this->testNo;
@@ -56,28 +61,37 @@ class FreeTheoryTest extends TheoryTest{
      * @param boolean $new If it is a new test or not
      * @return array Returns the current users settings which they have enabled
      */
-    protected function checkSettings($new = false) {
+    protected function checkSettings($new = false)
+    {
         $settings = [];
-        if(isset($_SESSION['settings'])){
+        if (isset($_SESSION['settings'])) {
             $settings = unserialize($_SESSION['settings']);
-            if($new !== true){
-                if($settings['review'] == 'all'){$this->review = (string) 'all';}
-                elseif($settings['review'] == 'flagged'){$this->review = (string) 'flagged';}
-                elseif($settings['review'] == 'incomplete'){$this->review = (string) 'incomplete';}
-                elseif($settings['review'] == 'answers'){$this->review = (string) 'answers';}
+            if ($new !== true) {
+                if ($settings['review'] == 'all') {
+                    $this->review = (string) 'all';
+                } elseif ($settings['review'] == 'flagged') {
+                    $this->review = (string) 'flagged';
+                } elseif ($settings['review'] == 'incomplete') {
+                    $this->review = (string) 'incomplete';
+                } elseif ($settings['review'] == 'answers') {
+                    $this->review = (string) 'answers';
+                }
+            } else {
+                $this->review = false;
             }
-            else{$this->review = false;}
-            if($settings['audio'] == 'on'){$this->audioEnabled = true;}
+            if ($settings['audio'] == 'on') {
+                $this->audioEnabled = true;
+            }
         }
         return $settings;
-        
     }
     
     /**
      * Clears the current settings from the users session
      * @return void Nothing is returned
      */
-    protected function clearSettings(){
+    protected function clearSettings()
+    {
         unset($_SESSION['settings']);
         unset($_SESSION['time_remaining']);
         unset($_SESSION['time_taken']);
@@ -88,7 +102,8 @@ class FreeTheoryTest extends TheoryTest{
      * @param string $type This is the type of question which is about to be reviewed (e.g. flagged, all, incomplete, etc)
      * @return void Nothing is returned
      */
-    public function reviewOnly($type = 'all'){
+    public function reviewOnly($type = 'all')
+    {
         $settings = $this->checkSettings();
         $settings['review'] = $type;
         $_SESSION['settings'] = serialize($settings);
@@ -100,8 +115,13 @@ class FreeTheoryTest extends TheoryTest{
      * @param string $status Should be set to either on or off
      * @return void Nothing is returned
      */
-    public function audioEnable($status = 'on'){
-        if($status == 'on'){$this->audioEnabled = true;}else{$this->audioEnabled = false;}
+    public function audioEnable($status = 'on')
+    {
+        if ($status == 'on') {
+            $this->audioEnabled = true;
+        } else {
+            $this->audioEnabled = false;
+        }
         $settings = $this->checkSettings();
         $settings['audio'] = $status;
         $_SESSION['settings'] = serialize($settings);
@@ -112,11 +132,11 @@ class FreeTheoryTest extends TheoryTest{
      * Sets the Test Name
      * @param string $name Sets the current test name
      */
-    protected function setTestName($name = ''){
-        if(!empty($name)){
+    protected function setTestName($name = '')
+    {
+        if (!empty($name)) {
             $this->testName = $name;
-        }
-        else{
+        } else {
             $this->testName = 'Free Theory Test '.$this->getTest();
         }
     }
@@ -126,9 +146,10 @@ class FreeTheoryTest extends TheoryTest{
      * @param int $testNo The current test number
      * @return boolean Returns true
      */
-    protected function chooseQuestions($testNo){
+    protected function chooseQuestions($testNo)
+    {
         $questions = $this->db->selectAll($this->testsTable, ['test' => $testNo], ['prim'], ['position' => 'ASC']);
-        foreach($questions as $i => $question){
+        foreach ($questions as $i => $question) {
             $this->questions[($i + 1)] = $question['prim'];
         }
         $_SESSION['test'.$testNo.'q'] = serialize($this->questions);
@@ -139,8 +160,9 @@ class FreeTheoryTest extends TheoryTest{
      * Gets the questions array from the database if $this->questions is not set
      * @return array Returns the questions array
      */
-    public function getQuestions(){
-        if(!isset($this->questions)){
+    public function getQuestions()
+    {
+        if (!isset($this->questions)) {
             $this->questions = unserialize($_SESSION['test'.$this->getTest().'q']);
         }
         return $this->questions;
@@ -150,8 +172,9 @@ class FreeTheoryTest extends TheoryTest{
      * Returns the current users answers for the current test
      * @return array Returns the current users answers for the current test
      */
-    public function getUserAnswers() {
-        if(!isset($this->useranswers) && isset($_SESSION['test'.$this->getTest()])){
+    public function getUserAnswers()
+    {
+        if (!isset($this->useranswers) && isset($_SESSION['test'.$this->getTest()])) {
             $this->useranswers = $_SESSION['test'.$this->getTest()];
         }
         return $this->useranswers;
@@ -161,7 +184,8 @@ class FreeTheoryTest extends TheoryTest{
      * Updates the useranswers field in the progress table in the database
      * @return true
      */
-    protected function updateAnswers(){
+    protected function updateAnswers()
+    {
         return json_encode(true);
     }
     
@@ -169,11 +193,11 @@ class FreeTheoryTest extends TheoryTest{
      * Sets and returns the current question number
      * @return int Returns the current question number
      */
-    protected function currentQuestion(){
-        if(!isset($this->current) && isset($_SESSION['question_no']['free'])){
+    protected function currentQuestion()
+    {
+        if (!isset($this->current) && isset($_SESSION['question_no']['free'])) {
             $this->current = $_SESSION['question_no']['free'];
-        }
-        elseif(!isset($this->current)){
+        } elseif (!isset($this->current)) {
             $this->current = 1;
         }
         return $this->current;
@@ -184,7 +208,8 @@ class FreeTheoryTest extends TheoryTest{
      * @param int $prim The prim number of the current question
      * @return void Nothing is returned
      */
-    protected function updateTestProgress($prim){
+    protected function updateTestProgress($prim)
+    {
         $this->current = $this->questionNo($prim);
         $_SESSION['question_no']['free'] = $this->current;
     }
@@ -192,7 +217,8 @@ class FreeTheoryTest extends TheoryTest{
     /**
      * This should be called at the very start of the free test to that no information is added unnecessarily. This function assigns values to the tamples to start the test
      */
-    protected function startTest(){
+    protected function startTest()
+    {
         $this->layout->assign('script', $this->existingScript());
         $this->questiondata = $this->layout->fetch('existing.tpl');
     }
@@ -201,8 +227,9 @@ class FreeTheoryTest extends TheoryTest{
      * Checks a cookie to see if the test has started
      * @return boolean If the test has been started will return true else return false
      */
-    private function testStarted(){
-        if(isset($_COOKIE['started']) && is_numeric($_COOKIE['started'])){
+    private function testStarted()
+    {
+        if (isset($_COOKIE['started']) && is_numeric($_COOKIE['started'])) {
             return true;
         }
         return false;
@@ -212,7 +239,8 @@ class FreeTheoryTest extends TheoryTest{
      * Sets the cookie to say that the test has been started
      * @return void Nothing is returned
      */
-    public function startNewTest(){
+    public function startNewTest()
+    {
         setcookie('started', 1, time() + 3600, '/', '', (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? true : false), true);
         return json_encode(true);
     }
@@ -221,9 +249,14 @@ class FreeTheoryTest extends TheoryTest{
      * Creates the HTML for an entire Theory Test for use when creating a new test
      * @return void Nothing is returned
      */
-    public function buildTest(){
-        if(!$this->testStarted()){$this->startTest();}
-        else{$this->createQuestionHTML($this->getFirstQuestion(), true); setcookie('started', 0, time() - 3600);}
+    public function buildTest()
+    {
+        if (!$this->testStarted()) {
+            $this->startTest();
+        } else {
+            $this->createQuestionHTML($this->getFirstQuestion(), true);
+            setcookie('started', 0, time() - 3600);
+        }
         $this->layout->assign('test_name', $this->getTestName(), true);
         $this->layout->assign('question_no', '1', true);
         $this->layout->assign('no_questions', $this->numQuestions(), true);
@@ -239,9 +272,10 @@ class FreeTheoryTest extends TheoryTest{
      * @param string $type This should be set to either taken or remaining
      * @return void nothing is returned
      */
-    public function setTime($time, $type = 'taken'){
-        if($time){
-            if($type == 'taken'){
+    public function setTime($time, $type = 'taken')
+    {
+        if ($time) {
+            if ($type == 'taken') {
                 list($mins, $secs) = explode(':', $time);
                 $time = gmdate('i:s', ($this->seconds - (($mins * 60) + $secs)));
             }
@@ -254,17 +288,22 @@ class FreeTheoryTest extends TheoryTest{
      * @param string $type This should be either set to 'taken' or 'remaining' depending on which you wish to get 'taken' by default
      * @return string Returns the time from the database
      */
-    public function getTime($type = 'taken'){
+    public function getTime($type = 'taken')
+    {
         return $_SESSION['time_'.$type];
     }
     
     /**
      * Marks the current test
      */
-    protected function markTest(){
-        foreach($this->getQuestions() as $prim){
-             if($this->getUserAnswers()[$this->questionNo($prim)]['status'] == 4){$type = 'correct';}
-             else{$type = 'incorrect';}
+    protected function markTest($time = false)
+    {
+        foreach ($this->getQuestions() as $prim) {
+            if ($this->getUserAnswers()[$this->questionNo($prim)]['status'] == 4) {
+                $type = 'correct';
+            } else {
+                $type = 'incorrect';
+            }
              
              $dvsa = $this->getDSACat($prim);
              $this->testresults['dvsa'][$dvsa][$type] = (int)$this->testresults['dvsa'][$dvsa][$type] + 1;
@@ -281,10 +320,9 @@ class FreeTheoryTest extends TheoryTest{
         $this->testresults['percent']['flagged'] = round(($this->testresults['flagged'] / $this->testresults['numquestions']) * 100);
         $this->testresults['percent']['incomplete'] = round(($this->testresults['incomplete'] / $this->testresults['numquestions']) * 100);
         $this->testresults['complete'] = date('Y-m-d H:i:s');
-        if($this->numCorrect() >= $this->passmark){
+        if ($this->numCorrect() >= $this->passmark) {
             $this->testresults['status'] = 'pass';
-        }
-        else{
+        } else {
             $this->testresults['status'] = 'fail';
         }
         $_SESSION['results'] = serialize($this->testresults);
@@ -294,7 +332,8 @@ class FreeTheoryTest extends TheoryTest{
      * Returns the test results for the current test
      * @return array Returns the test results for the current test as an array
      */
-    public function getTestResults(){
+    public function getTestResults()
+    {
         $this->testresults = unserialize($_SESSION['results']);
         return $this->testresults;
     }
@@ -303,7 +342,8 @@ class FreeTheoryTest extends TheoryTest{
      * Returns the print certificate/report button
      * @return array Returns the print certificate/report variables
      */
-    protected function printCertif(){
+    protected function printCertif()
+    {
         $certificate = parent::printCertif();
         $certificate['location'] = $certificate['location'].'&amp;type=free';
         return $certificate;
@@ -313,7 +353,8 @@ class FreeTheoryTest extends TheoryTest{
      * Returns the test report table to be displayed
      * @return string Returns the test report table to be displayed
      */
-    protected function testReport(){
+    protected function testReport()
+    {
         $this->layout->assign('free_test', 'Yes', true);
         $report = parent::testReport();
         unset($report['user']);

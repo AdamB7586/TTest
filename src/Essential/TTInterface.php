@@ -2,7 +2,8 @@
 
 namespace TheoryTest\Car\Essential;
 
-interface TTInterface{
+interface TTInterface
+{
     public function createNewTest($test = 1);
     public function createTestReport();
     public function setTime($time);

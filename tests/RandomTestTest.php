@@ -3,17 +3,20 @@ namespace TheoryTest\Tests;
 
 use TheoryTest\Car\RandomTest;
 
-class RandomTestTest extends SetUp {
+class RandomTestTest extends SetUp
+{
     
     protected static $theoryTest;
     
-    public static function setUpBeforeClass() : void {
+    public static function setUpBeforeClass() : void
+    {
         parent::setUpBeforeClass();
         self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
         self::$theoryTest = new RandomTest(self::$db, self::$config, self::$template, self::$user);
     }
     
-    public function testConnection() {
+    public function testConnection()
+    {
         $this->markTestIncomplete();
     }
 }

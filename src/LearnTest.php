@@ -6,7 +6,8 @@ use Configuration\Config;
 use Smarty;
 use DVSA\HighwayCode;
 
-class LearnTest extends TheoryTest{
+class LearnTest extends TheoryTest
+{
     protected $section = 'learn';
     protected $scriptVar = 'learn';
       
@@ -29,7 +30,8 @@ class LearnTest extends TheoryTest{
      * @param false|int $userID If you wish to emulate a user set this value to the users ID else set to false
      * @param string|false $templateDir If you want to change the template location set this location here else set to false
      */
-    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false, $theme = 'bootstrap') {
+    public function __construct(Database $db, Config $config, Smarty $layout, $user, $userID = false, $templateDir = false, $theme = 'bootstrap')
+    {
         parent::__construct($db, $config, $layout, $user, $userID, $templateDir, $theme);
         $this->getTestInfo();
     }
@@ -37,7 +39,8 @@ class LearnTest extends TheoryTest{
     /**
      * Sets the tables
      */
-    public function setTables() {
+    public function setTables()
+    {
         parent::setTables();
         $this->hcCatTable = $this->config->table_theory_hc_sections;
         $this->l2dCatTable = $this->config->table_theory_l2d_sections;
@@ -45,26 +48,30 @@ class LearnTest extends TheoryTest{
     }
     
     /**
-     * Creates a new test for the 
+     * Creates a new test for the
      * @param int $sectionNo This should be the section number for the test
      * @param string $type This should be the section you wish to create a test for currently 4 sections: dvsa, hc, l2d & casestudy
      * @return string|false Returns a new test if questions exists else will return false
      */
-    public function createNewTest($sectionNo = '1', $type = 'dvsa'){
+    public function createNewTest($sectionNo = '1', $type = 'dvsa')
+    {
         $this->clearSettings();
         $this->chooseStudyQuestions($sectionNo, $type);
         $this->setTest($type.$sectionNo);
         $table = strtolower($type).'CatTable';
-        if(empty($this->$table)){return false;}
-        if($type != 'casestudy'){
+        if (empty($this->$table)) {
+            return false;
+        }
+        if ($type != 'casestudy') {
             $sectionInfo = $this->getSectionInfo($this->$table, $sectionNo);
             $name = $sectionNo.'. '.$sectionInfo['name'];
-        }
-        else{
+        } else {
             $sectionInfo = $this->getSectionInfo($this->$table, $sectionNo, 'casestudyno');
             $name = 'Case Study';
         }
-        if((!isset($sectionInfo['free']) || $sectionInfo['free'] == 0) && method_exists($this->user, 'checkUserAccess')){$this->user->checkUserAccess();}
+        if ((!isset($sectionInfo['free']) || $sectionInfo['free'] == 0) && method_exists($this->user, 'checkUserAccess')) {
+            $this->user->checkUserAccess();
+        }
         $this->setTestName($name);
         return $this->buildTest();
     }
@@ -74,11 +81,12 @@ class LearnTest extends TheoryTest{
      * @param int $sectionNo This should be the section number for the test
      * @param string $type This should be the section you wish to create a test for currently 4 sections: dvsa, hc, l2d & casestudy
      */
-    protected function chooseStudyQuestions($sectionNo, $type = 'dvsa') {
+    protected function chooseStudyQuestions($sectionNo, $type = 'dvsa')
+    {
         $this->testInfo['casestudy'] = 'IS NULL';
         $this->testInfo['category'] = $this->categories[strtolower($type)];
         $this->testInfo['sort'] = $this->sortBy[strtolower($type)];
-        if($type == 'casestudy'){
+        if ($type == 'casestudy') {
             $this->testInfo['casestudy'] = '1';
         }
         $this->testInfo['section'] = $sectionNo;
@@ -89,7 +97,8 @@ class LearnTest extends TheoryTest{
      * Returns the current test name
      * @return string Returns the current test name
      */
-    public function getTestName(){
+    public function getTestName()
+    {
         return $this->testName;
     }
     
@@ -97,7 +106,8 @@ class LearnTest extends TheoryTest{
      * Override current returns false
      * @return boolean returns false
      */
-    public function getQuestions(){
+    public function getQuestions()
+    {
         return false;
     }
     
@@ -106,7 +116,8 @@ class LearnTest extends TheoryTest{
      * @param int $prim This should be the prim number of the question you wish to fin the question number for
      * @return int Returns the question number
      */
-    public function questionNo($prim){
+    public function questionNo($prim)
+    {
         return $this->currentQuestion();
     }
 
@@ -114,8 +125,9 @@ class LearnTest extends TheoryTest{
      * Sets the current test info into memory
      * @return void Nothing is returned
      */
-    protected function getTestInfo(){
-        if(!isset($this->testInfo) && isset($_COOKIE['testinfo'])){
+    protected function getTestInfo()
+    {
+        if (!isset($this->testInfo) && isset($_COOKIE['testinfo'])) {
             $this->testInfo = unserialize($_COOKIE['testinfo']);
         }
     }
@@ -127,7 +139,8 @@ class LearnTest extends TheoryTest{
      * @param string $field If the field you searching on has another name than section this should be entered here
      * @return array|false If any results exist will return an array else returns false
      */
-    public function getSectionInfo($table, $sectionID, $field = 'section'){
+    public function getSectionInfo($table, $sectionID, $field = 'section')
+    {
         return $this->db->select($table, [$field => $sectionID]);
     }
     
@@ -135,7 +148,8 @@ class LearnTest extends TheoryTest{
      * Make sure no alert is displayed within the learning section
      * @return boolean Returns false as no alerts should be displayed
      */
-    protected function alert(){
+    protected function alert()
+    {
         return false;
     }
     
@@ -143,14 +157,17 @@ class LearnTest extends TheoryTest{
      * Sets the current user answers into the memory
      * @return void Nothing is returned
      */
-    public function getUserAnswers() {
-        if(!isset($this->useranswers)){
+    public function getUserAnswers()
+    {
+        if (!isset($this->useranswers)) {
             $answers = $this->db->fetchColumn($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress']);
-            if($answers !== false){
-                if(isset($_SESSION['answers'])){$this->useranswers = $_SESSION['answers'] + unserialize(stripslashes($answers));}
-                else{$this->useranswers = unserialize(stripslashes($answers));}
-            }
-            else{
+            if ($answers !== false) {
+                if (isset($_SESSION['answers'])) {
+                    $this->useranswers = $_SESSION['answers'] + unserialize(stripslashes($answers));
+                } else {
+                    $this->useranswers = unserialize(stripslashes($answers));
+                }
+            } else {
                 $this->db->insert($this->learningProgressTable, ['user_id' => $this->getUserID(), 'progress' => serialize([])]);
             }
         }
@@ -160,18 +177,20 @@ class LearnTest extends TheoryTest{
      * Returns the number of questions in the current section
      * @return int This should be the number of questions for the section
      */
-    public function numQuestions(){
-        if($this->testInfo['category']){
+    public function numQuestions()
+    {
+        if ($this->testInfo['category']) {
             return count($this->db->selectAll($this->questionsTable, [$this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim']));
         }
         return 0;
     }
     
     /**
-     * Sets the currentPrim value 
+     * Sets the currentPrim value
      * @param int $prim Should be the current question prim number
      */
-    protected function updateTestProgress($prim) {
+    protected function updateTestProgress($prim)
+    {
         $this->currentPrim = $prim;
     }
 
@@ -180,8 +199,9 @@ class LearnTest extends TheoryTest{
      * Returns the current question number
      * @return int Returns the current question number
      */
-    protected function currentQuestion(){
-        if(!isset($this->current) && $this->testInfo['category']){
+    protected function currentQuestion()
+    {
+        if (!isset($this->current) && $this->testInfo['category']) {
             $currentnum = $this->db->select($this->questionsTable, ['prim' => $this->currentPrim, $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], [$this->testInfo['sort']]);
             $this->current = $currentnum[$this->testInfo['sort']];
         }
@@ -197,13 +217,14 @@ class LearnTest extends TheoryTest{
      * @param boolean $new Added for compatibility with parent class
      * @return array Should return the option array for the given answer
      */
-    protected function getOptions($prim, $option, $answer_num, $image = false, $new = false) {
+    protected function getOptions($prim, $option, $answer_num, $image = false, $new = false)
+    {
         $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
         $options = [];
-        if($this->answerSelected($prim, $letters[$answer_num]) && $this->questionStatus() !== 'unattempted'){
+        if ($this->answerSelected($prim, $letters[$answer_num]) && $this->questionStatus() !== 'unattempted') {
             $options['selected'] = strtolower($this->questionStatus());
         }
-        if($image !== false){
+        if ($image !== false) {
             $options['image'] = $this->createImage($prim.strtolower($letters[$answer_num]).'.png');
         }
         $options['audio'] = $this->addAudio($prim, $letters[$answer_num]);
@@ -218,12 +239,15 @@ class LearnTest extends TheoryTest{
      * Returns the Previous question HTML for the current question
      * @return string Returns the previous question HTML with the correct prim number for the previous question
      */
-    protected function prevQuestion(){
-        if(isset($_COOKIE['skipCorrect'])){$prim = $this->getIncomplete('prev');}
-        elseif($this->currentQuestion() != 1 && $this->testInfo['category']){
+    protected function prevQuestion()
+    {
+        if (isset($_COOKIE['skipCorrect'])) {
+            $prim = $this->getIncomplete('prev');
+        } elseif ($this->currentQuestion() != 1 && $this->testInfo['category']) {
             $prim = $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => ['<', $this->currentQuestion()], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], 0, [$this->testInfo['sort'] => 'DESC']);
+        } else {
+            $prim = $this->getLastQuestion();
         }
-        else{$prim = $this->getLastQuestion();}
         return ['id' => $prim, 'text' => 'Previous', 'icon' => 'angle-left'];
     }
     
@@ -231,12 +255,15 @@ class LearnTest extends TheoryTest{
      * Returns the Next question HTML for the current question
      * @return string Returns the next question HTML with the correct prim number for the next question
      */
-    protected function nextQuestion(){
-        if(isset($_COOKIE['skipCorrect'])){$prim = $this->getIncomplete();}
-        elseif(($this->currentQuestion() < $this->numQuestions()) && $this->testInfo['category']){
+    protected function nextQuestion()
+    {
+        if (isset($_COOKIE['skipCorrect'])) {
+            $prim = $this->getIncomplete();
+        } elseif (($this->currentQuestion() < $this->numQuestions()) && $this->testInfo['category']) {
             $prim = $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => ['>', $this->currentQuestion()], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], 0, [$this->testInfo['sort'] => 'ASC']);
+        } else {
+            $prim = $this->getFirstQuestion();
         }
-        else{$prim = $this->getFirstQuestion();}
         return ['id' => $prim, 'text' => 'Next', 'icon' => 'angle-right'];
     }
     
@@ -245,17 +272,25 @@ class LearnTest extends TheoryTest{
      * @param string $nextOrPrev Should be set to either 'next' or 'prev' depending on which way you wish to get the next question for
      * @return int|string Returns the prim number for the next/previous incomplete question
      */
-    protected function getIncomplete($nextOrPrev = 'next'){
-        if(strtolower($nextOrPrev) == 'next'){$dir = '>'; $sort = 'ASC'; $start = 0;}
-        else{$dir = '<'; $sort = 'DESC'; $start = 100000;}
+    protected function getIncomplete($nextOrPrev = 'next')
+    {
+        if (strtolower($nextOrPrev) == 'next') {
+            $dir = '>';
+            $sort = 'ASC';
+            $start = 0;
+        } else {
+            $dir = '<';
+            $sort = 'DESC';
+            $start = 100000;
+        }
         
-        if($this->testInfo['sort']){
+        if ($this->testInfo['sort']) {
             $searchCurrentQuestion = $this->findNextQuestion($dir, $this->currentQuestion(), $sort);
-            if($searchCurrentQuestion !== false){
+            if ($searchCurrentQuestion !== false) {
                 return $searchCurrentQuestion;
             }
             $searchStart = $this->findNextQuestion($dir, $start, $sort);
-            if($searchStart !== false){
+            if ($searchStart !== false) {
                 return $searchStart;
             }
         }
@@ -269,9 +304,10 @@ class LearnTest extends TheoryTest{
      * @param string $sort The sort order for the next question ASC or DESC
      * @return int|false Will return the prim number for the next question
      */
-    protected function findNextQuestion($dir, $start, $sort){
-        foreach($this->db->selectAll($this->questionsTable, [$this->testInfo['sort'] => [$dir, $start], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], [$this->testInfo['sort'] => $sort]) as $question){
-            if($this->useranswers[$question['prim']]['status'] <= 1){
+    protected function findNextQuestion($dir, $start, $sort)
+    {
+        foreach ($this->db->selectAll($this->questionsTable, [$this->testInfo['sort'] => [$dir, $start], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], [$this->testInfo['sort'] => $sort]) as $question) {
+            if ($this->useranswers[$question['prim']]['status'] <= 1) {
                 return $question['prim'];
             }
         }
@@ -282,8 +318,9 @@ class LearnTest extends TheoryTest{
      * Returns the first questions prim number for the current section
      * @return int Returns the prim number of the first question in the current section
      */
-    protected function getFirstQuestion(){
-        if($this->testInfo['category']){
+    protected function getFirstQuestion()
+    {
+        if ($this->testInfo['category']) {
             return $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => '1', $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim']);
         }
     }
@@ -292,8 +329,9 @@ class LearnTest extends TheoryTest{
      * Returns the last question prim number for the current section
      * @return int Returns the prim number of the last question in the current section
      */
-    protected function getLastQuestion(){
-        if($this->testInfo['category']){
+    protected function getLastQuestion()
+    {
+        if ($this->testInfo['category']) {
             return $this->db->fetchColumn($this->questionsTable, [$this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], 0, [$this->testInfo['sort'] => 'DESC']);
         }
     }
@@ -304,7 +342,8 @@ class LearnTest extends TheoryTest{
      * @param int $prim The prim number for the question the user is answering
      * @return string Returns if the answer is is correct, incorrect or incomplete
      */
-    public function addAnswer($answer, $prim){
+    public function addAnswer($answer, $prim)
+    {
         $arraystring = str_replace($answer, '', trim($_SESSION['answers'][$prim]['answer'])).$answer;
         return $this->replaceAnswer($this->sortAnswers($arraystring), $prim);
     }
@@ -315,14 +354,19 @@ class LearnTest extends TheoryTest{
      * @param int $prim The prim number for the current question
      * @return string Returns if the answer is is correct, incorrect or incomplete
      */
-    public function replaceAnswer($answer, $prim){
+    public function replaceAnswer($answer, $prim)
+    {
         $questiondata = $this->getQuestionData($prim);
         $_SESSION['answers'][$prim]['answer'] = strtoupper($answer);
-        if(strlen($_SESSION['answers'][$prim]['answer']) == $questiondata['mark']){
-            if($_SESSION['answers'][$prim]['answer'] == $questiondata['answerletters']){$_SESSION['answers'][$prim]['status'] = 2;}
-            else{$_SESSION['answers'][$prim]['status'] = 1;}
+        if (strlen($_SESSION['answers'][$prim]['answer']) == $questiondata['mark']) {
+            if ($_SESSION['answers'][$prim]['answer'] == $questiondata['answerletters']) {
+                $_SESSION['answers'][$prim]['status'] = 2;
+            } else {
+                $_SESSION['answers'][$prim]['status'] = 1;
+            }
+        } else {
+            $_SESSION['answers'][$prim]['status'] = 0;
         }
-        else{$_SESSION['answers'][$prim]['status'] = 0;}
         return $this->checkAnswer($prim);
     }
     
@@ -332,7 +376,8 @@ class LearnTest extends TheoryTest{
      * @param int $prim The prim number for the current question
      * @return string Returns if the answer is is correct, incorrect or incomplete
      */
-    public function removeAnswer($answer, $prim){
+    public function removeAnswer($answer, $prim)
+    {
         $_SESSION['answers'][$prim]['answer'] = str_replace(strtoupper($answer), '', $_SESSION['answers'][$prim]['answer']);
         $_SESSION['answers'][$prim]['status'] = 0;
         return $this->checkAnswer($prim);
@@ -342,7 +387,8 @@ class LearnTest extends TheoryTest{
      * Updates the current answers in the database
      * @return boolean Returns true if updated else returns false
      */
-    public function updateLearningProgress(){
+    public function updateLearningProgress()
+    {
         return $this->db->update($this->learningProgressTable, ['progress' => serialize($this->useranswers)], ['user_id' => $this->getUserID()]);
     }
     
@@ -352,9 +398,10 @@ class LearnTest extends TheoryTest{
      * @param string $letter The letter of the answer you are checking to see if it is selected
      * @return boolean Returns true if the answer is selected else returns false
      */
-    protected function answerSelected($prim, $letter){
-        if(isset($this->useranswers[$prim]['answer'])){
-            if(strpos($this->useranswers[$prim]['answer'], strtoupper($letter)) !== false){
+    protected function answerSelected($prim, $letter)
+    {
+        if (isset($this->useranswers[$prim]['answer'])) {
+            if (strpos($this->useranswers[$prim]['answer'], strtoupper($letter)) !== false) {
                 return true;
             }
         }
@@ -366,22 +413,33 @@ class LearnTest extends TheoryTest{
      * @param int $prim The prim number of the question you are checking
      * @return string Will return the current status of the question as a string
      */
-    public function checkAnswer($prim){
-        if(!isset($_SESSION['answers'])){$_SESSION['answers'] = $this->useranswers;}
+    public function checkAnswer($prim)
+    {
+        if (!isset($_SESSION['answers'])) {
+            $_SESSION['answers'] = $this->useranswers;
+        }
         $this->updateLearningProgress();
-        if($_SESSION['answers'][$prim]['status'] == '2'){return json_encode('CORRECT');}
-        elseif($_SESSION['answers'][$prim]['status'] == '1'){return json_encode('INCORRECT');}
-        else{return json_encode('INCOMPLETE');}
+        if ($_SESSION['answers'][$prim]['status'] == '2') {
+            return json_encode('CORRECT');
+        } elseif ($_SESSION['answers'][$prim]['status'] == '1') {
+            return json_encode('INCORRECT');
+        } else {
+            return json_encode('INCOMPLETE');
+        }
     }
     
     /**
      * Checks on the question status
      * @return string Will return the current status of the question as a string
      */
-    protected function questionStatus(){
-        if(isset($this->useranswers[$this->currentPrim]['status'])) {
-            if($this->useranswers[$this->currentPrim]['status'] == '2'){return 'correct';}
-            elseif($this->useranswers[$this->currentPrim]['status'] == '1'){return 'incorrect';}
+    protected function questionStatus()
+    {
+        if (isset($this->useranswers[$this->currentPrim]['status'])) {
+            if ($this->useranswers[$this->currentPrim]['status'] == '2') {
+                return 'correct';
+            } elseif ($this->useranswers[$this->currentPrim]['status'] == '1') {
+                return 'incorrect';
+            }
         }
         return 'unattempted';
     }
@@ -390,11 +448,22 @@ class LearnTest extends TheoryTest{
      * Returns the review button for the current test
      * @return array Returns the button array information
      */
-    protected function reviewButton() {
+    protected function reviewButton()
+    {
         $currentstatus = $this->questionStatus();
-        if($currentstatus == 'correct'){$style = ' checkcorrect'; $icon = 'check'; $text = 'Correct';}
-        elseif($currentstatus == 'incorrect'){$style = ' checkincorrect'; $icon = 'times'; $text = 'Incorrect';}
-        else{$style = ''; $icon = 'question'; $text = 'Check Answer';}
+        if ($currentstatus == 'correct') {
+            $style = ' checkcorrect';
+            $icon = 'check';
+            $text = 'Correct';
+        } elseif ($currentstatus == 'incorrect') {
+            $style = ' checkincorrect';
+            $icon = 'times';
+            $text = 'Incorrect';
+        } else {
+            $style = '';
+            $icon = 'question';
+            $text = 'Check Answer';
+        }
         return ['text' => $text, 'class' => 'check'.$style, 'icon' => $icon];
     }
 
@@ -403,7 +472,8 @@ class LearnTest extends TheoryTest{
      * @param int $prim Added for compatibility with parent class
      * @return string Returns the button HTML
      */
-    protected function flagHintButton($prim = false){
+    protected function flagHintButton($prim = false)
+    {
         return ['text' => 'Study', 'class' => 'hint'.(isset($this->checkSettings()['hint']) && $this->checkSettings()['hint'] === 'on' ? ' studyon' : ''), 'icon' => 'book'];
     }
     
@@ -412,8 +482,11 @@ class LearnTest extends TheoryTest{
      * @param boolean $review Added for compatibility on parent class
      * @return string Returns the script HTML information
      */
-    protected function getScript($review = false){
-        if(is_numeric($this->userClone)){return $this->getJavascriptLocation().'preview-'.$this->scriptVar.'.js';}
+    protected function getScript($review = false)
+    {
+        if (is_numeric($this->userClone)) {
+            return $this->getJavascriptLocation().'preview-'.$this->scriptVar.'.js';
+        }
         return $this->getJavascriptLocation().'learning-'.$this->scriptVar.'.js';
     }
     
@@ -421,9 +494,10 @@ class LearnTest extends TheoryTest{
      * Returns any extra HTML code that needs adding to the page
      * @return array Returns any extra HTML code that needs adding to the page
      */
-    protected function extraContent(){
+    protected function extraContent()
+    {
         $extra = [];
-        if(is_array($this->testInfo['casestudy'])){
+        if (is_array($this->testInfo['casestudy'])) {
             $extra['skipCorrect'] = true;
             $extra['flagged'] = ($_COOKIE['skipCorrect'] == 1 ? ' flagged' : '');
         }
@@ -437,7 +511,8 @@ class LearnTest extends TheoryTest{
      * @param int $prim This should be the questions unique prim number
      * @return array Should return any related question information in a tabbed format
      */
-    public function dsaExplanation($explanation, $prim){
+    public function dsaExplanation($explanation, $prim)
+    {
         $explain = [];
         $explain['visable'] = (isset($this->checkSettings()['hint']) && $this->checkSettings()['hint'] == 'on' ? ' visable' : '');
         $explain['tabs'][1]['label'] = 'Highway Code +';
@@ -455,16 +530,16 @@ class LearnTest extends TheoryTest{
      * @param int $prim This should be the questions unique prim number
      * @return string Returns any highway rules associated with the current question
      */
-    protected function highwayCodePlus($prim){
+    protected function highwayCodePlus($prim)
+    {
         $highwaycode = '';
         $hcClass = new HighwayCode($this->db, $this->config);
         $rules = $hcClass->getRule($this->db->select($this->questionsTable, ['prim' => $prim], ['hcrule1', 'hcrule2', 'hcrule3']));
-        if(is_array($rules)){
-            foreach($rules as $ruleno){
-                if(!$ruleno['hcrule']){
+        if (is_array($rules)) {
+            foreach ($rules as $ruleno) {
+                if (!$ruleno['hcrule']) {
                     $rule = '<p class="center">'.$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']).$this->hcImage($ruleno['imagetitle2'], $ruleno['hctitle']).'</p><p class="center">'.$ruleno['hctitle'].'</p>';
-                }
-                else{
+                } else {
                     $rule = $ruleno['hcrule'].$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']);
                 }
                 $highwaycode.= ($this->audioEnabled ? '<div class="sound" data-audio-id="hc'.$ruleno['hcno'].'"></div>' : '').'<span id="audiohc'.$ruleno['hcno'].'">'.$rule.'</span>';
@@ -479,10 +554,11 @@ class LearnTest extends TheoryTest{
      * @param string $alttext This needs to be any alt text you want to give to the image
      * @return string|boolean If the image exists will return the image HTML else will return false
      */
-    public function hcImage($imagesrc, $alttext){
+    public function hcImage($imagesrc, $alttext)
+    {
         $hcClass = new HighwayCode($this->db, $this->config, $_SERVER["DOCUMENT_ROOT"]);
         $image = $hcClass->buildImage($imagesrc);
-        if(!empty($image)){
+        if (!empty($image)) {
             return '<img src="'.$image['image'].'" alt="'.$alttext.'" width="'.$image['width'].'" height="'.$image['height'].'" class="img-responsive center-block" />';
         }
         return false;
@@ -493,7 +569,8 @@ class LearnTest extends TheoryTest{
      * @param int $prim This should be the questions unique prim number
      * @return string|false Returns the questions explanation if it exists else return false
      */
-    protected function instructorComments($prim){
+    protected function instructorComments($prim)
+    {
         return $this->db->fetchColumn($this->questionsTable, ['prim' => $prim], ['explanation']);
     }
     
@@ -501,7 +578,8 @@ class LearnTest extends TheoryTest{
      * Returns the status of each questions and the styles for the review answers section
      * @return string|false Returns false for learning section
      */
-    protected function reviewAnswers() {
+    protected function reviewAnswers()
+    {
         return false;
     }
 }

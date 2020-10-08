@@ -8,21 +8,23 @@ use Configuration\Config;
 use Smarty;
 use TheoryTest\Car\User;
 
-abstract class SetUp extends TestCase{
+abstract class SetUp extends TestCase
+{
     
     protected static $db;
     protected static $config;
     protected static $user;
     protected static $template;
     
-    public static function setUpBeforeClass() : void {
+    public static function setUpBeforeClass() : void
+    {
         self::$db = new Database($GLOBALS['DB_HOST'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'], $GLOBALS['DB_DBNAME']);
-        if(!self::$db->isConnected()){
+        if (!self::$db->isConnected()) {
              $this->markTestSkipped(
-                'No local database connection is available'
-            );
+                 'No local database connection is available'
+             );
         }
-        if(self::$db->count('users') < 1){
+        if (self::$db->count('users') < 1) {
             self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/user/database/database_mysql.sql'));
             self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/hcldc/database/mysql_database.sql'));
             self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/hcldc/tests/sample_data/mysql_data.sql'));
@@ -35,10 +37,10 @@ abstract class SetUp extends TestCase{
         self::$user = new User(self::$db);
     }
     
-    public static function tearDownAfterClass() : void {
+    public static function tearDownAfterClass() : void
+    {
         self::$db = null;
         self::$template = null;
         self::$user = null;
     }
-    
 }

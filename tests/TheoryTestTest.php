@@ -3,13 +3,13 @@ namespace TheoryTest\Tests;
 
 use TheoryTest\Car\TheoryTest;
 
-error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-
-class TheoryTestTest extends SetUp {
+class TheoryTestTest extends SetUp
+{
     
     protected $theoryTest;
     
-    protected function setUp() : void {
+    protected function setUp() : void
+    {
         self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
         $this->theoryTest = new TheoryTest(self::$db, self::$config, self::$template, self::$user);
     }
@@ -64,7 +64,8 @@ class TheoryTestTest extends SetUp {
      * @covers TheoryTest\Car\User::setUserSettings
      * @covers TheoryTest\Car\User::getUserSettings
      */
-    public function testCreateNewTest() {
+    public function testCreateNewTest()
+    {
         $newTest = $this->theoryTest->createNewTest();
         $this->assertStringStartsWith('<div class="row">', $newTest);
         $this->assertNotContains('<span id="qnum">1</span> of <span id="totalq">0</span>', $newTest);
@@ -83,7 +84,8 @@ class TheoryTestTest extends SetUp {
      * @covers TheoryTest\Car\TheoryTest::setTables
      * @covers TheoryTest\Car\User::getUserSettings
      */
-    public function testSetPassmark(){
+    public function testSetPassmark()
+    {
         $this->assertEquals(43, $this->theoryTest->getPassmark());
         $this->assertObjectHasAttribute('passmark', $this->theoryTest->setPassmark('hello'));
         $this->assertEquals(43, $this->theoryTest->getPassmark());
@@ -104,7 +106,8 @@ class TheoryTestTest extends SetUp {
      * @covers TheoryTest\Car\TheoryTest::setTables
      * @covers TheoryTest\Car\User::getUserSettings
      */
-    public function testSetTestType(){
+    public function testSetTestType()
+    {
         $this->assertEquals('CAR', $this->theoryTest->getTestType());
         $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType(45));
         $this->assertEquals('CAR', $this->theoryTest->getTestType());

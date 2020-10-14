@@ -231,7 +231,7 @@ class Review
             } else {
                 $cases[$i]['name'] = $this->db->fetchColumn($this->dvsaCatTable, ['section' => $case['dsacat']], ['name']);
             }
-            foreach ($this->db->selectAll($this->questionsTable, ['casestudyno' => $case['casestudyno']], '*', ['caseqposition' => 'ASC']) as $num => $question) {
+            foreach ($this->db->selectAll($this->questionsTable, ['casestudyno' => $case['casestudyno'], `alertcasestudy` => 1], '*', ['caseqposition' => 'ASC']) as $num => $question) {
                 $cases[$i]['q'][$num]['status'] = (isset($this->useranswers[$question['prim']]) ? $this->useranswers[$question['prim']]['status'] : 0);
                 $cases[$i]['q'][$num]['num'] = ($num + 1);
             }

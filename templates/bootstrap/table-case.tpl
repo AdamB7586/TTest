@@ -6,13 +6,13 @@
         {assign var="qno" value=1}
         {foreach $case.q as $question}
             <td class="text-center {if $question.status == 0}reviewunattempt{elseif $question.status == 1}reviewincorrect{elseif $question.status == 2}reviewcorrect{/if}" style="width:60px">{$question.num}</td>
-            {assign var="qno" value=$qno+1}
+{*            {assign var="qno" value=$qno+1}*}
         {/foreach}
-        {if $qno < 6}
+        {*{if $qno < 6}
             {for $fill=$qno to 5}
                 <td class="text-center">-</td>
             {/for}
-        {/if}
+        {/if}*}
         </tr>
     {/foreach}
 </table>

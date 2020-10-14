@@ -168,7 +168,7 @@ class LearnTest extends TheoryTest
                     $this->useranswers = unserialize(stripslashes($answers));
                 }
             } else {
-                $this->db->insert($this->learningProgressTable, ['user_id' => $this->getUserID(), 'progress' => serialize([])]);
+                $this->useranswers = [];
             }
         }
     }
@@ -389,7 +389,13 @@ class LearnTest extends TheoryTest
      */
     public function updateLearningProgress()
     {
-        return $this->db->update($this->learningProgressTable, ['progress' => serialize($this->useranswers)], ['user_id' => $this->getUserID()]);
+        if (!empty($this->useranswers)) {
+            if ($this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()])) {
+                return $this->db->update($this->learningProgressTable, ['progress' => serialize($this->useranswers)], ['user_id' => $this->getUserID()]);
+            }
+            return $this->db->insert($this->learningProgressTable, ['user_id' => $this->getUserID(), 'progress' => serialize($this->useranswers)]);
+        }
+        return false;
     }
     
     /**

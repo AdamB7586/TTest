@@ -25,7 +25,7 @@ class User extends \UserAuth\User
     {
         if (empty($this->userInfo) || is_numeric($user_id)) {
             $userInfo = $this->getUserInfo($user_id);
-            if(is_array($userInfo)){
+            if (is_array($userInfo)) {
                 return $userInfo['first_name'];
             }
             return false;
@@ -41,7 +41,7 @@ class User extends \UserAuth\User
     {
         if (empty($this->userInfo) || is_numeric($user_id)) {
             $userInfo = $this->getUserInfo($user_id);
-            if(is_array($userInfo)){
+            if (is_array($userInfo)) {
                 return $userInfo['last_name'];
             }
             return false;

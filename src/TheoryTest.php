@@ -1418,7 +1418,7 @@ class TheoryTest implements TTInterface
      */
     protected function prevQuestion()
     {
-        if (($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ((int)$this->currentQuestion() != 1 && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))) {
+        if ($this->checkIfLast()) {
             if ($this->review == 'flagged' && $this->numFlagged() > 1) {
                 $prev = $this->questionPrim($this->getNextFlagged('prev'));
             } elseif ($this->review == 'incomplete' && $this->numIncomplete() > 1) {
@@ -1440,7 +1440,7 @@ class TheoryTest implements TTInterface
      */
     protected function nextQuestion()
     {
-        if (($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ($this->currentQuestion() != $this->numQuestions() && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))) {
+        if ($this->checkIfLast($this->numQuestions())) {
             if ($this->review == 'flagged' && $this->numFlagged() > 1) {
                 $next = $this->questionPrim($this->getNextFlagged());
             } elseif ($this->review == 'incomplete' && $this->numIncomplete() > 1) {
@@ -1452,6 +1452,19 @@ class TheoryTest implements TTInterface
         }
         if ($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
             return ['id' => $this->getFirstQuestion(), 'text' => 'Next', 'icon' => 'angle-right'];
+        }
+        return false;
+    }
+    
+    /**
+     * Check to see if its the last question in the loop or not
+     * @param int $noQuestions The number of the question it should not match i.e. (1 of last)
+     * @return boolean If it is not the last in the loop will return true else return false
+     */
+    protected function checkIfLast($noQuestions = 1)
+    {
+        if (($this->review === 'flagged' && $this->numFlagged() > 1) || ($this->review === 'incomplete' && $this->numIncomplete() > 1) || ((int)$this->currentQuestion() != $noQuestions && ($this->review === 'all' || $this->review === false || $this->review === 'answers'))) {
+            return true;
         }
         return false;
     }

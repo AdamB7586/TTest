@@ -1418,20 +1418,7 @@ class TheoryTest implements TTInterface
      */
     protected function prevQuestion()
     {
-        if ($this->checkIfLast()) {
-            if ($this->review == 'flagged' && $this->numFlagged() > 1) {
-                $prev = $this->questionPrim($this->getNextFlagged('prev'));
-            } elseif ($this->review == 'incomplete' && $this->numIncomplete() > 1) {
-                $prev = $this->questionPrim($this->getNextIncomplete('prev'));
-            } else {
-                $prev = $this->questionPrim(($this->currentQuestion() - 1));
-            }
-            return ['id' => $prev, 'text' => 'Prev<span class="d-none d-lg-inline-block visible-lg-inline-block">ious</span>', 'icon' => 'angle-left'];
-        }
-        if ($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
-            return ['id' => $this->getLastQuestion(), 'text' => 'Prev<span class="d-none d-lg-inline-block visible-lg-inline-block">ious</span>', 'icon' => 'angle-left'];
-        }
-        return false;
+        return $this->getNextPrevArray(($this->currentQuestion() - 1), $this->getLastQuestion(), 'prev', 'Prev<span class="d-none d-lg-inline-block visible-lg-inline-block">ious</span>', 'angle-left');
     }
     
     /**
@@ -1440,18 +1427,32 @@ class TheoryTest implements TTInterface
      */
     protected function nextQuestion()
     {
+        return $this->getNextPrevArray(($this->currentQuestion() + 1), $this->getFirstQuestion());
+    }
+    
+    /**
+     * Return the button array information for the next button
+     * @param int $nextQuestion This should be the next question number
+     * @param int $loopQuestion If first of last should be the opposite end prim
+     * @param string $dir The direction of the next question 'prev' or 'next'
+     * @param string $text The text on the button
+     * @param string $icon The font awesome icon the button should display
+     * @return array|boolean If the button exists will return the information array else will return false
+     */
+    protected function getNextPrevButtonArray($nextQuestion, $loopQuestion, $dir = 'next', $text = 'Next', $icon = 'angle-right')
+    {
         if ($this->checkIfLast($this->numQuestions())) {
             if ($this->review == 'flagged' && $this->numFlagged() > 1) {
-                $next = $this->questionPrim($this->getNextFlagged());
+                $next = $this->questionPrim($this->getNextFlagged($dir));
             } elseif ($this->review == 'incomplete' && $this->numIncomplete() > 1) {
-                $next = $this->questionPrim($this->getNextIncomplete());
+                $next = $this->questionPrim($this->getNextIncomplete($dir));
             } else {
-                $next = $this->questionPrim(($this->currentQuestion() + 1));
+                $next = $this->questionPrim($nextQuestion);
             }
-            return ['id' => $next, 'text' => 'Next', 'icon' => 'angle-right'];
+            return ['id' => $next, 'text' => $text, 'icon' => $icon];
         }
         if ($this->review === 'all' || $this->review === 'answers' || $this->review === false) {
-            return ['id' => $this->getFirstQuestion(), 'text' => 'Next', 'icon' => 'angle-right'];
+            return ['id' => $loopQuestion, 'text' => $text, 'icon' => $icon];
         }
         return false;
     }

@@ -63,7 +63,8 @@ class TheoryTestCertificateTest extends SetUp
      * @covers TheoryTest\Car\User::getLastname
      * @covers TheoryTest\Car\User::getUserSettings
      */
-    public function testCertificate(){
+    public function testGenerateCertificate()
+    {
         $this->theoryTest->endTest('57:00', true);
         $this->assertNull($this->certificate->generateCertificate());
     }

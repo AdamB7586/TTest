@@ -125,4 +125,69 @@ class TheoryTestTest extends SetUp
         $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType('bike'));
         $this->assertEquals('BIKE', $this->theoryTest->getTestType());
     }
+    
+    /**
+     * @covers TheoryTest\Car\TheoryTest::getStartSeconds
+     * @covers TheoryTest\Car\TheoryTest::setSeconds
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\TheoryTest::getTest
+     * @covers TheoryTest\Car\TheoryTest::getTestType
+     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\TheoryTest::getUserID
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     */
+    public function testSetSeconds()
+    {
+        $originalSecs = $this->theoryTest->getStartSeconds();
+        $this->theoryTest->setSeconds(60);
+        $this->assertEquals(60, $this->theoryTest->getStartSeconds());
+        $this->assertNotEquals($originalSecs, $this->theoryTest->getStartSeconds());
+    }
+    
+    /**
+     * @covers TheoryTest\Car\TheoryTest::setJavascriptLocation
+     * @covers TheoryTest\Car\TheoryTest::getJavascriptLocation
+     * @covers TheoryTest\Car\TheoryTest::setVidLocation
+     * @covers TheoryTest\Car\TheoryTest::getVidLocation
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::getImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::getImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\TheoryTest::getTest
+     * @covers TheoryTest\Car\TheoryTest::getTestType
+     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\TheoryTest::getUserID
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     */
+    public function testSetLocations()
+    {
+        $origJS = $this->theoryTest->getJavascriptLocation();
+        $this->theoryTest->setJavascriptLocation('/js/');
+        $this->assertNotEquals($origJS, $this->theoryTest->getJavascriptLocation());
+        $this->assertEquals('/js/', $this->theoryTest->getJavascriptLocation());
+        
+        $origVid = $this->theoryTest->getVidLocation();
+        $this->theoryTest->setVidLocation('/vids/');
+        $this->assertNotEquals($origVid, $this->theoryTest->getVidLocation());
+        $this->assertEquals('/vids/', $this->theoryTest->getVidLocation());
+        
+        $origImagePath = $this->theoryTest->getImagePath();
+        $this->theoryTest->setImagePath('/images/');
+        $this->assertNotEquals($origImagePath, $this->theoryTest->getImagePath());
+        $this->assertEquals('/images/', $this->theoryTest->getImagePath());
+        
+        $origRootPath = $this->theoryTest->getImageRootPath();
+        $this->theoryTest->setImageRootPath('/root/');
+        $this->assertNotEquals($origRootPath, $this->theoryTest->getImageRootPath());
+        $this->assertEquals('/root/', $this->theoryTest->getImageRootPath());
+        
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setJavascriptLocation($origJS)->setVidLocation($origVid)->setImagePath($origImagePath)->setImageRootPath($origRootPath));
+    }
 }

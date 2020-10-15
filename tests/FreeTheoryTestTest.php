@@ -3,7 +3,7 @@ namespace TheoryTest\Tests;
 
 use TheoryTest\Car\FreeTheoryTest;
 
-class FreeTheoryTestTest extends TheoryTestTest
+class FreeTheoryTestTest extends SetUp
 {
   
     protected $theoryTest;
@@ -58,7 +58,7 @@ class FreeTheoryTestTest extends TheoryTestTest
      */
     public function testCreateNewTest()
     {
-        parent::testCreateNewTest();
+        $this->markTestIncomplete();
     }
     
     /**
@@ -79,7 +79,7 @@ class FreeTheoryTestTest extends TheoryTestTest
      */
     public function testSetPassmark()
     {
-        parent::testSetPassmark();
+        $this->markTestIncomplete();
     }
 
     /**
@@ -99,6 +99,6 @@ class FreeTheoryTestTest extends TheoryTestTest
      */
     public function testSetTestType()
     {
-        parent::testSetTestType();
+        $this->markTestIncomplete();
     }
 }

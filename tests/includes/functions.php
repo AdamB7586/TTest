@@ -6,8 +6,9 @@
  * @param boolean $permanent if true set the header to say the page has moved permanently (default false)
  * @return void
  */
-function redirect($url, $permanent = false){
-    if($permanent == true){
+function redirect($url, $permanent = false)
+{
+    if ($permanent == true) {
         header('HTTP/1.1 301 Moved Permanently');
     }
     header('Location: '.$url);

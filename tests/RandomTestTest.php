@@ -15,8 +15,6 @@ class RandomTestTest extends SetUp
         $this->theoryTest = new RandomTest($this->db, $this->config, $this->template, $this->user);
     }
     
-    
-    
     /**
      * @covers TheoryTest\Car\RandomTest::createNewTest
      * @covers TheoryTest\Car\RandomTest::chooseQuestions
@@ -81,15 +79,32 @@ class RandomTestTest extends SetUp
     {
         $newTest = $this->theoryTest->createNewTest();
         $this->assertStringStartsWith('<div class="row">', $newTest);
-        $this->markTestIncomplete();
+        //$this->markTestIncomplete();
     }
     
     /**
      * @covers TheoryTest\Car\RandomTest::createTestReport
      * @covers TheoryTest\Car\TheoryTest::createTestReport
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\TheoryTest::checkSettings
+     * @covers TheoryTest\Car\TheoryTest::getTest
+     * @covers TheoryTest\Car\TheoryTest::getTestResults
+     * @covers TheoryTest\Car\TheoryTest::getTestType
+     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\TheoryTest::getUserID
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     * @covers TheoryTest\Car\TheoryTest::setTest
+     * @covers TheoryTest\Car\User::getUserSettings
+     * @covers TheoryTest\Car\User::setUserSettings
      */
     public function testCreateReport()
     {
-        $this->markTestIncomplete();
+        $newTest = $this->theoryTest->createTestReport();
+        $this->assertStringStartsWith('<div class="row">', $newTest);
+        //$this->markTestIncomplete();
     }
 }

@@ -27,6 +27,8 @@ class DeleteDataTest extends SetUp
         $this->assertArrayHasKey('user_id', $this->db->select($this->delete->learningProgressTable, ['user_id' => 1]));
         $this->assertTrue($this->delete->deleteOnlyLearningProgress(1));
         $this->assertFalse($this->db->select($this->delete->learningProgressTable, ['user_id' => 1]));
+        $this->assertFalse($this->delete->deleteOnlyLearningProgress());
+        $this->assertFalse($this->delete->deleteOnlyLearningProgress('mytest'));
     }
     
     /**
@@ -54,6 +56,8 @@ class DeleteDataTest extends SetUp
         $this->assertArrayHasKey('user_id', $this->db->select($this->delete->learningProgressTable, ['user_id' => 1]));
         $this->assertTrue($this->delete->deleteData(1));
         $this->assertFalse($this->db->select($this->delete->learningProgressTable, ['user_id' => 1]));
+        $this->assertFalse($this->delete->deleteData());
+        $this->assertFalse($this->delete->deleteData('this should be an int'));
         //$this->markTestIncomplete();
     }
 }

@@ -71,4 +71,17 @@ class UserTest extends SetUp
         $this->assertFalse($this->user->setUserSettings(['current_test' => 1], 1));
         $this->assertArrayNotHasKey('audio', $this->user->getUserSettings(1));
     }
+    
+    /**
+     * @covers TheoryTest\Car\User::getUsername
+     * @covers TheoryTest\Car\User::getFirstname
+     * @covers TheoryTest\Car\User::getLastname
+     */
+    public function testGetDetailsWhenLoggedIn()
+    {
+        $this->user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
+        $this->user->getUserInfo();
+        $this->assertEquals('Test', $this->user->getUsername());
+        $this->assertEquals('User', $this->user->getLastname());
+    }
 }

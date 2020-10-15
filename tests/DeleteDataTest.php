@@ -11,7 +11,6 @@ class DeleteDataTest extends SetUp
     public function setUp() : void
     {
         parent::setUp();
-        $this->user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
         $this->delete = new DeleteData($this->db, $this->config, $this->user);
     }
     
@@ -22,7 +21,12 @@ class DeleteDataTest extends SetUp
      */
     public function testDeleteLearning()
     {
-        $this->markTestIncomplete();
+        if (!$this->db->select($this->delete->learningProgressTable, ['user_id' => 1])) {
+            $this->db->insert($this->delete->learningProgressTable, ['user_id' => 1, 'progress' => serialize([])]);
+        }
+        $this->assertArrayHasKey('user_id', $this->db->select($this->delete->learningProgressTable, ['user_id' => 1]));
+        $this->assertTrue($this->delete->deleteOnlyLearningProgress(1));
+        $this->assertFalse($this->db->select($this->delete->learningProgressTable, ['user_id' => 1]));
     }
     
     /**
@@ -44,7 +48,12 @@ class DeleteDataTest extends SetUp
      */
     public function testDeleteAllData()
     {
-        $this->assertFalse($this->delete->deleteData());
+        if (!$this->db->select($this->delete->learningProgressTable, ['user_id' => 1])) {
+            $this->db->insert($this->delete->learningProgressTable, ['user_id' => 1, 'progress' => serialize([])]);
+        }
+        $this->assertArrayHasKey('user_id', $this->db->select($this->delete->learningProgressTable, ['user_id' => 1]));
+        $this->assertTrue($this->delete->deleteData(1));
+        $this->assertFalse($this->db->select($this->delete->learningProgressTable, ['user_id' => 1]));
         //$this->markTestIncomplete();
     }
 }

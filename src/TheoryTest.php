@@ -1418,7 +1418,7 @@ class TheoryTest implements TTInterface
      */
     protected function prevQuestion()
     {
-        return $this->getNextPrevArray(($this->currentQuestion() - 1), $this->getLastQuestion(), 'prev', 'Prev<span class="d-none d-lg-inline-block visible-lg-inline-block">ious</span>', 'angle-left');
+        return $this->getNextPrevButtonArray(($this->currentQuestion() - 1), $this->getLastQuestion(), 'prev', 'Prev<span class="d-none d-lg-inline-block visible-lg-inline-block">ious</span>', 'angle-left');
     }
     
     /**
@@ -1427,7 +1427,7 @@ class TheoryTest implements TTInterface
      */
     protected function nextQuestion()
     {
-        return $this->getNextPrevArray(($this->currentQuestion() + 1), $this->getFirstQuestion());
+        return $this->getNextPrevButtonArray(($this->currentQuestion() + 1), $this->getFirstQuestion());
     }
     
     /**

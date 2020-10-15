@@ -67,6 +67,12 @@ class RandomTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getSeconds
      * @covers TheoryTest\Car\TheoryTest::getTime
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::checkIfLast
+     * @covers TheoryTest\Car\TheoryTest::getMark
+     * @covers TheoryTest\Car\TheoryTest::getNextPrevButtonArray
+     * @covers TheoryTest\Car\TheoryTest::createImage
+     * @covers TheoryTest\Car\TheoryTest::getImagePath
+     * @covers TheoryTest\Car\TheoryTest::getImageRootPath
      * @covers TheoryTest\Car\User::checkUserAccess
      * @covers TheoryTest\Car\User::setUserSettings
      * @covers TheoryTest\Car\User::getUserSettings

@@ -2,6 +2,8 @@
 
 namespace TheoryTest\Tests;
 
+error_reporting(0);
+
 use PHPUnit\Framework\TestCase;
 use DBAL\Database;
 use Configuration\Config;

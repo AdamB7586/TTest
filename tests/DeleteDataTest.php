@@ -16,10 +16,36 @@ class DeleteDataTest extends SetUp
     }
     
     /**
-     * @covers TheoryTest\Car\DeleteData::deleteData
+     * @covers TheoryTest\Car\DeleteData::__construct
+     * @covers TheoryTest\Car\DeleteData::setTables
+     * @covers TheoryTest\Car\DeleteData::deleteOnlyLearningProgress
      */
-    public function testDeleteData()
+    public function testDeleteLearning()
     {
         $this->markTestIncomplete();
+    }
+    
+    /**
+     * @covers TheoryTest\Car\DeleteData::__construct
+     * @covers TheoryTest\Car\DeleteData::setTables
+     * @covers TheoryTest\Car\DeleteData::deleteOnlyTestData
+     */
+    public function testDeleteTests()
+    {
+        $this->markTestIncomplete();
+    }
+    
+    /**
+     * @covers TheoryTest\Car\DeleteData::__construct
+     * @covers TheoryTest\Car\DeleteData::setTables
+     * @covers TheoryTest\Car\DeleteData::deleteData
+     * @covers TheoryTest\Car\DeleteData::deleteOnlyLearningProgress
+     * @covers TheoryTest\Car\DeleteData::deleteOnlyTestData
+     */
+    public function testDeleteAllData()
+    {
+        $this->assertTrue($this->delete->deleteData());
+        $this->assertFalse($this->delete->deleteData());
+        //$this->markTestIncomplete();
     }
 }

@@ -62,17 +62,11 @@ class LearnTest extends TheoryTest
         if (empty($this->$table)) {
             return false;
         }
-        if ($type != 'casestudy') {
-            $sectionInfo = $this->getSectionInfo($this->$table, $sectionNo);
-            $name = $sectionNo.'. '.$sectionInfo['name'];
-        } else {
-            $sectionInfo = $this->getSectionInfo($this->$table, $sectionNo, 'casestudyno');
-            $name = 'Case Study';
-        }
+        $sectionInfo = $this->getSectionInfo($this->$table, $sectionNo, ($type != 'casestudy' ? 'section' : 'casestudyno'));
         if ((!isset($sectionInfo['free']) || $sectionInfo['free'] == 0) && method_exists($this->user, 'checkUserAccess')) {
             $this->user->checkUserAccess();
         }
-        $this->setTestName($name);
+        $this->setTestName(($type != 'casestudy' ? $sectionNo.'. '.$sectionInfo['name'] : 'Case Study'));
         return $this->buildTest();
     }
     

@@ -44,7 +44,6 @@ class DeleteDataTest extends SetUp
      */
     public function testDeleteAllData()
     {
-        $this->assertTrue($this->delete->deleteData());
         $this->assertFalse($this->delete->deleteData());
         //$this->markTestIncomplete();
     }

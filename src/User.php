@@ -12,31 +12,39 @@ class User extends \UserAuth\User
     public function getUsername($user_id = false)
     {
         if ($this->getUserID() !== 0 || is_numeric($user_id)) {
-            $this->getFirstname($user_id);
+            return $this->getFirstname($user_id);
         }
         return false;
     }
     
     /**
      * Returns the users first name from the users information if they are logged in
-     * @return string This should be the users first name
+     * @return string|false This should be the users first name or false if they don't exist
      */
     public function getFirstname($user_id = false)
     {
-        if (!isset($this->userInfo)) {
-            $this->getUserInfo($user_id);
+        if (empty($this->userInfo) || is_numeric($user_id)) {
+            $userInfo = $this->getUserInfo($user_id);
+            if(is_array($userInfo)){
+                return $userInfo['first_name'];
+            }
+            return false;
         }
         return $this->userInfo['first_name'];
     }
     
     /**
      * Returns the users last name from the users information if they are logged in
-     * @return string This should be the users last name
+     * @return string|false This should be the users last name or false if they don't exist
      */
     public function getLastname($user_id = false)
     {
-        if (!isset($this->userInfo)) {
-            $this->getUserInfo($user_id);
+        if (empty($this->userInfo) || is_numeric($user_id)) {
+            $userInfo = $this->getUserInfo($user_id);
+            if(is_array($userInfo)){
+                return $userInfo['last_name'];
+            }
+            return false;
         }
         return $this->userInfo['last_name'];
     }
@@ -61,9 +69,9 @@ class User extends \UserAuth\User
         if ($userID === false) {
             $userID = $this->getUserID();
         }
-        $this->getUserInfo($userID);
-        if (is_string($this->userInfo['settings']) && !empty($this->userInfo['settings'])) {
-            return unserialize($this->userInfo['settings']);
+        $userInfo = $this->getUserInfo($userID);
+        if (is_string($userInfo['settings']) && !empty($userInfo['settings'])) {
+            return unserialize($userInfo['settings']);
         }
         return [];
     }
@@ -80,8 +88,9 @@ class User extends \UserAuth\User
             $userID = $this->getUserID();
         }
         if (is_array($vars)) {
+            $settings = array_filter($vars);
             return $this->db->update($this->table_users, [
-                'settings' => serialize(array_filter($vars))
+                'settings' => (empty($settings) ? 'NULL' : serialize($settings))
             ], ['id' => $userID], 1);
         }
         return false;

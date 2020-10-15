@@ -139,8 +139,8 @@ CREATE TABLE IF NOT EXISTS `users_test_progress` (
   `type` varchar(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `test_id` (`test_id`),,
-  KEY `current` (`current_test`)
+  KEY `test_id` (`test_id`),
+  KEY `current` (`current_test`),
   KEY `type` (`type`),
   KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

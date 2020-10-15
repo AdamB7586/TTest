@@ -7,7 +7,7 @@ require 'includes/functions.php';
 use TheoryTest\Car\TheoryTest;
 use TheoryTest\Car\TheoryTestCertificate;
 
-class CertificateTest extends SetUp
+class TheoryTestCertificateTest extends SetUp
 {
     protected $theoryTest;
     protected $certificate;

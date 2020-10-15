@@ -79,9 +79,9 @@ class RandomTestTest extends SetUp
      */
     public function testCreateNewTest()
     {
-         $newTest = $this->theoryTest->createNewTest();
-         $this->assertStringStartsWith('<div class="row">', $newTest);
-        //$this->markTestIncomplete();
+        $newTest = $this->theoryTest->createNewTest();
+        $this->assertStringStartsWith('<div class="row">', $newTest);
+        $this->markTestIncomplete();
     }
     
     /**

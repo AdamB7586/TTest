@@ -77,10 +77,6 @@ UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `casestudyno` = '".ran
      */
     protected function setTestName($name = '')
     {
-        if (!empty($name)) {
-            $this->testName = $name;
-        } else {
-            $this->testName = 'Random Theory Test';
-        }
+        $this->testName = 'Random Theory Test';
     }
 }

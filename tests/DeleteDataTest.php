@@ -6,13 +6,13 @@ use TheoryTest\Car\DeleteData;
 
 class DeleteDataTest extends SetUp
 {
-    
     protected $delete;
     
-    protected function setUp() : void
+    public function setUp() : void
     {
-        self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
-        $this->delete = new DeleteData(self::$db, self::$config, self::$user);
+        parent::setUp();
+        $this->user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
+        $this->delete = new DeleteData($this->db, $this->config, $this->user);
     }
     
     /**

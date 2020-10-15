@@ -10,16 +10,18 @@ class FreeTheoryTestTest extends TheoryTestTest
     
     protected function setUp() : void
     {
+        parent::setUp();
         if (!session_id()) {
             session_start();
         }
         $_SESSION['current_test'] = 1;
         $_SESSION['test'.$_SESSION['current_test']] = false;
-        $this->theoryTest = new FreeTheoryTest(self::$db, self::$config, self::$template, self::$user);
+        $this->theoryTest = new FreeTheoryTest($this->db, $this->config, $this->template, $this->user);
     }
     
     protected function tearDown() : void
     {
+        parent::tearDown();
         $this->theoryTest = null;
     }
     
@@ -47,6 +49,12 @@ class FreeTheoryTestTest extends TheoryTestTest
      * @covers TheoryTest\Car\User::getUserSettings
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
+     * @covers TheoryTest\Car\TheoryTest::getTest
+     * @covers TheoryTest\Car\TheoryTest::getTestType
+     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\TheoryTest::getUserID
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
      */
     public function testCreateNewTest()
     {
@@ -62,6 +70,12 @@ class FreeTheoryTestTest extends TheoryTestTest
      * @covers TheoryTest\Car\TheoryTest::getPassmark
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
+     * @covers TheoryTest\Car\TheoryTest::getTest
+     * @covers TheoryTest\Car\TheoryTest::getTestType
+     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\TheoryTest::getUserID
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
      */
     public function testSetPassmark()
     {
@@ -72,11 +86,16 @@ class FreeTheoryTestTest extends TheoryTestTest
      * @covers TheoryTest\Car\FreeTheoryTest::getTest
      * @covers TheoryTest\Car\FreeTheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\TheoryTest::getTest
      * @covers TheoryTest\Car\TheoryTest::setImagePath
      * @covers TheoryTest\Car\TheoryTest::setTestType
      * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
+     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\TheoryTest::getUserID
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
      */
     public function testSetTestType()
     {

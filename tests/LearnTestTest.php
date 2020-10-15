@@ -6,13 +6,13 @@ use TheoryTest\Car\LearnTest;
 class LearnTestTest extends SetUp
 {
     
-    protected static $learnTest;
+    protected $learnTest;
     
-    public static function setUpBeforeClass() : void
+    public function setUp() : void
     {
-        parent::setUpBeforeClass();
-        self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
-        self::$learnTest = new LearnTest(self::$db, self::$config, self::$template, self::$user);
+        parent::setUp();
+        $this->user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
+        $this->learnTest = new LearnTest($this->db, $this->config, $this->template, $this->user);
     }
     
     public function testConnection()

@@ -11,36 +11,36 @@ use TheoryTest\Car\User;
 abstract class SetUp extends TestCase
 {
     
-    protected static $db;
-    protected static $config;
-    protected static $user;
-    protected static $template;
+    protected $db;
+    protected $config;
+    protected $user;
+    protected $template;
     
-    public static function setUpBeforeClass() : void
+    protected function setUp() : void
     {
-        self::$db = new Database($GLOBALS['DB_HOST'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'], $GLOBALS['DB_DBNAME']);
-        if (!self::$db->isConnected()) {
+        $this->db = new Database($GLOBALS['DB_HOST'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'], $GLOBALS['DB_DBNAME']);
+        if (!$this->db->isConnected()) {
              $this->markTestSkipped(
                  'No local database connection is available'
              );
         }
-        if (self::$db->count('users') < 1) {
-            self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/user/database/database_mysql.sql'));
-            self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/hcldc/database/mysql_database.sql'));
-            self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/hcldc/tests/sample_data/mysql_data.sql'));
-            self::$db->query(file_get_contents(dirname(dirname(__FILE__)).'/database/database_mysql.sql'));
-            self::$db->query(file_get_contents(dirname(__FILE__).'/sample_data/data.sql'));
+        $this->db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/user/database/database_mysql.sql'));
+        if ($this->db->count('users') < 1) {
+            $this->db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/hcldc/database/mysql_database.sql'));
+            $this->db->query(file_get_contents(dirname(dirname(__FILE__)).'/vendor/adamb/hcldc/tests/sample_data/mysql_data.sql'));
+            $this->db->query(file_get_contents(dirname(dirname(__FILE__)).'/database/database_mysql.sql'));
+            $this->db->query(file_get_contents(dirname(__FILE__).'/sample_data/data.sql'));
         }
-        self::$config = new Config(self::$db);
-        self::$template = new Smarty();
-        self::$template->setCacheDir(dirname(__FILE__).'/cache/')->setCompileDir(dirname(__FILE__).'/cache/');
-        self::$user = new User(self::$db);
+        $this->config = new Config($this->db);
+        $this->template = new Smarty();
+        $this->template->setCacheDir(dirname(__FILE__).'/cache/')->setCompileDir(dirname(__FILE__).'/cache/');
+        $this->user = new User($this->db);
     }
     
-    public static function tearDownAfterClass() : void
+    protected function tearDown() : void
     {
-        self::$db = null;
-        self::$template = null;
-        self::$user = null;
+        $this->db = null;
+        $this->template = null;
+        $this->user = null;
     }
 }

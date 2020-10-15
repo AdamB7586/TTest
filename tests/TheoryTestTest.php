@@ -10,8 +10,9 @@ class TheoryTestTest extends SetUp
     
     protected function setUp() : void
     {
-        self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
-        $this->theoryTest = new TheoryTest(self::$db, self::$config, self::$template, self::$user);
+        parent::setUp();
+        $this->user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
+        $this->theoryTest = new TheoryTest($this->db, $this->config, $this->template, $this->user);
     }
     
     /**
@@ -49,7 +50,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::extraContent
      * @covers TheoryTest\Car\TheoryTest::flagHintButton
      * @covers TheoryTest\Car\TheoryTest::getLastQuestion
-     * @covers TheoryTest\Car\TheoryTest::getMarkText
      * @covers TheoryTest\Car\TheoryTest::getOptions
      * @covers TheoryTest\Car\TheoryTest::getScript
      * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
@@ -60,6 +60,10 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::questionPrim
      * @covers TheoryTest\Car\TheoryTest::reviewAnswers
      * @covers TheoryTest\Car\TheoryTest::reviewButton
+     * @covers TheoryTest\Car\TheoryTest::existingLayout
+     * @covers TheoryTest\Car\TheoryTest::getSeconds
+     * @covers TheoryTest\Car\TheoryTest::getTime
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
      * @covers TheoryTest\Car\User::checkUserAccess
      * @covers TheoryTest\Car\User::setUserSettings
      * @covers TheoryTest\Car\User::getUserSettings
@@ -68,7 +72,7 @@ class TheoryTestTest extends SetUp
     {
         $newTest = $this->theoryTest->createNewTest();
         $this->assertStringStartsWith('<div class="row">', $newTest);
-        $this->assertNotContains('<span id="qnum">1</span> of <span id="totalq">0</span>', $newTest);
+        $this->assertStringNotContainsString('<span id="qnum">1</span> of <span id="totalq">0</span>', $newTest);
     }
     
     /**
@@ -82,6 +86,8 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
      * @covers TheoryTest\Car\User::getUserSettings
      */
     public function testSetPassmark()
@@ -104,6 +110,8 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
      * @covers TheoryTest\Car\User::getUserSettings
      */
     public function testSetTestType()

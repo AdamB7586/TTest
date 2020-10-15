@@ -6,13 +6,13 @@ use TheoryTest\Car\RandomTest;
 class RandomTestTest extends SetUp
 {
     
-    protected static $theoryTest;
+    protected $theoryTest;
     
-    public static function setUpBeforeClass() : void
+    protected function setUp() : void
     {
-        parent::setUpBeforeClass();
-        self::$user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
-        self::$theoryTest = new RandomTest(self::$db, self::$config, self::$template, self::$user);
+        parent::setUp();
+        $this->user->login($GLOBALS['LOGIN_EMAIL'], $GLOBALS['LOGIN_PASSWORD']);
+        $this->theoryTest = new RandomTest($this->db, $this->config, $this->template, $this->user);
     }
     
     public function testConnection()

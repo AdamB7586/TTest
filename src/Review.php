@@ -14,7 +14,7 @@ class Review
     protected $user;
     protected $userClone;
     
-    public $where = ['carquestion' => 'Y', 'alertcasestudy' => 'IS NULL'];
+    public $where = ['carquestion' => 'Y', 'dsacat' => 'IS NOT NULL', 'alertcasestudy' => 'IS NULL'];
     
     public $noOfTests = 15;
     

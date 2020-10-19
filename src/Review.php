@@ -25,7 +25,7 @@ class Review
     protected $progressTable;
     protected $caseStudyTable;
     
-    protected $useranswers;
+    protected $useranswers = [];
     
     protected $testType = 'CAR';
 
@@ -112,9 +112,11 @@ class Review
      */
     public function getUserAnswers()
     {
-        if (!isset($this->useranswers)) {
+        if (empty($this->useranswers) && $this->getUserID() >= 1) {
             $answers = $this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress']);
-            $this->useranswers = unserialize(stripslashes($answers['progress']));
+            if(isset($answers['progress'])) {
+                $this->useranswers = unserialize(stripslashes($answers['progress']));
+            }
         }
         return $this->useranswers;
     }

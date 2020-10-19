@@ -73,7 +73,7 @@ UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `casestudyno` = '".ran
     
     /**
      * Sets the current test name
-     * @param string $name This should be the name of the test you wish to set it to if left blank will just be Theory Test plus test number
+     * @param string $name This should be the name of the test you wish to set it to if left blank will just be Random Theory Test
      */
     protected function setTestName($name = '')
     {

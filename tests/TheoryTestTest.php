@@ -67,15 +67,42 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::checkIfLast
      * @covers TheoryTest\Car\TheoryTest::getMark
      * @covers TheoryTest\Car\TheoryTest::getNextPrevButtonArray
+     * @covers TheoryTest\Car\TheoryTest::startNewTest
      * @covers TheoryTest\Car\User::checkUserAccess
      * @covers TheoryTest\Car\User::setUserSettings
      * @covers TheoryTest\Car\User::getUserSettings
      */
     public function testCreateNewTest()
     {
+        $this->theoryTest->startNewTest();
         $newTest = $this->theoryTest->createNewTest();
         $this->assertStringStartsWith('<div class="row">', $newTest);
         $this->assertStringNotContainsString('<span id="qnum">1</span> of <span id="totalq">0</span>', $newTest);
+    }
+    
+    /**
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\TheoryTest::checkSettings
+     * @covers TheoryTest\Car\TheoryTest::createTestReport
+     * @covers TheoryTest\Car\TheoryTest::getTest
+     * @covers TheoryTest\Car\TheoryTest::getTestResults
+     * @covers TheoryTest\Car\TheoryTest::getTestType
+     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\TheoryTest::getUserID
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     * @covers TheoryTest\Car\TheoryTest::setTest
+     * @covers TheoryTest\Car\User::getUserSettings
+     * @covers TheoryTest\Car\User::setUserSettings
+     */
+    public function testCreateReport()
+    {
+        $newTest = $this->theoryTest->createTestReport();
+        $this->assertStringStartsWith('<div class="row">', $newTest);
+        //$this->markTestIncomplete();
     }
     
     /**
@@ -189,5 +216,25 @@ class TheoryTestTest extends SetUp
         $this->assertEquals('/root/', $this->theoryTest->getImageRootPath());
         
         $this->assertObjectHasAttribute('passmark', $this->theoryTest->setJavascriptLocation($origJS)->setVidLocation($origVid)->setImagePath($origImagePath)->setImageRootPath($origRootPath));
+    }
+    
+    /**
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\TheoryTest::getTest
+     * @covers TheoryTest\Car\TheoryTest::getTestType
+     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\TheoryTest::getUserID
+     * @covers TheoryTest\Car\TheoryTest::getUserProgress
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     * @covers TheoryTest\Car\User::getUserSettings
+     */
+    public function testUserClone()
+    {
+        session_destroy();
+        $newTheory = new TheoryTest($this->db, $this->config, $this->template, $this->user, 500);
+        $this->assertEquals(500, $newTheory->getUserID());
     }
 }

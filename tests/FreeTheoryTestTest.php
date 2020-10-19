@@ -58,7 +58,9 @@ class FreeTheoryTestTest extends SetUp
      */
     public function testCreateNewTest()
     {
-        $this->markTestIncomplete();
+        $newTest = $this->theoryTest->createNewTest();
+        $this->assertStringStartsWith('<div class="row">', $newTest);
+        $this->assertStringNotContainsString('<span id="qnum">1</span> of <span id="totalq">0</span>', $newTest);
     }
     
     /**
@@ -79,7 +81,11 @@ class FreeTheoryTestTest extends SetUp
      */
     public function testSetPassmark()
     {
-        $this->markTestIncomplete();
+        $this->assertEquals(43, $this->theoryTest->getPassmark());
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setPassmark('hello'));
+        $this->assertEquals(43, $this->theoryTest->getPassmark());
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setPassmark(45));
+        $this->assertEquals(45, $this->theoryTest->getPassmark());
     }
 
     /**
@@ -99,6 +105,25 @@ class FreeTheoryTestTest extends SetUp
      */
     public function testSetTestType()
     {
-        $this->markTestIncomplete();
+        $this->assertEquals('CAR', $this->theoryTest->getTestType());
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType(45));
+        $this->assertEquals('CAR', $this->theoryTest->getTestType());
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType('bike'));
+        $this->assertEquals('BIKE', $this->theoryTest->getTestType());
+    }
+    
+    /**
+     * @covers TheoryTest\Car\TheoryTest::saveProgress
+     * @covers TheoryTest\Car\FreeTheoryTest::getTest
+     * @covers TheoryTest\Car\FreeTheoryTest::updateAnswers
+     * @covers TheoryTest\Car\FreeTheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     */
+    public function testUpdateAnswers()
+    {
+        $this->assertEquals('true', $this->theoryTest->saveProgress());
     }
 }

@@ -71,12 +71,14 @@ class RandomTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::createImage
      * @covers TheoryTest\Car\TheoryTest::getImagePath
      * @covers TheoryTest\Car\TheoryTest::getImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::startNewTest
      * @covers TheoryTest\Car\User::checkUserAccess
      * @covers TheoryTest\Car\User::setUserSettings
      * @covers TheoryTest\Car\User::getUserSettings
      */
     public function testCreateNewTest()
     {
+        $this->theoryTest->startNewTest();
         $newTest = $this->theoryTest->createNewTest();
         $this->assertStringStartsWith('<div class="row">', $newTest);
         //$this->markTestIncomplete();

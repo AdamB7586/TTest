@@ -162,7 +162,7 @@ class LearnTest extends TheoryTest
                     $this->useranswers = unserialize(stripslashes($answers));
                 }
             } else {
-                $this->useranswers = [];
+                $this->useranswers = (empty($_SESSION['answers']) ? [] : $_SESSION['answers']);
             }
         }
     }

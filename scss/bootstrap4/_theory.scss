@@ -6,9 +6,6 @@
     font-weight:400;
     margin:0 auto;
     @include box-shadow(0 2px 3px rgba(0,0,0,.3));
-    @include media-breakpoint-down(xs){
-        margin:($grid-gutter-width / 2) -($grid-gutter-width / 2) 0 -($grid-gutter-width / 2);
-    }
     #testHeader{
         height:30px !important;
         line-height:30px;

@@ -165,7 +165,7 @@ class Review
         $categories = $this->db->query("SELECT `{$table}`.*, count(*) as `numquestions` FROM `{$table}`, `{$this->questionsTable}`".(empty($where) ? ' WHERE' : $where.' AND')."`section` = `{$tableSecNo}` GROUP BY `{$tableSecNo}`{$this->db->orderBy(['section' => 'ASC'])};", $this->db->values);
         $review = ['totalquestions' => 0, 'totalcorrect' => 0, 'totalnotattempted' => 0, 'totalincorrect' => 0];
         if (is_array($categories)) {
-            if (!is_array($this->useranswers)) {
+            if (empty($this->useranswers)) {
                 $this->getUserAnswers();
             }
             $review['title'] = $title;

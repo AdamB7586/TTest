@@ -19,34 +19,40 @@ class User extends \UserAuth\User
     
     /**
      * Returns the users first name from the users information if they are logged in
+     * @param int|false $user_id This should either be the users unique ID of false for the current user
      * @return string|false This should be the users first name or false if they don't exist
      */
     public function getFirstname($user_id = false)
     {
-        if (empty($this->userInfo) || is_numeric($user_id)) {
-            $userInfo = $this->getUserInfo($user_id);
-            if (is_array($userInfo)) {
-                return $userInfo['first_name'];
-            }
-            return false;
-        }
-        return $this->userInfo['first_name'];
+        return $this->getUserField($user_id);
     }
     
     /**
      * Returns the users last name from the users information if they are logged in
+     * @param int|false $user_id This should either be the users unique ID of false for the current user
      * @return string|false This should be the users last name or false if they don't exist
      */
     public function getLastname($user_id = false)
     {
+        return $this->getUserField($user_id, 'last_name');
+    }
+    
+    /**
+     * Returns a field from the users information based on the given information
+     * @param int|false $user_id This should either be the users unique ID of false for the current user
+     * @param string $field The field name that you want to return
+     * @return string|false This should be the users information or false if they don't exist
+     */
+    protected function getUserField($user_id = false, $field = 'first_name')
+    {
         if (empty($this->userInfo) || is_numeric($user_id)) {
             $userInfo = $this->getUserInfo($user_id);
             if (is_array($userInfo)) {
-                return $userInfo['last_name'];
+                return $userInfo[$field];
             }
             return false;
         }
-        return $this->userInfo['last_name'];
+        return $this->userInfo[$field];
     }
     
     /**

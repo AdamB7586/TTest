@@ -1059,8 +1059,8 @@ class TheoryTest implements TTInterface
     }
     
     /**
-     * This is to add extra content if required (Used on extention classes)
-     * @return false
+     * This is to add extra content if required (Used on extension classes)
+     * @return mixed
      */
     protected function extraContent()
     {
@@ -1264,7 +1264,7 @@ class TheoryTest implements TTInterface
      * Returns the correct HTML for the DVSA explanation in the review section
      * @param string $explanation Should be the DVSA explanation for the particular question
      * @param int $prim Should be the prim number of the current question
-     * @return string|false Returns the HTML string if in the review section else returns false
+     * @return array|false Returns the HTML string if in the review section else returns false
      */
     public function dsaExplanation($explanation, $prim)
     {

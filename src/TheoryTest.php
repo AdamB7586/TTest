@@ -821,6 +821,7 @@ class TheoryTest implements TTInterface
                 $this->review = false;
             }
         } else {
+            $settings = [];
             $this->review = 'answers';
         }
         if (isset($settings['audio']) && $settings['audio'] == 'on') {
@@ -1517,7 +1518,8 @@ class TheoryTest implements TTInterface
     
     /**
      * Marks the current test
-     * @return $this;
+     * @param int|false $time The time to set as taken for the current test of false to not update
+     * @return $this
      */
     protected function markTest($time = false)
     {

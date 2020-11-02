@@ -919,7 +919,7 @@ class TheoryTest implements TTInterface
     /**
      * Adds/Removes flags the particular question
      * @param int $prim This should be the question prim
-     * @return boolean Should return true if flag status has been updated else returns false
+     * @return string Should return true if flag status has been updated else returns false as A JSON string
      */
     public function flagQuestion($prim)
     {

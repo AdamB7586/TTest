@@ -321,7 +321,7 @@ class LearnTest extends TheoryTest
         }
     }
     
-     /**
+    /**
      * Returns the last question prim number for the current section
      * @return int Returns the prim number of the last question in the current section
      */
@@ -544,7 +544,7 @@ class LearnTest extends TheoryTest
                 } else {
                     $rule = $ruleno['hcrule'].$this->hcImage($ruleno['imagetitle1'], $ruleno['hctitle']);
                 }
-                $highwaycode.= ($this->audioEnabled ? '<div class="sound" data-audio-id="hc'.$ruleno['hcno'].'"></div>' : '').'<span id="audiohc'.$ruleno['hcno'].'">'.$rule.'</span>';
+                $highwaycode .= ($this->audioEnabled ? '<div class="sound" data-audio-id="hc'.$ruleno['hcno'].'"></div>' : '').'<span id="audiohc'.$ruleno['hcno'].'">'.$rule.'</span>';
             }
         }
         return $highwaycode;
@@ -554,7 +554,7 @@ class LearnTest extends TheoryTest
      * Returns the formatted image HTML code
      * @param string $imagesrc This should be the image name
      * @param string $alttext This needs to be any alt text you want to give to the image
-     * @return string|boolean If the image exists will return the image HTML else will return false
+     * @return string|false If the image exists will return the image HTML else will return false
      */
     public function hcImage($imagesrc, $alttext)
     {

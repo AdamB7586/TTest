@@ -148,7 +148,7 @@ class TheoryTestCertificate implements CertificateInterface
                 $this->theory->testresults['id'],
                 date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])))
             ],
-            [52,52,39,47]
+            [52, 52, 39, 47]
         );
         $this->pdf->Ln();
         $this->pdf->SetFont('Arial', 'B', 16);
@@ -209,7 +209,7 @@ class TheoryTestCertificate implements CertificateInterface
             $totalincorrect = $totalincorrect + $incorrect;
             $totalq = $totalq + $total;
         }
-        $widths = [14,78,19,19,19,20,21];
+        $widths = [14, 78, 19, 19, 19, 20, 21];
         $this->pdf->basicTable($header, $groupdata, $widths, 6, true);
         $first = true;
         $grouppercent = round(($totalcorrect / $totalq) * 100);
@@ -245,7 +245,7 @@ class TheoryTestCertificate implements CertificateInterface
             $questioninfo = $this->theory->questionInfo($prim);
             $testdata[] = [$question, $questioninfo['cat'], $questioninfo['topic'], $correct];
         }
-        $this->pdf->basicTable($testheader, $testdata, [22,98,30,40], 5, true);
+        $this->pdf->basicTable($testheader, $testdata, [22, 98, 30, 40], 5, true);
     }
     
     /**

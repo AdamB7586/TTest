@@ -114,7 +114,7 @@ class Review
     {
         if (empty($this->useranswers) && $this->getUserID() >= 1) {
             $answers = $this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress']);
-            if(isset($answers['progress'])) {
+            if (isset($answers['progress'])) {
                 $this->useranswers = unserialize(stripslashes($answers['progress']));
             }
         }

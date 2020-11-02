@@ -7,7 +7,7 @@ class User extends \UserAuth\User
     
     /**
      * Returns the users name if logged in else return false
-     * @return string|boolean
+     * @return string|false
      */
     public function getUsername($user_id = false)
     {

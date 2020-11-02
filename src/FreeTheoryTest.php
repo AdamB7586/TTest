@@ -304,9 +304,8 @@ class FreeTheoryTest extends TheoryTest
             } else {
                 $type = 'incorrect';
             }
-             
-             $dvsa = $this->getDSACat($prim);
-             $this->testresults['dvsa'][$dvsa][$type] = (int)$this->testresults['dvsa'][$dvsa][$type] + 1;
+            $dvsa = $this->getDSACat($prim);
+            $this->testresults['dvsa'][$dvsa][$type] = (int)$this->testresults['dvsa'][$dvsa][$type] + 1;
         }
         
         $this->testresults['id'] = date('jn').'-'.rand(1000, 9999);

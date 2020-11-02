@@ -668,7 +668,7 @@ class TheoryTest implements TTInterface
     /**
      * Change the audio enabled settings
      * @param string $status Should be set to either 'on' or 'off'
-     * @return boolean if the settings are updated will return true else returns false
+     * @return string If the settings are updated will return true else returns false as a JSON string
      */
     public function audioEnable($status = 'on')
     {
@@ -707,7 +707,7 @@ class TheoryTest implements TTInterface
     
     /**
      * Updates the database to enable or disable the hint button and display/hide contents
-     * @return boolean Returns true if DB updated else returns false
+     * @return string If the settings are updated will return true else returns false as a JSON string
      */
     public function hintEnable()
     {
@@ -833,7 +833,7 @@ class TheoryTest implements TTInterface
     /**
      * Updates the test review type in the settings
      * @param string $type Should be the review type (e.g. 'all', 'flagged', 'incomplete', etc)
-     * @return boolean Returns true if the settings are updated
+     * @return string If the settings are updated will return true else returns false as a JSON string
      */
     public function reviewOnly($type = 'all')
     {
@@ -846,7 +846,7 @@ class TheoryTest implements TTInterface
      * Adds a given answer to the users progress in the database
      * @param string $answer This is the answer the user has just selected
      * @param int $prim The current question number to add the answer to
-     * @return true
+     * @return string Will return true as a JSON string
      */
     public function addAnswer($answer, $prim)
     {
@@ -858,7 +858,7 @@ class TheoryTest implements TTInterface
      * Replaces the answer for the given prim number
      * @param string $letters This should be the answer the user has selected
      * @param int $prim This should be the question prim number
-     * @return true
+     * @return string Will return true as a JSON string
      */
     public function replaceAnswer($letters, $prim)
     {
@@ -884,7 +884,7 @@ class TheoryTest implements TTInterface
      * Removes a given answer from the current question
      * @param string $answer This should be the answer you wish to remove
      * @param int $prim This should be the question prim you wish to remove the answer from
-     * @return true
+     * @return string Will return true as a JSON string
      */
     public function removeAnswer($answer, $prim)
     {
@@ -933,7 +933,7 @@ class TheoryTest implements TTInterface
     
     /**
      * Updates the `useranswers` field in the progress table in the database
-     * @return boolean
+     * @return string If updated will return true else for failure returns false as a JSON string
      */
     protected function updateAnswers()
     {
@@ -945,7 +945,7 @@ class TheoryTest implements TTInterface
     
     /**
      * Public function to save the users information before the page is exited
-     * @return boolean
+     * @return string If updated will return true else for failure returns false as a JSON string
      */
     public function saveProgress()
     {
@@ -1485,7 +1485,7 @@ class TheoryTest implements TTInterface
     
     /**
      * Deletes the existing test for the current user if they wish to start again
-     * @return boolean If existing tests are deleted will return true else will return false
+     * @return string If existing tests are deleted will return true else will return false as a JSON string
      */
     public function startNewTest()
     {
@@ -1530,9 +1530,8 @@ class TheoryTest implements TTInterface
             } else {
                 $type = 'incorrect';
             }
-             
-             $dvsa = $this->getDSACat($prim);
-             $this->testresults['dvsa'][$dvsa][$type] = (int)$this->testresults['dvsa'][$dvsa][$type] + 1;
+            $dvsa = $this->getDSACat($prim);
+            $this->testresults['dvsa'][$dvsa][$type] = (int)$this->testresults['dvsa'][$dvsa][$type] + 1;
         }
         
         $this->testresults['correct'] = $this->numCorrect();

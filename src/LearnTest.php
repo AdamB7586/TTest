@@ -452,21 +452,7 @@ class LearnTest extends TheoryTest
      */
     protected function reviewButton()
     {
-        $currentstatus = $this->questionStatus();
-        if ($currentstatus == 'correct') {
-            $style = ' checkcorrect';
-            $icon = 'check';
-            $text = 'Correct';
-        } elseif ($currentstatus == 'incorrect') {
-            $style = ' checkincorrect';
-            $icon = 'times';
-            $text = 'Incorrect';
-        } else {
-            $style = '';
-            $icon = 'question';
-            $text = 'Check Answer';
-        }
-        return ['text' => $text, 'class' => 'check'.$style, 'icon' => $icon];
+        return ['text' => 'Skip Correct', 'class' => 'skipcorrect'.($_COOKIE['skipCorrect'] == 1 ? ' flagged' : ''), 'icon' => 'forward'];
     }
 
     /**

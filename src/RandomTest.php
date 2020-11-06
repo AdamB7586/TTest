@@ -58,7 +58,7 @@ UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '11' AND `c
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '12' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 2)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '13' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 3)
 UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` = '14' AND `carquestion` = 'Y' AND `alertcasestudy` IS NULL LIMIT 1) ORDER BY RAND()) as a
-UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `casestudyno` = '".rand(67, 80)."');");
+UNION (SELECT `prim` FROM `{$this->questionsTable}` WHERE `dsacat` IS NOT NULL AND `casestudyno` = '".rand(67, 80)."');");
          
         $q = 1;
         unset($_SESSION['test'.$this->getTest()]);

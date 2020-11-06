@@ -17,7 +17,7 @@ class Review
     public $where = ['carquestion' => 'Y', 'dsacat' => 'IS NOT NULL', 'alertcasestudy' => 'IS NULL'];
     public $whereCase = ['carquestion' => 'Y', 'dsacat' => 'IS NOT NULL', 'alertcasestudy' => 'IS NOT NULL', 'casestudyno' => ['>=' => 67]];
     
-    public $noOfTests = 15;
+    public $noOfTests = 14;
     
     protected $testsTable;
     protected $questionsTable;
@@ -249,8 +249,8 @@ class Review
     public function reviewTests()
     {
         $answers = [];
-        for ($i = 1; $i <= $this->numberOfTests(); $i++) {
-            if ($i == $this->numberOfTests()) {
+        for ($i = 1; $i <= ($this->numberOfTests() + 1); $i++) {
+            if ($i > $this->numberOfTests()) {
                 $testID = 'random';
             } else {
                 $testID = $i;

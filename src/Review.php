@@ -15,6 +15,7 @@ class Review
     protected $userClone;
     
     public $where = ['carquestion' => 'Y', 'dsacat' => 'IS NOT NULL', 'alertcasestudy' => 'IS NULL'];
+    public $whereCase = ['carquestion' => 'Y', 'dsacat' => 'IS NULL', 'alertcasestudy' => 'IS NOT NULL'];
     
     public $noOfTests = 15;
     
@@ -287,5 +288,18 @@ class Review
         $info['Incorrect'] = $incorrect;
         $info['Correct'] = $correct;
         return $info;
+    }
+    
+    /**
+     * Returns a summary of how the user has done on the case questions and how many they have correct, incorrect and how many are incomplete
+     * @return array Returns a summary of how the user has done on the case questions and how many they have correct, incorrect and how many are incomplete as an array of numbers
+     */
+    public function userCaseInformation()
+    {
+        $originalWhere = $this->where;
+        $this->where = $this->whereCase;
+        $caseInfo = $this->userTestInformation();
+        $this->where = $originalWhere;
+        return $caseInfo;
     }
 }

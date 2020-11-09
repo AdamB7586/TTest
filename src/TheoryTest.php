@@ -190,6 +190,11 @@ class TheoryTest implements TTInterface
     protected $testType = 'car';
     
     /**
+     * @var boolean If you want all old tests deleted when resitting a new test set to true else to save all completed tests set to false
+     */
+    protected $deleteOldTests = true;
+    
+    /**
      * Connects to the database sets the current user and gets any user answers
      * @param Database $db This needs to be an instance of the database class
      * @param Config $config This needs to be an instance of the Configuration class
@@ -454,7 +459,7 @@ class TheoryTest implements TTInterface
     protected function chooseQuestions($testNo)
     {
         $questions = $this->db->selectAll($this->testsTable, ['test' => $testNo], ['prim'], ['position' => 'ASC']);
-        $this->db->delete($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()]);
+        $this->db->delete($this->progressTable, array_merge(['user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()], ($this->deleteOldTests === true ? [] : ['status' => 0])));
         unset($_SESSION['test'.$this->getTest()]);
         if (is_array($questions)) {
             foreach ($questions as $i => $question) {
@@ -938,7 +943,7 @@ class TheoryTest implements TTInterface
     protected function updateAnswers()
     {
         if (!empty($this->getUserTestInfo())) {
-            return json_encode($this->db->update($this->progressTable, ['answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]));
+            return json_encode($this->db->update($this->progressTable, ['answers' => serialize($this->getUserTestInfo()), 'time_remaining' => $_SESSION['time_remaining']['test'.$this->getTest()], 'question_no' => $this->currentQuestion()], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'current_test' => 1]));
         }
         return json_encode(false);
     }
@@ -1385,7 +1390,7 @@ class TheoryTest implements TTInterface
                 list($mins, $secs) = explode(':', $time);
                 $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
                 $this->userProgress['time_taken'] = $newtime;
-                $this->db->update($this->progressTable, ['time_'.$type => $newtime], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
+                $this->db->update($this->progressTable, ['time_'.$type => $newtime], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(),  'current_test' => 1]);
             } else {
                 $_SESSION['time_'.$type]['test'.$this->getTest()] = $time;
             }
@@ -1489,7 +1494,7 @@ class TheoryTest implements TTInterface
      */
     public function startNewTest()
     {
-        return json_encode($this->db->delete($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]));
+        return json_encode($this->db->delete($this->progressTable, array_merge(['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()], ($this->deleteOldTests === true ? [] : ['status' => 0]))));
     }
     
     /**
@@ -1556,7 +1561,7 @@ class TheoryTest implements TTInterface
             $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
             $this->userProgress['time_taken'] = $newtime;
         }
-        $this->db->update($this->progressTable, array_merge(['status' => $status, 'answers' => serialize($this->getUserTestInfo()), 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect()], ($time !== false ? ['time_taken' => $newtime] : [])), ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType()]);
+        $this->db->update($this->progressTable, array_merge(['status' => $status, 'answers' => serialize($this->getUserTestInfo()), 'results' => serialize($this->testresults), 'complete' => date('Y-m-d H:i:s'), 'totalscore' => $this->numCorrect(), 'current_test' => 0], ($time !== false ? ['time_taken' => $newtime] : [])), ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'current_test' => 1]);
         return $this;
     }
     

@@ -141,7 +141,7 @@ class Review
      */
     public function testsPassed()
     {
-        return $this->db->count($this->progressTable, ['status' => 1, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)]);
+        return $this->db->count($this->progressTable, ['status' => 1, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType), 'test_id' => ['<=' => $this->noOfTests]]);
     }
     
     /**
@@ -150,7 +150,7 @@ class Review
      */
     public function testsFailed()
     {
-        return $this->db->count($this->progressTable, ['status' => 2, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType)]);
+        return $this->db->count($this->progressTable, ['status' => 2, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType), 'test_id' => ['<=' => $this->noOfTests]]);
     }
     
     /**

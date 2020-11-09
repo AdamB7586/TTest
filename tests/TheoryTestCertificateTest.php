@@ -62,6 +62,7 @@ class TheoryTestCertificateTest extends SetUp
      * @covers TheoryTest\Car\User::getFirstname
      * @covers TheoryTest\Car\User::getLastname
      * @covers TheoryTest\Car\User::getUserSettings
+     * @covers TheoryTest\Car\User::getUserField
      */
     public function testGenerateCertificate()
     {

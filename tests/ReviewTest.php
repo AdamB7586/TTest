@@ -38,7 +38,7 @@ class ReviewTest extends SetUp
      */
     public function testGetNoOfTests()
     {
-        $this->assertEquals(15, $this->review->numberOfTests());
+        $this->assertEquals(14, $this->review->numberOfTests());
         $this->review->noOfTests = 'hello';
         $this->assertEquals(1, $this->review->numberOfTests());
     }

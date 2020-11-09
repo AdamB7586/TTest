@@ -8,6 +8,7 @@ class UserTest extends SetUp
     /**
      * @covers TheoryTest\Car\User::getUsername
      * @covers TheoryTest\Car\User::getFirstname
+     * @covers TheoryTest\Car\User::getUserField
      */
     public function testGetUsername()
     {
@@ -19,6 +20,7 @@ class UserTest extends SetUp
     
     /**
      * @covers TheoryTest\Car\User::getFirstname
+     * @covers TheoryTest\Car\User::getUserField
      */
     public function testGetFirstname()
     {
@@ -30,6 +32,7 @@ class UserTest extends SetUp
     
     /**
      * @covers TheoryTest\Car\User::getLastname
+     * @covers TheoryTest\Car\User::getUserField
      */
     public function testGetLastname()
     {
@@ -76,6 +79,7 @@ class UserTest extends SetUp
      * @covers TheoryTest\Car\User::getUsername
      * @covers TheoryTest\Car\User::getFirstname
      * @covers TheoryTest\Car\User::getLastname
+     * @covers TheoryTest\Car\User::getUserField
      */
     public function testGetDetailsWhenLoggedIn()
     {

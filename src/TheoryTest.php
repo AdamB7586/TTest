@@ -1391,7 +1391,7 @@ class TheoryTest implements TTInterface
                 list($mins, $secs) = explode(':', $time);
                 $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
                 $this->userProgress['time_taken'] = $newtime;
-                $this->db->update($this->progressTable, ['time_'.$type => $newtime], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(),  'current_test' => 1]);
+                $this->db->update($this->progressTable, ['time_'.$type => $newtime], ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'type' => $this->getTestType(), 'current_test' => 1]);
             } else {
                 $_SESSION['time_'.$type]['test'.$this->getTest()] = $time;
             }

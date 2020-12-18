@@ -176,7 +176,7 @@ class LearnTest extends TheoryTest
     public function numQuestions()
     {
         if ($this->testInfo['category']) {
-            return count($this->db->selectAll($this->questionsTable, [$this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim']));
+            return count($this->db->selectAll($this->questionsTable, [$this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy']], ['prim']));
         }
         return 0;
     }
@@ -198,7 +198,7 @@ class LearnTest extends TheoryTest
     protected function currentQuestion()
     {
         if (!isset($this->current) && $this->testInfo['category']) {
-            $currentnum = $this->db->select($this->questionsTable, ['prim' => $this->currentPrim, $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], [$this->testInfo['sort']]);
+            $currentnum = $this->db->select($this->questionsTable, ['prim' => $this->currentPrim, $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy']], [$this->testInfo['sort']]);
             $this->current = $currentnum[$this->testInfo['sort']];
         }
         return $this->current;
@@ -240,7 +240,7 @@ class LearnTest extends TheoryTest
         if (isset($_COOKIE['skipCorrect'])) {
             $prim = $this->getIncomplete('prev');
         } elseif ($this->currentQuestion() != 1 && $this->testInfo['category']) {
-            $prim = $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => ['<', $this->currentQuestion()], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], 0, [$this->testInfo['sort'] => 'DESC']);
+            $prim = $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => ['<', $this->currentQuestion()], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy']], ['prim'], 0, [$this->testInfo['sort'] => 'DESC']);
         } else {
             $prim = $this->getLastQuestion();
         }
@@ -256,7 +256,7 @@ class LearnTest extends TheoryTest
         if (isset($_COOKIE['skipCorrect'])) {
             $prim = $this->getIncomplete();
         } elseif (($this->currentQuestion() < $this->numQuestions()) && $this->testInfo['category']) {
-            $prim = $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => ['>', $this->currentQuestion()], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], 0, [$this->testInfo['sort'] => 'ASC']);
+            $prim = $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => ['>', $this->currentQuestion()], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy']], ['prim'], 0, [$this->testInfo['sort'] => 'ASC']);
         } else {
             $prim = $this->getFirstQuestion();
         }
@@ -302,7 +302,7 @@ class LearnTest extends TheoryTest
      */
     protected function findNextQuestion($dir, $start, $sort)
     {
-        foreach ($this->db->selectAll($this->questionsTable, [$this->testInfo['sort'] => [$dir, $start], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], [$this->testInfo['sort'] => $sort]) as $question) {
+        foreach ($this->db->selectAll($this->questionsTable, [$this->testInfo['sort'] => [$dir, $start], $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy']], ['prim'], [$this->testInfo['sort'] => $sort]) as $question) {
             if ($this->useranswers[$question['prim']]['status'] <= 1) {
                 return $question['prim'];
             }
@@ -317,7 +317,7 @@ class LearnTest extends TheoryTest
     protected function getFirstQuestion()
     {
         if ($this->testInfo['category']) {
-            return $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => '1', $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim']);
+            return $this->db->fetchColumn($this->questionsTable, [$this->testInfo['sort'] => '1', $this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy']], ['prim']);
         }
     }
     
@@ -328,7 +328,7 @@ class LearnTest extends TheoryTest
     protected function getLastQuestion()
     {
         if ($this->testInfo['category']) {
-            return $this->db->fetchColumn($this->questionsTable, [$this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy'], strtolower($this->getTestType()).'question' => 'Y'], ['prim'], 0, [$this->testInfo['sort'] => 'DESC']);
+            return $this->db->fetchColumn($this->questionsTable, [$this->testInfo['category'] => $this->testInfo['section'], 'alertcasestudy' => $this->testInfo['casestudy']], ['prim'], 0, [$this->testInfo['sort'] => 'DESC']);
         }
     }
 

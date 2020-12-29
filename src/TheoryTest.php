@@ -464,7 +464,6 @@ class TheoryTest implements TTInterface
         if (is_array($questions)) {
             foreach ($questions as $i => $question) {
                 $this->questions[($i + 1)] = $question['prim'];
-                $this->questions[($i + 1)]['dvsa'] = $this->db->fetchColumn($this->questionsTable, ['prim' => $question['prim']], ['dsacat']);
             }
             return $this->db->insert($this->progressTable, ['user_id' => $this->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize([]), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => $this->getTestType()]);
         }
@@ -1486,10 +1485,6 @@ class TheoryTest implements TTInterface
      */
     protected function getDSACat($prim)
     {
-        $qNo = $this->questionNo($prim);
-        if(isset($this->questions[$qNo]['dvsa'])){
-            return $this->questions[$qNo]['dvsa'];
-        }
         return $this->db->fetchColumn($this->questionsTable, ['prim' => $prim], ['dsacat']);
     }
     

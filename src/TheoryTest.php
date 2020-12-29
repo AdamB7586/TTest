@@ -458,13 +458,13 @@ class TheoryTest implements TTInterface
      */
     protected function chooseQuestions($testNo)
     {
-        $questions = $this->db->selectAll($this->testsTable, ['test' => $testNo], ['prim', 'dsacat'], ['position' => 'ASC']);
+        $questions = $this->db->selectAll($this->testsTable, ['test' => $testNo], ['prim'], ['position' => 'ASC']);
         $this->db->delete($this->progressTable, array_merge(['user_id' => $this->getUserID(), 'test_id' => $testNo, 'type' => $this->getTestType()], ($this->deleteOldTests === true ? [] : ['status' => 0])));
         unset($_SESSION['test'.$this->getTest()]);
         if (is_array($questions)) {
             foreach ($questions as $i => $question) {
                 $this->questions[($i + 1)] = $question['prim'];
-                $this->questions[($i + 1)]['dvsa'] = $question['dsacat'];
+                $this->questions[($i + 1)]['dvsa'] = $this->db->fetchColumn($this->questionsTable, ['prim' => $question['prim']], ['dsacat']);
             }
             return $this->db->insert($this->progressTable, ['user_id' => $this->getUserID(), 'questions' => serialize($this->questions), 'answers' => serialize([]), 'test_id' => $testNo, 'started' => date('Y-m-d H:i:s'), 'status' => 0, 'type' => $this->getTestType()]);
         }

@@ -544,8 +544,8 @@ class TheoryTest implements TTInterface
                 $this->testID = $answers['id'];
                 return $this->useranswers;
             }
-            return false;
         }
+        return false;
     }
     
     /**

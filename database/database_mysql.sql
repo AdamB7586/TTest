@@ -13,7 +13,9 @@ INSERT INTO `config` (`setting`, `value`) VALUES
 ('table_theory_dvsa_sections', 'theory_dsa_sections'),
 ('table_theory_case_studies', 'theory_case_studies'),
 ('table_theory_questions', 'theory_questions'),
-('table_theory_tests', 'theory_test_positions');
+('table_theory_tests', 'theory_test_positions'),
+('table_hc_sections', 'highway_code_section'),
+('table_hc_rules', 'highway_code');
 
 CREATE TABLE IF NOT EXISTS `theory_case_studies` (
   `casestudyno` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,

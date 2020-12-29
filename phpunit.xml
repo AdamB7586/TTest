@@ -21,7 +21,6 @@
     <var name="DB_DBNAME" value="theory_db"/>
     <cookie name="testinfo" value=""/>
     <cookie name="started" value="false"/>
-    <cookie name="skipCorrect" value="0"/>
     <cookie name="testinfo" value="true"/>
     <server name="REMOTE_ADDR" value="127.0.0.1"/>
     <server name="HTTP_USER_AGENT" value="PHPUnit Test Browser"/>

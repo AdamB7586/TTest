@@ -64,6 +64,73 @@ class FreeTheoryTestTest extends SetUp
     }
     
     /**
+     * @covers TheoryTest\Car\FreeTheoryTest::checkSettings
+     * @covers TheoryTest\Car\FreeTheoryTest::getTest
+     * @covers TheoryTest\Car\FreeTheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\FreeTheoryTest::reviewOnly
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     */
+    public function testChangeReview()
+    {
+        $flagged = $this->theoryTest->reviewOnly('flagged');
+        $this->assertJsonStringEqualsJsonString("true", $flagged);
+        $incomplete = $this->theoryTest->reviewOnly('incomplete');
+        $this->assertJsonStringEqualsJsonString("true", $incomplete);
+        $all = $this->theoryTest->reviewOnly();
+        $this->assertJsonStringEqualsJsonString("true", $all);
+    }
+    
+    /**
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\FreeTheoryTest::audioEnable
+     * @covers TheoryTest\Car\FreeTheoryTest::checkSettings
+     * @covers TheoryTest\Car\FreeTheoryTest::currentQuestion
+     * @covers TheoryTest\Car\FreeTheoryTest::getQuestions
+     * @covers TheoryTest\Car\FreeTheoryTest::getTest
+     * @covers TheoryTest\Car\FreeTheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\FreeTheoryTest::updateTestProgress
+     * @covers TheoryTest\Car\TheoryTest::addAudio
+     * @covers TheoryTest\Car\TheoryTest::alert
+     * @covers TheoryTest\Car\TheoryTest::answerSelected
+     * @covers TheoryTest\Car\TheoryTest::audioButton
+     * @covers TheoryTest\Car\TheoryTest::checkIfLast
+     * @covers TheoryTest\Car\TheoryTest::createQuestionHTML
+     * @covers TheoryTest\Car\TheoryTest::dsaExplanation
+     * @covers TheoryTest\Car\TheoryTest::extraContent
+     * @covers TheoryTest\Car\TheoryTest::flagHintButton
+     * @covers TheoryTest\Car\TheoryTest::getFirstQuestion
+     * @covers TheoryTest\Car\TheoryTest::getJavascriptLocation
+     * @covers TheoryTest\Car\TheoryTest::getLastQuestion
+     * @covers TheoryTest\Car\TheoryTest::getMark
+     * @covers TheoryTest\Car\TheoryTest::getNextPrevButtonArray
+     * @covers TheoryTest\Car\TheoryTest::getOptions
+     * @covers TheoryTest\Car\TheoryTest::getQuestionData
+     * @covers TheoryTest\Car\TheoryTest::getScript
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
+     * @covers TheoryTest\Car\TheoryTest::nextQuestion
+     * @covers TheoryTest\Car\TheoryTest::numQuestions
+     * @covers TheoryTest\Car\TheoryTest::prevQuestion
+     * @covers TheoryTest\Car\TheoryTest::questionFlagged
+     * @covers TheoryTest\Car\TheoryTest::questionNo
+     * @covers TheoryTest\Car\TheoryTest::questionPrim
+     * @covers TheoryTest\Car\TheoryTest::reviewAnswers
+     * @covers TheoryTest\Car\TheoryTest::reviewButton
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     */
+    public function testEnableAudio()
+    {
+        $this->assertJsonStringEqualsJsonString("true", $this->theoryTest->audioEnable());
+        $question = json_decode($this->theoryTest->createQuestionHTML(800));
+        $this->assertStringContainsString('data-audio-id', $question->html);
+        $this->assertJsonStringEqualsJsonString("true", $this->theoryTest->audioEnable('off'));
+    }
+    
+    /**
      * @covers TheoryTest\Car\FreeTheoryTest::getTest
      * @covers TheoryTest\Car\FreeTheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::__construct
@@ -86,6 +153,21 @@ class FreeTheoryTestTest extends SetUp
         $this->assertEquals(43, $this->theoryTest->getPassmark());
         $this->assertObjectHasAttribute('passmark', $this->theoryTest->setPassmark(45));
         $this->assertEquals(45, $this->theoryTest->getPassmark());
+    }
+    
+    /**
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\FreeTheoryTest::getTest
+     * @covers TheoryTest\Car\FreeTheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\FreeTheoryTest::setTime
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     */
+    public function testSetTime()
+    {
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTime('46:07', 'remaining'));
+        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTime('07:56'));
     }
 
     /**
@@ -125,5 +207,53 @@ class FreeTheoryTestTest extends SetUp
     public function testUpdateAnswers()
     {
         $this->assertEquals('true', $this->theoryTest->saveProgress());
+    }
+    
+    /**
+     * @covers TheoryTest\Car\TheoryTest::__construct
+     * @covers TheoryTest\Car\FreeTheoryTest::getQuestions
+     * @covers TheoryTest\Car\FreeTheoryTest::getTest
+     * @covers TheoryTest\Car\FreeTheoryTest::getTestResults
+     * @covers TheoryTest\Car\FreeTheoryTest::getTime
+     * @covers TheoryTest\Car\FreeTheoryTest::getUserAnswers
+     * @covers TheoryTest\Car\FreeTheoryTest::markTest
+     * @covers TheoryTest\Car\FreeTheoryTest::printCertif
+     * @covers TheoryTest\Car\FreeTheoryTest::setTestName
+     * @covers TheoryTest\Car\FreeTheoryTest::testReport
+     * @covers TheoryTest\Car\TheoryTest::buildReport
+     * @covers TheoryTest\Car\TheoryTest::createOverviewResults
+     * @covers TheoryTest\Car\TheoryTest::endTest
+     * @covers TheoryTest\Car\TheoryTest::getCategories
+     * @covers TheoryTest\Car\TheoryTest::getDSACat
+     * @covers TheoryTest\Car\TheoryTest::getFirstQuestion
+     * @covers TheoryTest\Car\TheoryTest::getJavascriptLocation
+     * @covers TheoryTest\Car\TheoryTest::getPassmark
+     * @covers TheoryTest\Car\TheoryTest::getScript
+     * @covers TheoryTest\Car\TheoryTest::getTestName
+     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
+     * @covers TheoryTest\Car\TheoryTest::numComplete
+     * @covers TheoryTest\Car\TheoryTest::numCorrect
+     * @covers TheoryTest\Car\TheoryTest::numFlagged
+     * @covers TheoryTest\Car\TheoryTest::numIncomplete
+     * @covers TheoryTest\Car\TheoryTest::numQuestions
+     * @covers TheoryTest\Car\TheoryTest::printCertif
+     * @covers TheoryTest\Car\TheoryTest::questionNo
+     * @covers TheoryTest\Car\TheoryTest::setImagePath
+     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
+     * @covers TheoryTest\Car\TheoryTest::setTables
+     * @covers TheoryTest\Car\TheoryTest::testPercentages
+     * @covers TheoryTest\Car\TheoryTest::testReport
+     * @covers TheoryTest\Car\TheoryTest::testStatus
+     * @covers TheoryTest\Car\User::getFirstname
+     * @covers TheoryTest\Car\User::getLastname
+     * @covers TheoryTest\Car\User::getUserField
+     */
+    public function testEndTest()
+    {
+        $end = $this->theoryTest->endTest('47:06', true);
+        $this->assertJson($end);
+        
+        $report = $this->theoryTest->buildReport(false);
+        $this->assertStringStartsWith('<div class="row">', $report);
     }
 }

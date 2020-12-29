@@ -270,7 +270,7 @@ class FreeTheoryTest extends TheoryTest
      * Sets the time taken an remaining in the session variables
      * @param int $time The current time in seconds
      * @param string $type This should be set to either taken or remaining
-     * @return void nothing is returned
+     * @return $this
      */
     public function setTime($time, $type = 'taken')
     {
@@ -281,6 +281,7 @@ class FreeTheoryTest extends TheoryTest
             }
             $_SESSION['time_'.$type] = $time;
         }
+        return $this;
     }
     
     /**

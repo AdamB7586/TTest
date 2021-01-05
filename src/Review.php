@@ -27,8 +27,6 @@ class Review
     protected $caseStudyTable;
     
     protected $useranswers = [];
-    
-    protected $testType = 'CAR';
 
 
     /**
@@ -141,7 +139,7 @@ class Review
      */
     public function testsPassed()
     {
-        return $this->db->count($this->progressTable, ['status' => 1, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType), 'test_id' => ['<=' => $this->noOfTests]]);
+        return $this->db->count($this->progressTable, ['status' => 1, 'user_id' => $this->getUserID(), 'test_id' => ['<=' => $this->noOfTests]]);
     }
     
     /**
@@ -150,7 +148,7 @@ class Review
      */
     public function testsFailed()
     {
-        return $this->db->count($this->progressTable, ['status' => 2, 'user_id' => $this->getUserID(), 'type' => strtoupper($this->testType), 'test_id' => ['<=' => $this->noOfTests]]);
+        return $this->db->count($this->progressTable, ['status' => 2, 'user_id' => $this->getUserID(), 'test_id' => ['<=' => $this->noOfTests]]);
     }
     
     /**
@@ -226,7 +224,7 @@ class Review
     {
         $this->getUserAnswers();
         $cases = [];
-        foreach ($this->db->selectAll($this->caseStudyTable, ['lp' => 'IS NOT NULL', 'video' => 'IS NOT NULL', 'type' => $this->testType], '*', ['casestudyno' => 'ASC']) as $i => $case) {
+        foreach ($this->db->selectAll($this->caseStudyTable, ['lp' => 'IS NOT NULL', 'video' => 'IS NOT NULL'], '*', ['casestudyno' => 'ASC']) as $i => $case) {
             $cases[$i] = $case;
             $cases[$i]['section'] = $case['casestudyno'];
             if (!is_null($case['video'])) {
@@ -256,7 +254,7 @@ class Review
                 $testID = $i;
             }
             unset($_SESSION['test'.$i]);
-            $answers[$testID] = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $i, 'status' => ['>=', 1], 'type' => strtoupper($this->testType)], ['status', 'totalscore', 'complete']);
+            $answers[$testID] = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $i, 'status' => ['>=', 1]], ['status', 'totalscore', 'complete']);
         }
         return $answers;
     }

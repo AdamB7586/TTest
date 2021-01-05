@@ -35,7 +35,6 @@ class RandomTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getJavascriptLocation
      * @covers TheoryTest\Car\TheoryTest::getQuestionData
      * @covers TheoryTest\Car\TheoryTest::getTestName
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::numQuestions
      * @covers TheoryTest\Car\TheoryTest::questionNo
@@ -91,7 +90,6 @@ class RandomTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::checkSettings
      * @covers TheoryTest\Car\TheoryTest::getTest
      * @covers TheoryTest\Car\TheoryTest::getTestResults
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress

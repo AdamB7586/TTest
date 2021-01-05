@@ -5,9 +5,7 @@ namespace TheoryTest\Car;
  * @codeCoverageIgnore
  */
 class FreeTheoryTestCertificate extends TheoryTestCertificate
-{
-    protected $testType = 'FREE';
-    
+{    
     public function generateCertificate()
     {
         $this->theory->getQuestions();
@@ -28,7 +26,7 @@ class FreeTheoryTestCertificate extends TheoryTestCertificate
             $this->pdf->Cell(10, 10, '', 0);
             $this->pdf->Cell(14, 10, 'Test', 0);
             $this->pdf->Ln(12);
-            $this->certLine('Test ID:', strtoupper($this->testType).$this->theory->testresults['id']);
+            $this->certLine('Test ID:', 'FREE'.$this->theory->testresults['id']);
             $this->certLine('Test Name:', strip_tags($this->theory->getTestName()));
             $this->certLine('Completion Date/Time:', date('d/m/Y g:i A', strtotime($this->theory->testresults['complete'])));
             $this->certLine('Score:', $this->theory->testresults['correct'].' / '.$this->theory->numQuestions());

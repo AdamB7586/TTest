@@ -47,7 +47,6 @@ class LearnTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getJavascriptLocation
      * @covers TheoryTest\Car\TheoryTest::getQuestionData
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::setImagePath
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath

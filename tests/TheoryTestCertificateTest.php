@@ -37,7 +37,6 @@ class TheoryTestCertificateTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getTest
      * @covers TheoryTest\Car\TheoryTest::getTestName
      * @covers TheoryTest\Car\TheoryTest::getTestResults
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getTime
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID

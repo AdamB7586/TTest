@@ -18,8 +18,6 @@ interface TTInterface
     public function startNewTest();
     public function saveProgress();
     
-    public function setTestType($type);
-    public function getTestType();
     public function setPassmark($mark);
     public function getPassmark();
 }

@@ -50,7 +50,6 @@ class FreeTheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -140,7 +139,6 @@ class FreeTheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
      * @covers TheoryTest\Car\TheoryTest::setTables
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -168,30 +166,6 @@ class FreeTheoryTestTest extends SetUp
     {
         $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTime('46:07', 'remaining'));
         $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTime('07:56'));
-    }
-
-    /**
-     * @covers TheoryTest\Car\FreeTheoryTest::getTest
-     * @covers TheoryTest\Car\FreeTheoryTest::getUserAnswers
-     * @covers TheoryTest\Car\TheoryTest::__construct
-     * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::setImagePath
-     * @covers TheoryTest\Car\TheoryTest::setTestType
-     * @covers TheoryTest\Car\TheoryTest::getTestType
-     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
-     * @covers TheoryTest\Car\TheoryTest::setTables
-     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
-     * @covers TheoryTest\Car\TheoryTest::getUserID
-     * @covers TheoryTest\Car\TheoryTest::getUserProgress
-     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
-     */
-    public function testSetTestType()
-    {
-        $this->assertEquals('CAR', $this->theoryTest->getTestType());
-        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType(45));
-        $this->assertEquals('CAR', $this->theoryTest->getTestType());
-        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType('bike'));
-        $this->assertEquals('BIKE', $this->theoryTest->getTestType());
     }
     
     /**

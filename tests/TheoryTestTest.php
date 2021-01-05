@@ -34,7 +34,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getJavascriptLocation
      * @covers TheoryTest\Car\TheoryTest::getQuestionData
      * @covers TheoryTest\Car\TheoryTest::getTestName
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::numQuestions
      * @covers TheoryTest\Car\TheoryTest::questionNo
@@ -85,7 +84,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::flagQuestion
      * @covers TheoryTest\Car\TheoryTest::getQuestions
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -129,7 +127,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getQuestions
      * @covers TheoryTest\Car\TheoryTest::getScript
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -174,7 +171,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getQuestionData
      * @covers TheoryTest\Car\TheoryTest::getQuestions
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -256,7 +252,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getQuestions
      * @covers TheoryTest\Car\TheoryTest::getScript
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -290,7 +285,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::createTestReport
      * @covers TheoryTest\Car\TheoryTest::getTest
      * @covers TheoryTest\Car\TheoryTest::getTestResults
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -314,7 +308,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::setPassmark
      * @covers TheoryTest\Car\TheoryTest::getPassmark
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::setImageRootPath
@@ -332,36 +325,11 @@ class TheoryTestTest extends SetUp
         $this->assertEquals(45, $this->theoryTest->getPassmark());
     }
     
-
-    /**
-     * @covers TheoryTest\Car\TheoryTest::__construct
-     * @covers TheoryTest\Car\TheoryTest::setImagePath
-     * @covers TheoryTest\Car\TheoryTest::setTestType
-     * @covers TheoryTest\Car\TheoryTest::getTestType
-     * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getUserAnswers
-     * @covers TheoryTest\Car\TheoryTest::getUserID
-     * @covers TheoryTest\Car\TheoryTest::setImageRootPath
-     * @covers TheoryTest\Car\TheoryTest::setTables
-     * @covers TheoryTest\Car\TheoryTest::getUserProgress
-     * @covers TheoryTest\Car\TheoryTest::getUserTestInfo
-     * @covers TheoryTest\Car\User::getUserSettings
-     */
-    public function testSetTestType()
-    {
-        $this->assertEquals('CAR', $this->theoryTest->getTestType());
-        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType(45));
-        $this->assertEquals('CAR', $this->theoryTest->getTestType());
-        $this->assertObjectHasAttribute('passmark', $this->theoryTest->setTestType('bike'));
-        $this->assertEquals('BIKE', $this->theoryTest->getTestType());
-    }
-    
     /**
      * @covers TheoryTest\Car\TheoryTest::getStartSeconds
      * @covers TheoryTest\Car\TheoryTest::setSeconds
      * @covers TheoryTest\Car\TheoryTest::__construct
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -381,7 +349,6 @@ class TheoryTestTest extends SetUp
     /**
      * @covers TheoryTest\Car\TheoryTest::__construct
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -409,7 +376,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getImageRootPath
      * @covers TheoryTest\Car\TheoryTest::__construct
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -451,7 +417,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getQuestions
      * @covers TheoryTest\Car\TheoryTest::getScript
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -488,7 +453,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getSeconds
      * @covers TheoryTest\Car\TheoryTest::getTest
      * @covers TheoryTest\Car\TheoryTest::getTestName
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getTime
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
@@ -528,7 +492,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::getTest
      * @covers TheoryTest\Car\TheoryTest::getTestName
      * @covers TheoryTest\Car\TheoryTest::getTestResults
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getTime
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
@@ -598,7 +561,6 @@ class TheoryTestTest extends SetUp
      * @covers TheoryTest\Car\TheoryTest::__construct
      * @covers TheoryTest\Car\TheoryTest::getQuestions
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress
@@ -618,7 +580,6 @@ class TheoryTestTest extends SetUp
     /**
      * @covers TheoryTest\Car\TheoryTest::__construct
      * @covers TheoryTest\Car\TheoryTest::getTest
-     * @covers TheoryTest\Car\TheoryTest::getTestType
      * @covers TheoryTest\Car\TheoryTest::getUserAnswers
      * @covers TheoryTest\Car\TheoryTest::getUserID
      * @covers TheoryTest\Car\TheoryTest::getUserProgress

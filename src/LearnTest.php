@@ -452,7 +452,7 @@ class LearnTest extends TheoryTest
      */
     protected function reviewButton()
     {
-        return ['text' => 'Skip Correct', 'class' => 'skipcorrect'.($_COOKIE['skipCorrect'] == 1 ? ' flagged' : ''), 'icon' => 'forward'];
+        return ['text' => 'Skip Correct', 'class' => 'skipcorrect'.(isset($_COOKIE['skipCorrect']) && $_COOKIE['skipCorrect'] == 1 ? ' flagged' : ''), 'icon' => 'forward'];
     }
 
     /**
@@ -487,7 +487,7 @@ class LearnTest extends TheoryTest
         $extra = [];
         if (is_array($this->testInfo['casestudy'])) {
             $extra['skipCorrect'] = true;
-            $extra['flagged'] = ($_COOKIE['skipCorrect'] == 1 ? ' flagged' : '');
+            $extra['flagged'] = (isset($_COOKIE['skipCorrect']) && $_COOKIE['skipCorrect'] == 1 ? ' flagged' : '');
         }
         $extra['signal'] = $this->questionStatus();
         return $extra;

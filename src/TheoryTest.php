@@ -1529,7 +1529,7 @@ class TheoryTest implements TTInterface
             $this->testresults['status'] = 'fail';
             $status = 2;
         }
-        if ($time !== false) {
+        if ($time !== false && preg_match('~[0-9]+~', $time)) {
             list($mins, $secs) = explode(':', $time);
             $newtime = gmdate('i:s', ($this->getStartSeconds() - (($mins * 60) + $secs)));
             $this->userProgress['time_taken'] = $newtime;

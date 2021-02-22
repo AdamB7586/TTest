@@ -1289,6 +1289,7 @@ class TheoryTest implements TTInterface
      */
     public function setTest($testNo)
     {
+        unset($this->questions, $this->userProgress, $this->useranswers, $this->testID, $this->testData);
         if (is_numeric($testNo) && $this->testNo !== $testNo) {
             $this->testNo = $testNo;
         }
@@ -1296,8 +1297,6 @@ class TheoryTest implements TTInterface
         $settings['current_test'] = $testNo;
         $_SESSION['current_test'] = $testNo;
         if ($this->user->setUserSettings($settings)) {
-            unset($this->questions);
-            unset($this->useranswers);
             $this->getQuestions();
             $this->getUserAnswers();
         }

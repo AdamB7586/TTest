@@ -181,11 +181,7 @@ $(".nextquestion").click(function(){
 
 $(".hint").click(function(){
     $(this).toggleClass("studyon");
-    $(".showhint").toggleClass("visable").slideToggle('slow', function(){
-        if($(".showhint").is(":visible")){
-            $(document).scrollTop(500);
-        }
-    });
+    $(".showhint").toggleClass("visable");
     $.get("<?php echo($page); ?>?hint=true");
 });
 

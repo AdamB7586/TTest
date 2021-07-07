@@ -452,7 +452,7 @@ class TheoryTest implements TTInterface
         if (is_string($this->exists)) {
             return $this->exists;
         }
-        $existing = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'status' => ['<=', 1]]);
+        $existing = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'status' => ['<=', 1]], '*', [], false);
         if (!empty($existing)) {
             $this->exists = ($existing['status'] == 1 ? 'passed' : 'exists');
             return $this->exists;
@@ -530,7 +530,7 @@ class TheoryTest implements TTInterface
         if (!empty($this->userProgress)) {
             return $this->userProgress;
         }
-        $this->userProgress = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest()], '*', ['started' => 'DESC']);
+        $this->userProgress = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest()], '*', ['started' => 'DESC'], false);
         return $this->userProgress;
     }
 
@@ -1543,7 +1543,7 @@ class TheoryTest implements TTInterface
      */
     public function updateLearningSection()
     {
-        $info = $this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress']);
+        $info = $this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress'], [], false);
         $userprogress = unserialize(stripslashes($info['progress']));
         $this->getQuestions();
         foreach ($this->questions as $prim) {
@@ -1578,7 +1578,7 @@ class TheoryTest implements TTInterface
      */
     public function getTestResults()
     {
-        $results = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'status' => ['>', 0]], ['id', 'test_id', 'results', 'started', 'complete', 'time_taken', 'status'], ['started' => 'DESC']);
+        $results = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $this->getTest(), 'status' => ['>', 0]], ['id', 'test_id', 'results', 'started', 'complete', 'time_taken', 'status'], ['started' => 'DESC'], false);
         if (!empty($results)) {
             $this->testresults = unserialize(stripslashes($results['results']));
             $this->testresults['id'] = $results['id'];

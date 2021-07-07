@@ -156,7 +156,7 @@ class LearnTest extends TheoryTest
     public function getUserAnswers()
     {
         if (!isset($this->useranswers)) {
-            $answers = $this->db->fetchColumn($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress']);
+            $answers = $this->db->fetchColumn($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress'], 0, [], false);
             if ($answers !== false) {
                 if (isset($_SESSION['answers'])) {
                     $this->useranswers = $_SESSION['answers'] + unserialize(stripslashes($answers));
@@ -386,7 +386,7 @@ class LearnTest extends TheoryTest
     public function updateLearningProgress()
     {
         if (!empty($this->useranswers)) {
-            if ($this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()])) {
+            if ($this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()], '*', [], false)) {
                 return $this->db->update($this->learningProgressTable, ['progress' => serialize($this->useranswers)], ['user_id' => $this->getUserID()]);
             }
             return $this->db->insert($this->learningProgressTable, ['user_id' => $this->getUserID(), 'progress' => serialize($this->useranswers)]);

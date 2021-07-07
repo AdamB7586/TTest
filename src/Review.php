@@ -112,7 +112,7 @@ class Review
     public function getUserAnswers()
     {
         if (empty($this->useranswers) && $this->getUserID() >= 1) {
-            $answers = $this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress']);
+            $answers = $this->db->select($this->learningProgressTable, ['user_id' => $this->getUserID()], ['progress'], [], false);
             if (isset($answers['progress'])) {
                 $this->useranswers = unserialize(stripslashes($answers['progress']));
             }
@@ -139,7 +139,7 @@ class Review
      */
     public function testsPassed()
     {
-        return $this->db->count($this->progressTable, ['status' => 1, 'user_id' => $this->getUserID(), 'test_id' => ['<=' => $this->noOfTests]]);
+        return $this->db->count($this->progressTable, ['status' => 1, 'user_id' => $this->getUserID(), 'test_id' => ['<=' => $this->noOfTests]], '*', [], false);
     }
     
     /**
@@ -148,7 +148,7 @@ class Review
      */
     public function testsFailed()
     {
-        return $this->db->count($this->progressTable, ['status' => 2, 'user_id' => $this->getUserID(), 'test_id' => ['<=' => $this->noOfTests]]);
+        return $this->db->count($this->progressTable, ['status' => 2, 'user_id' => $this->getUserID(), 'test_id' => ['<=' => $this->noOfTests]], '*', [], false);
     }
     
     /**
@@ -254,7 +254,7 @@ class Review
                 $testID = $i;
             }
             unset($_SESSION['test'.$i]);
-            $answers[$testID] = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $i, 'status' => ['>=', 1]], ['status', 'totalscore', 'complete']);
+            $answers[$testID] = $this->db->select($this->progressTable, ['user_id' => $this->getUserID(), 'test_id' => $i, 'status' => ['>=', 1]], ['status', 'totalscore', 'complete'], [], false);
         }
         return $answers;
     }
